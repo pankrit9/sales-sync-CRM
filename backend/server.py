@@ -1,13 +1,12 @@
+import json
 from flask import Flask , render_template, request, flash, jsonify
 import jwt
 from functools import wraps
 from pymongo import MongoClient
-#from src.error import InputError, AccessError
 from helpers import add_customer
 import datetime
 
 from flask_bcrypt import Bcrypt
-from registerLoginHelpers import check_email_taken
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Avengers'
@@ -51,9 +50,19 @@ def home():
 @app.route("/login" , methods=['GET','POST'])
 def login():
     request.form['email']
-    if request.form['email'] and db.Accounts.find_one({"email": request.form['email']}):
+    request.form['password']
+    matching_user = db.Accounts.find_one({"email": request.form['email']})
+
+    # Encrypt the password
+    encoded_password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8')
+
+
+    if request.form['email'] and matching_user['password'] == encoded_password:
+
+        # Created a token so users can be authenticated 
         token = jwt.encode({
             'user': request.form['email'],
+            'position': request.json['position'],
             'exp' : datetime.datetime.utcnow() + datetime.timedelta(seconds=180)
         }, app.config['SECRET_KEY']) #Secret key is 'Avengers'
 
@@ -65,8 +74,11 @@ def login():
 
 @app.route("/register", methods=['POST'])
 def register():
+
+    # Encrypt the password
     encoded_password = bcrypt.generate_password_hash(request.json['password']).decode('utf-8')
 
+    # Create a temporary user that will be added to the mongodb  
     new_user = { 
         "email" : request.json['email'],
         "first_name" : request.json['first_name'],
@@ -75,19 +87,25 @@ def register():
         "position" : request.json['position'],
         "company" : request.json['company']
     }
+
     # Check whether the email is taken
     if db.Accounts.find_one({"email": new_user['email']}):
         return jsonify({"error": "The given email is already taken."})
     
     # Adds user to the database
     db.Accounts.insert_one(new_user)
+
+    # Returns the success message, Should return token
     return jsonify({"msg" :"User was succesfuly created."})
 
 @app.route("/users", methods=['GET'])
-@token_required
+#@token_required
 def staff_list():
-    
-    return db.Accounts.find({})
+    users_cursor = db.Accounts.find()
+    users_list = [user for user in users_cursor]
+    return jsonify({
+            
+        })
 
 if __name__ == '__main__':
     app.run(debug=True)
