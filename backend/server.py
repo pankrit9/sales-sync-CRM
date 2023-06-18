@@ -11,7 +11,6 @@ app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = 'Avengers'
 
-
 SECRET_JWT = 'salesync'
 
 
@@ -60,7 +59,7 @@ def login():
     if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
         # Created a token so users can be authenticated
         token = jwt.encode({
-            'user': request.json['email'],
+            'email': request.json['email'],
             'first_name': matching_user['first_name'],
             'position': matching_user['position'],
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=180)
@@ -95,7 +94,7 @@ def register():
     db.Accounts.insert_one(new_user)
 
     # Returns the success message, Should return token
-    return jsonify({"msg": "User was succesfuly created."})
+    return jsonify({"message": "User was succesfuly created."})
 
 
 @app.route("/users", methods=['GET'])
