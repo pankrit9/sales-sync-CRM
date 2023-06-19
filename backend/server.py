@@ -7,12 +7,16 @@ from pymongo import MongoClient
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 
+#from loginRegister.loginRegisterRoutes import login_page
+
 app = Flask(__name__)
 CORS(app)
 app.config['SECRET_KEY'] = 'Avengers'
 
 SECRET_JWT = 'salesync'
 
+# Blueprints
+#app.register_blueprint(login_page, url_prefix="/login")
 
 # db is the CRM database
 database_URL = "mongodb+srv://avengers:endgame@crm.e8aut5k.mongodb.net/"
@@ -42,6 +46,8 @@ def token_required(f):
             data = jwt.decode(token, app.config['SECRET_KEY'])
         except:
             return jsonify({'message': 'Token is invalid'}), 401
+        
+        return f(data, *args, **kwargs)
     return decorated
 
 
@@ -50,7 +56,7 @@ def home():
     return
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/auth/login", methods=['GET', 'POST'])
 def login():
 
     # find user with the given email
@@ -61,7 +67,7 @@ def login():
         token = jwt.encode({
             'email': request.json['email'],
             'first_name': matching_user['first_name'],
-            'position': matching_user['position'],
+            #'position': matching_user['position'],
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=180)
         }, app.config['SECRET_KEY'])  # Secret key is 'Avengers'
 
@@ -69,7 +75,7 @@ def login():
         return jsonify({'token': token})
 
 
-@app.route("/register", methods=['POST'])
+@app.route("/auth/register", methods=['POST'])
 def register():
 
     # Encrypt the password
@@ -98,8 +104,8 @@ def register():
 
 
 @app.route("/users", methods=['GET'])
-# @token_required
-def staff_list():
+#@token_required
+def staff_list(data):
     users_cursor = db.Accounts.find()
     users_list = [user for user in users_cursor]
     return jsonify({

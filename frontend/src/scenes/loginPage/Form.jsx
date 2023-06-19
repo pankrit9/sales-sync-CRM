@@ -1,3 +1,4 @@
+// this is where the register functionality is handled
 import { useState } from "react";
 import {
     Box,
@@ -7,38 +8,37 @@ import {
     useMediaQuery,
     useTheme,
 } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Formik } from "formik";    // used for the form library
-import * as yup from "yup";    // validation library
-import { useNavigate } from "react-router-dom"; // to navigate when they register
-import { useDispatch } from "react-redux";  // used react-redux to store the user info
-import { setLogin } from "state";
-import FlexBetween from "components/FlexBetween";
+import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Formik } from "formik";
+import { setLogin } from "../../state";
+import { BACKEND_API } from "../../api";
 
-const registerForm = yup.object().shape({
+// creating the validation schema to tell how the form library is going to store the information
+const registerSchema = yup.object().shape({
     // yup handles the validation of the form (i.e. if the user has entered the correct info)
     firstName: yup.string().required("required"),
     lastName: yup.string().required("required"),
     email: yup.string().email("Invalid email").required("required"),
-    password: yup.string().required("required")
+    password: yup.string().required("required"),
+    company: yup.string().required("required")
 });
 
-const loginForm = yup.object().shape({
+const loginSchema = yup.object().shape({
     // stripped down version of the registerSchema
     email: yup.string().email("Invalid email").required("required"),
     password: yup.string().required("required"),
 });
 
 const initialValuesRegister = {
-    // form for the validation
+    // schema for the validation
     // this for the initial values of the form
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    location: "",
-    occupation: "",
-    picture: "",
+    company: ""
 }
 
 const initialValuesLogin = {
@@ -47,16 +47,13 @@ const initialValuesLogin = {
 }
 
 const Form = () => {
-    // Form component
+    const [pageType, setPageType] = useState("login");
     const { palette } = useTheme();
-    const [pageType, setPageType] = useState("login"); // to determine if the user is on the register page or the login page
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const isNonMobile = useMediaQuery("(min-width: 600px)"); // hook built into mui to determine if the curr screen size is lower or higher to the value input in it
     const isLogin = pageType === "login"; // to determine if the user is on the login page or the register page
     const isRegister = pageType === "register";
-    
-    const isNonMobile = useMediaQuery("(min-width: 600px)"); // hook built into mui to determine if the curr screen size is lower or higher to the value input in it
 
     /**
      * 
@@ -119,7 +116,8 @@ const Form = () => {
         }
     }
 
-    /** logic behind when the user submits the form */
+
+/** logic behind when the user submits the form */
     const handleFormSubmit = async (values, onSubmitProps) => {
         if (isLogin) await login(values, onSubmitProps);    // leave it for the backend
         if (isRegister) await register(values, onSubmitProps);
@@ -150,44 +148,55 @@ const Form = () => {
                             "& > div": {
                                 gridColumn: isNonMobile ? undefined : "span 4",
                             }
-                        }} // passed in any div of this box component
+                        }}
                     >
                         {isRegister && (
-                            // if on the register page, we'll have a number of components
                             <>
-    {/* BASIC NAMING */}
+{/* USER DETAILS */}
                                 <TextField
-                                    label="First Name" // display of the text
-                                    onBlur={handleBlur} // whenwe click out of input field
+                                    label="First Name"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     value={values.firstName}
-                                    name="firstName" // to sync to the correct value from the initialValueRegister
+                                    name="firstName"
                                     error={Boolean(touched.firstName) && Boolean(errors.firstName)}
                                     helperText={touched.firstName && errors.firstName}
                                     sx={{
                                         gridColumn: "span 2"
                                     }} />
                                 <TextField
-                                    label="Last Name" // display of the text
-                                    onBlur={handleBlur} // whenwe click out of input field
+                                    label="Last Name"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     value={values.lastName}
-                                    name="lastName" // to sync to the correct value from the initialValueRegister
+                                    name="lastName"
                                     error={Boolean(touched.lastName) && Boolean(errors.lastName)}
                                     helperText={touched.lastName && errors.lastName}
                                     sx={{
                                         gridColumn: "span 2"
                                     }} />
+                                <TextField
+                                    label="company"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.location}
+                                    name="company"
+                                    error={Boolean(touched.location) && Boolean(errors.location)}
+                                    helperText={touched.location && errors.location}
+                                    sx={{
+                                        gridColumn: "span 4"
+                                    }} />
+                                
                             </>
                         )}
-                        
-    {/* LOGIN AND REGISTER */}
+       
+{/* LOGIN AND REGISTER */}
                         <TextField
-                            label="Email" // display of the text
-                            onBlur={handleBlur} // when we click out of input field
+                            label="Email" 
+                            onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.email}
-                            name="email" // to sync to the correct value from the initialValueRegister
+                            name="email"initialValueRegister
                             error={Boolean(touched.email) && Boolean(errors.email)}
                             helperText={touched.email && errors.email}
                             sx={{
@@ -195,9 +204,9 @@ const Form = () => {
                             }} 
                         />
                         <TextField
-                            label="Password" // display of the text
+                            label="Password"
                             type="password" // to hide the value
-                            onBlur={handleBlur} // when we click out of input field
+                            onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.password}
                             name="password" // to sync to the correct value from the initialValueRegister
@@ -209,22 +218,23 @@ const Form = () => {
                         />
                     </Box>
 
-    {/* ------------- BUTTONS SECTION ------------- */}
+{/* ------------- BUTTONS SECTION ------------- */}
                     <Box>
+    {/* LOGIN/REGISTER BUTTON */}
                         <Button
                             fullWidth
-                            type="SIGN UP"
+                            type="submit"
                             sx={{
                                 margin: "2rem 0",
                                 padding: "1rem",
                                 backgroundColor: palette.primary.main,
                                 color: palette.background.alt,
-                                "&:hover": { color: palette.primary.main },
+                                "&:hover": { color: palette.primary.main},
                             }}
                         >
                             {isLogin ? "LOGIN" : "REGISTER"}
                         </Button>
-    {/* TEXT BELOW (TO SWITCH BETWEEN REGISTER AND LOGIN) */}
+    {/* SWITCH BETWEEN REGISTER AND LOGIN */}
                         <Typography
                             onClick={() => {
                                 // if on login page, switch to register page, else switch to login page
