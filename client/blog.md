@@ -40,7 +40,9 @@ package manager: yarn
 - easy backend url
 
 ### App.js
-- handles all the routes and their placements 
+- handles all the routes and their placements
+    - the overall layout of the application
 - the main file of react
 
 ### scenes/loginPage/index.jsx
+- renders the root components of the application including the app.js 
