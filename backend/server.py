@@ -80,16 +80,16 @@ def register():
 
     # Encrypt the password
     encoded_password = bcrypt.generate_password_hash(
-        request.json['password']).decode('utf-8')
+        request.form['password']).decode('utf-8')
 
     # Create a temporary user that will be added to the mongodb
     new_user = {
-        "email": request.json['email'],
-        "first_name": request.json['first_name'],
-        "last_name": request.json['last_name'],
+        "email": request.form['email'],
+        "first_name": request.form['firstName'],
+        "last_name": request.form['lastName'],
         "password": encoded_password,
-        "position": request.json['position'],
-        "company": request.json['company']
+        #"position": request.form['position'],
+        "company": request.form['company']
     }
 
     # Check whether the email is taken
