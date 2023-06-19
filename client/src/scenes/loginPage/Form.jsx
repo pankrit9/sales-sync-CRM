@@ -47,8 +47,7 @@ const initialValuesLogin = {
 }
 
 const Form = () => {
-    // Form component
-    const [pageType, setPageType] = useState("login"); // to determine if the user is on the register page or the login page
+    const [pageType, setPageType] = useState("login");
     const { palette } = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -149,41 +148,39 @@ const Form = () => {
                             "& > div": {
                                 gridColumn: isNonMobile ? undefined : "span 4",
                             }
-                        }} // passed in any div of this box component
+                        }}
                     >
                         {isRegister && (
-                            // if on the register page, we'll have a number of components
                             <>
 {/* USER DETAILS */}
-
                                 <TextField
-                                    label="First Name" // display of the text
-                                    onBlur={handleBlur} // whenwe click out of input field
+                                    label="First Name"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     value={values.firstName}
-                                    name="firstName" // to sync to the correct value from the initialValueRegister
+                                    name="firstName"
                                     error={Boolean(touched.firstName) && Boolean(errors.firstName)}
                                     helperText={touched.firstName && errors.firstName}
                                     sx={{
                                         gridColumn: "span 2"
                                     }} />
                                 <TextField
-                                    label="Last Name" // display of the text
-                                    onBlur={handleBlur} // whenwe click out of input field
+                                    label="Last Name"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     value={values.lastName}
-                                    name="lastName" // to sync to the correct value from the initialValueRegister
+                                    name="lastName"
                                     error={Boolean(touched.lastName) && Boolean(errors.lastName)}
                                     helperText={touched.lastName && errors.lastName}
                                     sx={{
                                         gridColumn: "span 2"
                                     }} />
                                 <TextField
-                                    label="company" // display of the text
-                                    onBlur={handleBlur} // whenwe click out of input field
+                                    label="company"
+                                    onBlur={handleBlur}
                                     onChange={handleChange}
                                     value={values.location}
-                                    name="company" // to sync to the correct value from the initialValueRegister
+                                    name="company"
                                     error={Boolean(touched.location) && Boolean(errors.location)}
                                     helperText={touched.location && errors.location}
                                     sx={{
@@ -195,11 +192,11 @@ const Form = () => {
        
 {/* LOGIN AND REGISTER */}
                         <TextField
-                            label="Email" // display of the text
-                            onBlur={handleBlur} // whenwe click out of input field
+                            label="Email" 
+                            onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.email}
-                            name="email" // to sync to the correct value from the initialValueRegister
+                            name="email"initialValueRegister
                             error={Boolean(touched.email) && Boolean(errors.email)}
                             helperText={touched.email && errors.email}
                             sx={{
@@ -207,9 +204,9 @@ const Form = () => {
                             }} 
                         />
                         <TextField
-                            label="Password" // display of the text
+                            label="Password"
                             type="password" // to hide the value
-                            onBlur={handleBlur} // whenwe click out of input field
+                            onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.password}
                             name="password" // to sync to the correct value from the initialValueRegister
@@ -223,6 +220,7 @@ const Form = () => {
 
 {/* ------------- BUTTONS SECTION ------------- */}
                     <Box>
+    {/* LOGIN/REGISTER BUTTON */}
                         <Button
                             fullWidth
                             type="submit"
@@ -236,7 +234,7 @@ const Form = () => {
                         >
                             {isLogin ? "LOGIN" : "REGISTER"}
                         </Button>
-{/* TEXT BELOW (TO SWITCH BETWEEN REGISTER AND LOGIN) */}
+    {/* SWITCH BETWEEN REGISTER AND LOGIN */}
                         <Typography
                             onClick={() => {
                                 // if on login page, switch to register page, else switch to login page

@@ -1,3 +1,4 @@
+// layout for the login page
 import {
     Box,
     Typography,
@@ -46,7 +47,7 @@ const LoginPage = () => {
                         borderRadius="1.5rem"
                         backgroundColor={theme.palette.background.alt}
                     >
-                        <Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem"}}>
+                        <Typography fontWeight="bold" variant="h1" sx={{ mb: "1.5rem"}}>
                             Welcome to SalesSync, unlock the power of your sales data!
                         </Typography>
                         <Form />
