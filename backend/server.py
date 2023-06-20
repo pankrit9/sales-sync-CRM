@@ -7,7 +7,7 @@ from pymongo import MongoClient
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 
-#from loginRegister.loginRegisterRoutes import login_page
+from loginRegister.registerLoginHelpers import check_email_password, recovery_email
 
 app = Flask(__name__)
 CORS(app)
@@ -61,7 +61,7 @@ def login():
 
     # find user with the given email
     matching_user = db.Accounts.find_one({"email": request.json['email']})
-
+    print(matching_user)
     if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
         # Created a token so users can be authenticated
         token = jwt.encode({
@@ -96,12 +96,55 @@ def register():
     if db.Accounts.find_one({"email": new_user['email']}):
         return jsonify({"error": "The given email is already taken."})
 
+    check_email_password(request.form['email'],request.form['password'])
     # Adds user to the database
     db.Accounts.insert_one(new_user)
 
     # Returns the success message, Should return token
     return jsonify({"message": "User was succesfuly created."})
 
+@app.route("/auth/recover-password", methods=['GET', 'POST'])
+def recover_password():
+
+    # get user with the given email from the database
+    matching_user = db.Accounts.find_one({"email": request.json['email']})
+    # Send code to email and get the sent code
+    recovery_code = recovery_email(request.json['email'], bcrypt)
+    print(recovery_code)
+    # Add an key-value pair that stores an encrypted code.
+    db.Accounts.update_one( {"email": request.json['email']},{ "$set": { "reset_code": recovery_code}})
+
+    return jsonify({"message": "A code for changing your password have been sent to the given email."})
+
+@app.route("/auth/change-password", methods=['GET', 'POST'])
+def change_password():
+
+    # get user with the given email from the database
+    matching_user = db.Accounts.find_one({"email": request.json['email']})
+    # Verify the code
+    bcrypt.check_password_hash(matching_user["reset_code"],request.json['code'])
+    print("1")
+    if bcrypt.check_password_hash(matching_user["reset_code"],request.json['code']):        
+        # update the password for the given email
+        db.Accounts.update_one( 
+            { "email": request.json['email']},
+            { "$set": { "password": request.json['new_password']}})
+
+        return jsonify({'message': "success"})
+
+@app.route("/add-product", methods = ['POST'])
+def add_products():
+    products = db.Products
+
+    new_product = {
+        "name" : request.json['name'],
+        "stock" : request.json['stock'] ,
+        "price" : request.json['price']
+    }
+
+    products.insert_one(new_product)
+
+    return jsonify({"product_list": []})
 
 @app.route("/users", methods=['GET'])
 #@token_required

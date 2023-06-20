@@ -1,6 +1,13 @@
 import re
+from email.message import EmailMessage
+import ssl
+import smtplib
+import random
+import string
+#from server import bcrypt
+
 # Checks user's email to see whether it is valid or not
-def check_email(email, password):
+def check_email_password(email, password):
     # Regular expression for validating an email
     regex = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'
     
@@ -10,28 +17,43 @@ def check_email(email, password):
     
     # Checks if invalid email format
     if not re.fullmatch(regex, email):
-        raise Exception(description='Invalid email format')
+        raise Exception('Invalid email format')
     
     # Check the lenght
     if len(password) < 8:
-        raise Exception(description='Password cannot be less than 8 characters')
+        raise Exception('Password cannot be less than 8 characters')
     
-    # Checks if an email address is already being used by another user
-    for user in store['users']:
-        if user['email'] == email:
-            raise Exception(description= 'The given email is already taken')
 
+def recovery_email(receiver_email, bcrypt):
+    
+    company_email = 'salesyncrm@gmail.com'
+    email_password = 'rjwvvnyemqwquzss'
 
+    subject = "Salesync password reset"
+    body = "The recovery code for your Salesync account is: "
+
+    #create a random string that is going to be the code 
+    result_str = ''.join(random.choice(string.ascii_letters) for i in range(20))
+    # Encrypt the randomly generated code so we can store the encrypted code in the database
+    encoded_password = bcrypt.generate_password_hash(result_str).decode('utf-8')
+
+    em = EmailMessage()
+    em['From'] = company_email
+    em['To'] = receiver_email
+    em['Subject'] = subject
+    em.set_content(body+result_str)
+    context = ssl.create_default_context()
+
+    
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(company_email,email_password)
+        smtp.sendmail(company_email, receiver_email, em.as_string())
+        smtp.close()
+    return encoded_password
 
 # Checks if length of user's first and last name is not between 1 and 50 characters inclusive (invalid)
 def check_name(name):
     if len(name) < 1 or len(name) > 50:
         raise Exception(description='Invalid name length')
 
-# Check data_store to see if generated handle is already in use
-# Return True if handle is already in use, otherwise return False
-def check_duplicate_handle(handle_str, store):
-    for user in store['users']:
-        if user['handle_str'] == handle_str:
-            return True
-    return False
