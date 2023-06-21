@@ -123,7 +123,6 @@ def change_password():
     matching_user = db.Accounts.find_one({"email": request.json['email']})
     # Verify the code
     bcrypt.check_password_hash(matching_user["reset_code"],request.json['code'])
-    print("1")
     if bcrypt.check_password_hash(matching_user["reset_code"],request.json['code']):        
         # update the password for the given email
         db.Accounts.update_one( 
@@ -132,7 +131,7 @@ def change_password():
 
         return jsonify({'message': "success"})
 
-@app.route("/add-product", methods = ['POST'])
+'''@app.route("/add-product", methods = ['POST'])
 def add_products():
     products = db.Products
 
@@ -144,7 +143,7 @@ def add_products():
 
     products.insert_one(new_product)
 
-    return jsonify({"product_list": []})
+    return jsonify({"product_list": []})'''
 
 @app.route("/users", methods=['GET'])
 #@token_required
