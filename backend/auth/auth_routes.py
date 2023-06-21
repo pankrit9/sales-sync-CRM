@@ -4,15 +4,18 @@ from config import db, bcrypt
 from flask import Blueprint, jsonify, request
 from auth.registerLoginHelpers import check_email_password, recovery_email
 
-
+# All the api requests that start with auth will be guided here
+# so if someone request auth/login then it direct them to this file and then
+# search for the route /login
 auth = Blueprint('auth', __name__)
+
 
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
 
     # find user with the given email
     matching_user = db.Accounts.find_one({"email": request.json['email']})
-    print(matching_user)
+
     if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
         # Created a token so users can be authenticated
         token = jwt.encode({
@@ -54,26 +57,29 @@ def register():
     # Returns the success message, Should return token
     return jsonify({"message": "User was succesfuly created."})
 
+
 @auth.route("/recover-password", methods=['GET', 'POST'])
 def recover_password():
 
     # get user with the given email from the database
     matching_user = db.Accounts.find_one({"email": request.json['email']})
+
     # Send code to email and get the sent code
     recovery_code = recovery_email(request.json['email'], bcrypt)
-    print(recovery_code)
+    
     # Add an key-value pair that stores an encrypted code.
     db.Accounts.update_one( {"email": request.json['email']},{ "$set": { "reset_code": recovery_code}})
 
     return jsonify({"message": "A code for changing your password have been sent to the given email."})
+
 
 @auth.route("/change-password", methods=['GET', 'POST'])
 def change_password():
 
     # get user with the given email from the database
     matching_user = db.Accounts.find_one({"email": request.json['email']})
+
     # Verify the code
-    bcrypt.check_password_hash(matching_user["reset_code"],request.json['code'])
     if bcrypt.check_password_hash(matching_user["reset_code"],request.json['code']):        
         # update the password for the given email
         db.Accounts.update_one( 
