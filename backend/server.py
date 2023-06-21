@@ -14,8 +14,6 @@ app.config['SECRET_KEY'] = 'Avengers'
 
 SECRET_JWT = 'salesync'
 
-
-
 bcrypt.init_app(app)
 
 # Blueprints
