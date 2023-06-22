@@ -1,27 +1,15 @@
-import json
-import datetime
-import jwt
-from flask import Flask, render_template, request, flash, jsonify, session
-from functools import wraps
-from pymongo import MongoClient
-from flask_cors import CORS
-from flask_bcrypt import Bcrypt
+from config import db
+from flask import Blueprint, jsonify, request
 
-app = Flask(__name__)
-CORS(app)
-
-database_URL = "mongodb+srv://avengers:endgame@crm.e8aut5k.mongodb.net/"
-client = MongoClient(database_URL)
-
-db = client.CRM
-
+manTasks = Blueprint('manager/tasks', __name__)
+staTasks = Blueprint('staff/tasks', __name__)
 #-----------------manager access-------------------#
 
 # See all tasks
 # For frontend: Is pagination a front end implementation? i.e.
 # scroll down and load additional. Not load all tasks onto the page
 # at once?
-@app.route("/manager/tasks/<uId>", methods=['GET'])
+@manTasks.route("/<uId>", methods=['GET'])
 def manager_tasks(uId):
     
     # gets all tasks from the Tasks Collection that the manager created
@@ -44,7 +32,7 @@ def manager_tasks(uId):
 # For frontend: If possible, can add drop down selection of staff to
 # assign based on staff accounts, instead of trying to string match
 # their names on input
-@app.route("/manager/tasks/create/<uId>", methods=['POST'])
+@manTasks.route("/create/<uId>", methods=['POST'])
 def manager_create_task(uId):
     
     # Fetch all ids and convert them to integers
@@ -79,7 +67,7 @@ def manager_create_task(uId):
     return jsonify({"message": "Task was succesfuly created."})
 
     # delete task
-@app.route("/manager/tasks/delete/<taskId>", methods=['POST'])
+@manTasks.route("/delete/<taskId>", methods=['POST'])
 def manager_task_delete(taskId):
     
     # delete task from db based on task ID
@@ -93,7 +81,7 @@ def manager_task_delete(taskId):
     # edit task
     # for frontend: managers cannot edit status, only staff can
     # managers cannot edit task id either
-@app.route("/manager/tasks/edit/<taskId>", methods=['POST'])
+@manTasks.route("/edit/<taskId>", methods=['POST'])
 def manager_task_edit(taskId):
 
     # parse json object for data to update i.e. due date
@@ -109,7 +97,7 @@ def manager_task_edit(taskId):
 
 #-----------------staff access-------------------#
 
-@app.route("/staff/tasks/<uId>", methods=['GET'])
+@staTasks.route("/<uId>", methods=['GET'])
 def staff_tasks(uId):
     
     # gets all tasks from the Tasks Collection that are assigned to the staff member
@@ -125,7 +113,7 @@ def staff_tasks(uId):
     return jsonify(tasks_list)
 
 # update completion 
-@app.route("/staff/tasks/status/<taskId>", methods=['POST'])
+@staTasks.route("/status/<taskId>", methods=['POST'])
 def staff_status(taskId):
 
     # parse json object for data to update i.e. completed
@@ -141,7 +129,7 @@ def staff_status(taskId):
 
     # edit task
     # for frontend: staff can edit their own assignment or their manager's assignment
-@app.route("/staff/tasks/edit/<taskId>", methods=['POST'])
+@staTasks.route("/edit/<taskId>", methods=['POST'])
 def staff_task_edit(taskId):
     
     # parse json object for data to update i.e. due date
@@ -155,6 +143,3 @@ def staff_task_edit(taskId):
     else:
         return jsonify({"message": "Unsuccessful"}), 400  
     
-
-if __name__ == '__main__':
-    app.run(debug=True)
