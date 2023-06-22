@@ -6,6 +6,7 @@ from functools import wraps
 from config import db, bcrypt
 from flask_cors import CORS
 from auth.auth_routes import auth
+from products.products_routes import products
 
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ bcrypt.init_app(app)
 
 # Blueprints
 app.register_blueprint(auth, url_prefix="/auth")
+app.register_blueprint(products, url_prefix="/products")
 
 # This might be usefull later on
 def token_required(f):
@@ -46,29 +48,6 @@ def home():
     return
 
 
-
-'''@app.route("/add-product", methods = ['POST'])
-def add_products():
-    products = db.Products
-
-    new_product = {
-        "name" : request.json['name'],
-        "stock" : request.json['stock'] ,
-        "price" : request.json['price']
-    }
-
-    products.insert_one(new_product)
-
-    return jsonify({"product_list": []})'''
-
-@app.route("/users", methods=['GET'])
-#@token_required
-def staff_list(data):
-    users_cursor = db.Accounts.find()
-    users_list = [user for user in users_cursor]
-    return jsonify({
-
-    })
 
 
 if __name__ == '__main__':
