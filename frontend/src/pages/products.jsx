@@ -11,9 +11,7 @@ function Products() {
             </div>
             
             <div >
-                <Link to="#" className='menu-bars'>
-                    Hello hello im the inventory. This needs to be finished by Tuesday
-                </Link>
+                
             </div>
         </>
     );

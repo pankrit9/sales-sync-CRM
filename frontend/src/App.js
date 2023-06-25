@@ -11,6 +11,7 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import Navbar  from "./components/Navbar";
 import Rankings from "./pages/rankings";
+import Staff from "./pages/staff";
 function App() {
   const mode = useSelector((state) => state.mode); // grabs the value created at initial state in ./state/index.js
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]); // gets the theme, yet to pass to the material ui
@@ -30,6 +31,7 @@ function App() {
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/clients" element={<Clients />} />
             <Route path="/rankings" element={<Rankings />} />
+            <Route path="/staff" element={<Staff />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
