@@ -10,7 +10,7 @@ from auth.registerLoginHelpers import check_email_password, recovery_email
 auth = Blueprint('auth', __name__)
 
 
-@auth.route("/login", methods=['GET', 'POST'])
+@auth.route("/login", methods=['POST'])
 def login():
 
     # find user with the given email
@@ -58,7 +58,7 @@ def register():
     return jsonify({"message": "User was succesfuly created."})
 
 
-@auth.route("/recover-password", methods=['GET', 'POST'])
+@auth.route("/recover-password", methods=['POST'])
 def recover_password():
 
     # get user with the given email from the database
@@ -73,7 +73,7 @@ def recover_password():
     return jsonify({"message": "A code for changing your password have been sent to the given email."})
 
 
-@auth.route("/change-password", methods=['GET', 'POST'])
+@auth.route("/change-password", methods=['PUT'])
 def change_password():
 
     # get user with the given email from the database
@@ -85,5 +85,5 @@ def change_password():
         db.Accounts.update_one( 
             { "email": request.json['email']},
             { "$set": { "password": request.json['new_password']}})
-
+        
         return jsonify({'message': "success"})
