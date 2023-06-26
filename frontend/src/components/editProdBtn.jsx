@@ -9,11 +9,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../api";
 import { useState, useEffect } from "react";
 
-export default function AddBtn({fetchData}) {
+export default function EditBtn({fetchData}) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
   const [price, setPrice] = React.useState("");
+  const [_id, setId] = React.useState("");
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,14 +24,15 @@ export default function AddBtn({fetchData}) {
     setOpen(false);
   };
 
-  const handleAdd = async () => {
+  const handleEdit = async () => {
     const product = {
+      _id,
       name,
       stock,
       price
     };
   
-    const response = await fetch(`${BACKEND_API}/products/add`, {
+    const response = await fetch(`${BACKEND_API}/products/edit/${_id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -44,27 +46,38 @@ export default function AddBtn({fetchData}) {
       setOpen(false);
     } else {
       const errorData = await response.json();
-      console.error("Error adding product: ", errorData);
-      alert("Error adding product: " + (errorData.message || "Unknown Error"));
+      console.error("Error updating product: ", errorData);
+      alert("Error updating product: " + (errorData.message || "Unknown Error"));
     }
   };
   
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Add Product
+        Edit Product
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Product</DialogTitle>
+        <DialogTitle>Edit Product</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please add in the details of a new product below.
+            Please add in the new details for the product you want to update.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
+            id="_id"
+            label="Product ID"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={_id}
+            onChange={(e) => setId(e.target.value)}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
             id="name"
-            label="Product Name"
+            label="Name"
             type="text"
             fullWidth
             variant="standard"
@@ -96,7 +109,7 @@ export default function AddBtn({fetchData}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAdd}>Add</Button>
+          <Button onClick={handleEdit}>Update</Button>
         </DialogActions>
       </Dialog>
     </div>
