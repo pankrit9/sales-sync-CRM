@@ -48,29 +48,26 @@ def delete_product(id):
 
     return jsonify({"message": "success product deleted"})
 
-@products.route("/sell", methods = ['PUT'])
-def sell_product():
+@products.route("/sell/<id>", methods = ['PUT'])
+def sell_product(id):
     products = db.Products
 
-    sell_product = {
-        "name" : request.json['name']
-    }
-    quantity_sold = request.json['quantity']
+    quantity_sold = int(request.json['quantity'])
     
-    sold_product = products.find_one(sell_product)
+    sold_product = products.find_one({"_id":id})
     
-    stock = sold_product['stock']
-    price = sold_product['price']
-    prev_revenue = sold_product['revenue']
+    stock = int(sold_product['stock'])
+    price = int(sold_product['price'])
+    prev_revenue = int(sold_product['revenue'])
 
     if quantity_sold > stock:
         raise Exception("You don't have enough stock available.")
     
     products.update_one(
-        sell_product,
-        { "$set": {"stock" : stock - quantity_sold, "revenue" : prev_revenue + price * quantity_sold}}
+        {"_id":id},
+        { "$set": {"stock" : str(stock - quantity_sold), "n_sold" : str(quantity_sold) ,"revenue" : str(prev_revenue + price * quantity_sold)}}
     )
-    return jsonify({"message": "success product deleted"})
+    return jsonify({"message": "success"})
 
 @products.route("/", methods=['GET'])
 def see_products():

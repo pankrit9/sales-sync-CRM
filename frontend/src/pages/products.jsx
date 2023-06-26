@@ -4,6 +4,7 @@ import Navbar  from "../components/Navbar";
 import EnhancedTable from "../components/productsTable";
 import AddBtn from "../components/addProdBtn";
 import EditBtn from "../components/editProdBtn";
+import SellBtn from "../components/sellProdBtn";
 import { BACKEND_API } from "../api";
 
 function Products() {
@@ -24,11 +25,14 @@ function Products() {
         <>
             <Navbar/>
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Products</h1>
-            <div style={{display: 'flex', marginLeft: '1070px'}}>
+            <div style={{display: 'flex', marginLeft: '960px'}}>
                 <div style={{marginRight: '10px'}}>
                     <EditBtn fetchData={fetchData}/>
                 </div>
-                <AddBtn fetchData={fetchData}/>
+                <div style={{marginRight: '10px'}}>
+                    <AddBtn fetchData={fetchData}/>
+                </div>
+                <SellBtn fetchData={fetchData}/>
             </div>
             <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '50px'}}>
                 {products.length > 0 ? <EnhancedTable rows={products} fetchData={fetchData}/> : <p>Loading...</p>}
