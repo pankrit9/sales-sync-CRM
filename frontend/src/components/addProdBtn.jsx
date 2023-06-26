@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../api";
 
-export default function FormDialog(fetchData) {
+export default function FormDialog({fetchData}) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
@@ -37,7 +37,8 @@ export default function FormDialog(fetchData) {
       body: JSON.stringify(product),
     });
 
-    
+    fetchData();
+
     setOpen(false);
   };
 
