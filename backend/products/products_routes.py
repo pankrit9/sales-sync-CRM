@@ -55,19 +55,27 @@ def sell_product(id):
     quantity_sold = int(request.json['quantity'])
     
     sold_product = products.find_one({"_id":id})
+
+    if not sold_product:
+        return jsonify({"message": "Product with given id not found"}), 404
     
     stock = int(sold_product['stock'])
     price = int(sold_product['price'])
     prev_revenue = int(sold_product['revenue'])
 
     if quantity_sold > stock:
-        raise Exception("You don't have enough stock available.")
-    
-    products.update_one(
+        return jsonify({"message" : "You don't have enough stock available."}), 404
+      
+    result = products.update_one(
         {"_id":id},
-        { "$set": {"stock" : str(stock - quantity_sold), "n_sold" : str(quantity_sold) ,"revenue" : str(prev_revenue + price * quantity_sold)}}
+        { "$set": {"stock" : str(stock - quantity_sold),
+                    "n_sold" : str(quantity_sold),
+                    "revenue" : str(prev_revenue + price * quantity_sold)}}
     )
-    return jsonify({"message": "success"})
+    if result.modified_count > 0:
+        return jsonify({"message": "Successful"})
+    else:
+        return jsonify({"message": "Unsuccessful"}), 404 
 
 @products.route("/", methods=['GET'])
 def see_products():
