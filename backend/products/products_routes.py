@@ -32,9 +32,12 @@ def add_products():
         "revenue" : 0
     }
 
-    products.insert_one(new_product)
+    result = products.insert_one(new_product)
 
-    return jsonify({"message": "success"})
+    if result.inserted_id:
+        return jsonify({"message": "Successful"})
+    else:
+        return jsonify({"message": "error adding product"}), 500
 
 # We have POST, PUT, DELETE and GET 
 @products.route("/delete/<id>", methods = ['DELETE'])
@@ -65,9 +68,8 @@ def sell_product():
     
     products.update_one(
         sell_product,
-        { "$set": {"stock" : stock - quantity_sold, "revenue" : prev_revenue +price * quantity_sold}}
+        { "$set": {"stock" : stock - quantity_sold, "revenue" : prev_revenue + price * quantity_sold}}
     )
-
     return jsonify({"message": "success product deleted"})
 
 @products.route("/", methods=['GET'])
@@ -82,3 +84,17 @@ def see_products():
         return jsonify({"message": "You don't have any products"})
 
     return jsonify(product_list)
+
+@products.route("/edit/<id>", methods=['POST'])
+def product_edit(id):
+
+    # parse json object for data to update i.e. due date
+    edit = request.get_json()
+
+    # updates fields according to provided JSON
+    result = db.Products.update_one({"_id": id}, {"$set": edit})
+
+    if result.modified_count > 0:
+        return jsonify({"message": "Successful"})
+    else:
+        return jsonify({"message": "Unsuccessful"}), 400 

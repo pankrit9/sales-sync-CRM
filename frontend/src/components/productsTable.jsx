@@ -177,12 +177,12 @@ async function deleteSelected(selectedIds, fetchData) {
   }
 }
 
-
 function EnhancedTableToolbar(props) {
   const { numSelected, selectedIds, fetchData } = props;
 
   const handleDelete = async () => {
     await deleteSelected(selectedIds, fetchData);
+    props.fetchData()
   }
 
   return (
