@@ -5,6 +5,7 @@
 
 .navbar {
     background-color: rgb(18, 2, 31);
+    margin-top: 0rem;
     height: 80px;
     display: flex;
     justify-content: start;
@@ -26,6 +27,7 @@
 
 .nav-menu {
     /*background-color: rgb(18, 2, 31);*/
+    top:0;
     background-color:#222222;
     width: 80px;
     height: 100%;
