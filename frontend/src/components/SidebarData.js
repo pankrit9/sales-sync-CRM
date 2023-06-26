@@ -4,6 +4,8 @@ import * as AiIcons from "react-icons/ai";
 import * as IoIcons from "react-icons/io";
 import * as BsIcons from "react-icons/bs";
 import * as FaIcons6 from "react-icons/fa6";
+import * as VscIcons from "react-icons/vsc";
+
 export const SidebarData = [
 
     {
@@ -41,5 +43,11 @@ export const SidebarData = [
         path: '/rankings',
         icon: <FaIcons6.FaRankingStar/>,
         cName: 'nav-text'
+    },
+    {
+        title: 'SING OUT',
+        path: '/signout',
+        icon: <VscIcons.VscSignOut/>,
+        cName: 'nav-text out'
     }
 ]
