@@ -1,0 +1,16 @@
+.search-bar {
+    left: 50%;
+}
+
+.tools {
+    display: 'flex';
+    width: '100%';
+}
+
+.product-buttoms {
+    left: 50%;
+}
+
+.search-icon {
+    left:50.5%;
+}
