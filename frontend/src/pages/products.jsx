@@ -4,6 +4,7 @@ import Navbar  from "../components/Navbar";
 import EnhancedTable from "../components/productsTable";
 import AddBtn from "../components/addProdBtn";
 import EditBtn from "../components/editProdBtn";
+import SellBtn from "../components/sellProdBtn";
 import { BACKEND_API } from "../api";
 import { SearchBar } from '../components/SearchBar';
 import "../components/Searchbar.css"
@@ -44,6 +45,13 @@ function Products() {
                     <AddBtn fetchData={fetchData}/>
                 </div>
                 
+                <div style={{marginRight: '10px'}}>
+                    <EditBtn fetchData={fetchData}/>
+                </div>
+                <div style={{marginRight: '10px'}}>
+                    <AddBtn fetchData={fetchData}/>
+                </div>
+                <SellBtn fetchData={fetchData}/>
             </div>
             <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '50px'}}>
                 {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData}/> : <p>The inventory is empty</p>}
