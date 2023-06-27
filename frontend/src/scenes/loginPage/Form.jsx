@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { Formik } from "formik";
 import { setLogin } from "../../state";
 import { BACKEND_API } from "../../api";
+import './Navbar.css'
 
 // creating the validation schema to tell how the form library is going to store the information
 const registerSchema = yup.object().shape({
