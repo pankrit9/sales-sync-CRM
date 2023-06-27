@@ -1,7 +1,8 @@
 .search-bar {
-    right: 500px;
     width: auto;
     display: flex;
+    justify-content: center;
+
     position: fixed;
  
 }
@@ -9,8 +10,16 @@
     margin-left: 80px;
     display: flex;
     width: 100%;
+    position: fixed;
 }
+.tools {
+    right: 500px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
 
+}
 .edit-btn-product {
     right: 230px;
     display: flex;
@@ -20,7 +29,6 @@
 
 }
 .search-icon {
-    right:500px;
     display: flex;
     justify-content: center;
     position: fixed;
