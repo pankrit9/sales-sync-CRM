@@ -13,22 +13,23 @@ const LoginPage = () => {
     
     return (
         <div class="container">
-            <div class="left-side"
+            <div class="center"
                 width="100%"
                 backgroundColor={theme.palette.background.alt}
                 p="1rem 6%"
-                textAlign="left"
             >
                 <Typography
                     fontWeight="bold"
-                    fontSize="32px"
+                    fontSize="60px"
+                    textAlign = "center"
                     >
-                    SalesSync
+                    SaleSync
                 </Typography>
                 <Typography
                     fontWeight="bold"
-                    fontSize="15px"
+                    fontSize="30px"
                     color="primary"
+                    textAlign = "center"
                     >
                     Customer Relationship Management
                 </Typography>
@@ -47,8 +48,8 @@ const LoginPage = () => {
                         borderRadius="1.5rem"
                         backgroundColor={theme.palette.background.alt}
                     >
-                        <Typography fontWeight="bold" variant="h1" sx={{ mb: "1.5rem"}}>
-                            Welcome to SalesSync, unlock the power of your sales data!
+                        <Typography textAlign = "center" fontWeight="bold" variant="h2" sx={{ mb: "1.5rem"}}>
+                            Welcome to SaleSync, unlock the power of your sales data!
                         </Typography>
                         <Form />
                     </Box>
