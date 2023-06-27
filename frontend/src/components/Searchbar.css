@@ -1,16 +1,44 @@
 .search-bar {
-    left: 50%;
+    right: 500px;
+    width: auto;
+    display: flex;
+    position: fixed;
+ 
+}
+.container {
+    margin-left: 80px;
+    display: flex;
+    width: 100%;
 }
 
-.tools {
-    display: 'flex';
-    width: '100%';
-}
+.edit-btn-product {
+    right: 230px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
 
-.product-buttoms {
-    left: 50%;
 }
-
 .search-icon {
-    left:50.5%;
+    right:500px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+
+}
+.add-btn-product {
+    right: 362px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
+
+}
+.sell-btn-product {
+    right: 120px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
 }

@@ -38,20 +38,20 @@ function Products() {
         <>
             <Navbar/>
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Products</h1>
-            <div className="tools">
-                <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery}  />
-                <div className='product-buttoms'>
-                    <EditBtn fetchData={fetchData} style={{right:'10%'}}/>
-                    <AddBtn fetchData={fetchData}/>
+            
+            <div className="container">
+                <div className="tools">
+                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 </div>
-                
-                <div style={{marginRight: '10px'}}>
+                <div className='edit-btn-product'>
                     <EditBtn fetchData={fetchData}/>
                 </div>
-                <div style={{marginRight: '10px'}}>
+                <div className='add-btn-product'>
                     <AddBtn fetchData={fetchData}/>
                 </div>
-                <SellBtn fetchData={fetchData}/>
+                <div className='sell-btn-product'>
+                    <SellBtn fetchData={fetchData}/>
+                </div>
             </div>
             <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '50px'}}>
                 {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData}/> : <p>The inventory is empty</p>}
