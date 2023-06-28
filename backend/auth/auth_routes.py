@@ -87,3 +87,4 @@ def change_password():
             { "$set": { "password": bcrypt.generate_password_hash(request.json['new_password']).decode('utf-8')}}
         )
         return jsonify({'message': "success"})
+    return jsonify({'message': "Incorrect details."})

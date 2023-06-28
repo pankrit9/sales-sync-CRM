@@ -90,6 +90,7 @@ const Resetpassword = () => {
         );
         const loggedIn = await loggedInResponse.json();
         onSubmitProps.resetForm();  // reset the form
+        navigate("/")
     }
 
 

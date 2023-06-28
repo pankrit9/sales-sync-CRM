@@ -321,6 +321,7 @@ const Form = () => {
                             onClick={() => {
                                 // if on login page, switch to forgot page, else switch to login page
                                 setPageType(isLogin ? "forgot password" : "login");
+                                navigate("/resetpassword");
                                 resetForm();
                             }}
                             sx={{
