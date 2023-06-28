@@ -24,12 +24,13 @@ import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../api";
 import { useState, useEffect } from 'react';
 
-function createData(_id, name, stock, price, n_sold, revenue) {
+function createData(_id, name, stock, price, is_electronic, n_sold, revenue) {
   return {
     _id,
     name,
     stock,
     price,
+    is_electronic,
     n_sold,
     revenue
   };
@@ -91,6 +92,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Price ($AUD)',
+  },
+  {
+    id: 'is_electronic',
+    numeric: true,
+    disablePadding: false,
+    label: 'Electronic Product',
   },
   {
     id: 'n_sold',
@@ -176,7 +183,6 @@ async function deleteSelected(selectedIds, fetchData) {
     console.error(err);
   }
 }
-
 function EnhancedTableToolbar(props) {
   const { numSelected, selectedIds, fetchData } = props;
 
@@ -362,6 +368,13 @@ export default function EnhancedTable({rows, fetchData}) {
                     <TableCell align="right">{row.name}</TableCell>
                     <TableCell align="right">{row.stock}</TableCell>
                     <TableCell align="right">{row.price}</TableCell>
+                    <TableCell align="right">
+                      <Checkbox
+                        checked={row.is_electronic}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                        disabled
+                      />
+                    </TableCell>
                     <TableCell align="right">{row.n_sold}</TableCell>
                     <TableCell align="right">{row.revenue}</TableCell>
                   </TableRow>

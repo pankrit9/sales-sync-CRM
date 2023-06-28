@@ -8,12 +8,17 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../api";
 import { useState, useEffect } from "react";
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 
 export default function AddBtn({fetchData}) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
   const [price, setPrice] = React.useState("");
+  const [is_electronic, setIsElectronic] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -27,7 +32,8 @@ export default function AddBtn({fetchData}) {
     const product = {
       name,
       stock,
-      price
+      price,
+      is_electronic,
     };
   
     const response = await fetch(`${BACKEND_API}/products/add`, {
@@ -74,17 +80,6 @@ export default function AddBtn({fetchData}) {
           <TextField
             autoFocus
             margin="dense"
-            id="stock"
-            label="Stock"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
             id="price"
             label="Price"
             type="text"
@@ -92,6 +87,36 @@ export default function AddBtn({fetchData}) {
             variant="standard"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+          />
+          <div style={{marginTop: '30px'}}></div>
+          <FormControl fullWidth>
+            <InputLabel id="is_electronic">Electronic Product?</InputLabel>
+            <Select
+              labelId="is_electronic"
+              id="is_electronic"
+              value={is_electronic}
+              label="Electronic Product?"
+              onChange={(e) => {setIsElectronic(e.target.value)
+                if(e.target.value) {
+                  setStock("0")
+                }}
+              }
+            >
+              <MenuItem value={true}>True</MenuItem>
+              <MenuItem value={false}>False</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="stock"
+            label="Stock"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            disabled={is_electronic}
           />
         </DialogContent>
         <DialogActions>

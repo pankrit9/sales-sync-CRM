@@ -53,7 +53,7 @@ function Products() {
                     <SellBtn fetchData={fetchData}/>
                 </div>
             </div>
-            <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
+                <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
                 {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData}/> : <p>The inventory is empty</p>}
             </div>
         </>
