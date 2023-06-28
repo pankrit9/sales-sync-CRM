@@ -22,7 +22,8 @@ const registerSchema = yup.object().shape({
     lastName: yup.string().required("required"),
     email: yup.string().email("Invalid email").required("required"),
     password: yup.string().required("required"),
-    company: yup.string().required("required")
+    company: yup.string().required("required"),
+    role: yup.string().required("required")
 });
 
 const loginSchema = yup.object().shape({
@@ -43,7 +44,8 @@ const initialValuesRegister = {
     lastName: "",
     email: "",
     password: "",
-    company: ""
+    company: "",
+    role: "",   // to determine if the user is a manager or staff
 }
 
 const initialValuesLogin = {
@@ -217,7 +219,7 @@ const Form = () => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.email}
-                            name="email"initialValueRegister
+                            name="email"
                             error={Boolean(touched.email) && Boolean(errors.email)}
                             helperText={touched.email && errors.email}
                             sx={{
@@ -237,8 +239,38 @@ const Form = () => {
                                 gridColumn: "span 4"
                             }}
                         />
-                    {/*    {/* LOGIN/REGISTER BUTTON */}   
-                    <Button
+                        {isRegister && (
+                            <>
+                                <label>
+                                    <input 
+                                        type="radio"
+                                        name="role"
+                                        value="manager"
+                                        checked={values.role === "manager"}
+                                        onChange={handleChange}
+                                    />
+                                    Manager
+                                </label>
+                                <label>
+                                    <input 
+                                        type="radio"
+                                        name="role"
+                                        value="manager"
+                                        checked={values.role === "manager"}
+                                        onChange={handleChange}
+                                        sx={{
+                                            position:'absolute'
+                                        }}
+                                    />
+                                    Staff
+                                </label>
+                            </>
+                        )}
+
+{/* ------------- BUTTONS SECTION ------------- */}
+                    <Box>
+    {/* LOGIN/REGISTER BUTTON */}
+                        <Button
                             fullWidth
                             type="submit"
                             sx={{
@@ -249,7 +281,7 @@ const Form = () => {
                                 "&:hover": { color: palette.primary.main},
                             }}
                         >
-                            {isLogin ? "LOGIN" : "REGISTER"}
+                        {isLogin ? "LOGIN" : "REGISTER"}
                         </Button>
     {/* SWITCH BETWEEN REGISTER AND LOGIN */}
                         <Button
@@ -271,8 +303,10 @@ const Form = () => {
                             {isLogin 
                                 ? "Don't have a SaleSync account? Click here to sign Up Now!"
                                 : "Already have an account? Click here to login!"}
-                        </Button>    
+                        </Button>   
+                    </Box> 
                     </>
+                    
                 )}
        
 {/* LOGIN AND REGISTER */}

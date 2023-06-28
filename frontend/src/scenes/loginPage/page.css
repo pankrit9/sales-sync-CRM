@@ -1,0 +1,51 @@
+.container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .left-side {
+    width: 45%;
+    background-color: black;
+    color: white;
+    padding: 1rem 6%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .left-side h1 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .left-side p {
+    font-size: 15px;
+    font-weight: bold;
+    color: purple;
+  }
+  
+  .right-side {
+    width: 60%;
+    background-color: white;
+    padding: 1rem 6%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .right-side h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-box {
+    width: 50%;
+    padding: 2rem;
+    margin: 2rem auto;
+    border-radius: 1.5rem;
+    background-color: white;
+  }
+  
