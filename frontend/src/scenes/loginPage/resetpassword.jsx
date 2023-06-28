@@ -16,21 +16,6 @@ import { setLogin } from "../../state";
 import { BACKEND_API } from "../../api";
 
 // creating the validation schema to tell how the form library is going to store the information
-const registerSchema = yup.object().shape({
-    // yup handles the validation of the form (i.e. if the user has entered the correct info)
-    firstName: yup.string().required("required"),
-    lastName: yup.string().required("required"),
-    email: yup.string().email("Invalid email").required("required"),
-    password: yup.string().required("required"),
-    company: yup.string().required("required")
-});
-
-const loginSchema = yup.object().shape({
-    // stripped down version of the registerSchema
-    email: yup.string().email("Invalid email").required("required"),
-    password: yup.string().required("required"),
-});
-
 const forgotPasswordSchema =  yup.object().shape({
     // lets user enter their email if they forgot their password
     email: yup.string().email("Invalid email").required("required"),
@@ -46,70 +31,18 @@ const resetpassword = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const isNonMobile = useMediaQuery("(min-width: 600px)"); // hook built into mui to determine if the curr screen size is lower or higher to the value input in it
-    const isLogin = pageType === "login"; // to determine if the user is on the login page or the register page
     const isForgotPassword = pageType === "forgot password";
+    const isChangePassword = pageType === "change password";
 
     /**
      * 
     // allows us to send form info with the image
-     * @param values `value` used in the formik textFields is in this object
-     * @param onSubmitProps -> essentially the formik props provides several formik methods 
-     */
-    const register = async (values, onSubmitProps) => {
-        // form data is used
-        const formData = new FormData();    // to handle the pictures
-        for (let value in values) {
-        // loop through each key-value in the values object and append to the form data
-            formData.append(value, values[value]);
-        }
-
-        const savedUserResponse = await fetch(
-            // send the form data to the below api call
-            `${BACKEND_API}/auth/register`,
-            {
-                method: "POST",
-                body: formData,
-            }
-        );
-        // to save whatver is returned from the backend, in a parsable form like json
-        const savedUser = await savedUserResponse.json();
-        onSubmitProps.resetForm();  // reset the form
-
-        if (savedUser) {
-            setPageType("login");   // if the user is registered, then we'll navigate them to the login page
-        }
-    }
 
     /**
      * 
      * @param values 
      * @param onSubmitProps 
     */
-    const login = async (values, onSubmitProps) => {
-        const loggedInResponse = await fetch(
-            // send the form data to the below api call
-            `${BACKEND_API}/auth/login`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-                credentials: "omit",
-            }
-        );
-        const loggedIn = await loggedInResponse.json();
-        onSubmitProps.resetForm();  // reset the form
-        if (loggedIn) {
-            dispatch(
-                setLogin({
-                    // comes from the redux state dir 
-                    user: loggedIn.user,
-                    token: loggedIn.token,
-                })
-            );   // dispatch the user info to the store
-            navigate("/home");  // navigate to the home page as the user is logged in
-        }
-    }
-
     const forgotPassword = async (values, onSubmitProps) => {
         const loggedInResponse = await fetch(
             // send the form data to the below api call
@@ -125,10 +58,31 @@ const resetpassword = () => {
         onSubmitProps.resetForm();  // reset the form
     }
 
+    /**
+     * 
+     * @param values 
+     * @param onSubmitProps 
+    */
+    const changePassword = async (values, onSubmitProps) => {
+        const loggedInResponse = await fetch(
+            // send the form data to the below api call
+            `${BACKEND_API}/auth/change-password`,
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(values),
+                credentials: "omit",
+            }
+        );
+        const loggedIn = await loggedInResponse.json();
+        onSubmitProps.resetForm();  // reset the form
+    }
+
+
 /** logic behind when the user submits the form */
     const handleFormSubmit = async (values, onSubmitProps) => {
         if (isForgotPassword) await forgotPassword(values, onSubmitProps);
-        if (isChangedPassword) await forgotPassword(values, onSubmitProps);
+        if (isChangePassword) await forgotPassword(values, onSubmitProps);
     };
 
     return (
@@ -207,6 +161,64 @@ const resetpassword = () => {
                                 ? "Forgot my Password"  
                                 : "I've remembered my password, click here to login!"}
                         </Typography>
+                    </Box>
+                    </>
+                )}
+
+{/*CHECK EMAIL INBOX MESSAGE */}
+                {isChangePassword && (
+                    <>
+                    <TextField
+                        label="Recovery Code" 
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.email}
+                        name="email"initialValueRegister
+                        error={Boolean(touched.email) && Boolean(errors.email)}
+                        helperText={touched.email && errors.email}
+                        sx={{
+                            gridColumn: "span 4"
+                        }} 
+                    />
+                    {/*ADD FUNCTIONALITY TO CONFIRM PASSWORDS ARE EQUAL */}
+                    <TextField
+                        label="New Password" 
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.email}
+                        name="email"initialValueRegister
+                        error={Boolean(touched.email) && Boolean(errors.email)}
+                        helperText={touched.email && errors.email}
+                        sx={{
+                            gridColumn: "span 4"
+                        }} 
+                    />
+                    <TextField
+                        label="Confirm New Password" 
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.email}
+                        name="email"initialValueRegister
+                        error={Boolean(touched.email) && Boolean(errors.email)}
+                        helperText={touched.email && errors.email}
+                        sx={{
+                            gridColumn: "span 4"
+                        }} 
+                    />
+                    <Box>
+                        <Button
+                            fullWidth
+                            type="submit"
+                            sx={{
+                                margin: "2rem 0",
+                                padding: "1rem",
+                                backgroundColor: palette.primary.main,
+                                color: palette.background.alt,
+                                "&:hover": { color: palette.primary.main},
+                            }}
+                        >
+                            {isLogin ? "LOGIN" : "SUBMIT"}
+                        </Button>
                     </Box>
                     </>
                 )}
