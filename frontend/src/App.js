@@ -13,6 +13,7 @@ import Navbar  from "./components/Navbar";
 import Rankings from "./pages/rankings";
 import Staff from "./pages/staff";
 import ResetPage from "./scenes/loginPage/indexReset";
+import Home from "./homePage/pages/Home";
 
 function App() {
   const mode = useSelector((state) => state.mode); // grabs the value created at initial state in ./state/index.js
@@ -28,7 +29,7 @@ function App() {
             {/* SETTING UP THE ROUTES */}
             <Route path="/" element={<LoginPage />} />
             <Route path="/resetpassword" element={<ResetPage />} />
-            <Route path="/home" element={<Navbar />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/products" element={<Products />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/tasks" element={<Tasks />} />
