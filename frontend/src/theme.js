@@ -1,5 +1,9 @@
 // color design tokens export
 export const colorTokens = {
+    white: {
+        0: "#FFFFFF",
+        0: "#FFFFFF",   // change to black (for dark mode)
+    },
     grey: {
       0: "#FFFFFF",
       10: "#F6F6F6",
@@ -16,16 +20,16 @@ export const colorTokens = {
       1000: "#000000",
     },
     primary: {
-      50: "#5E17EB",
-      100: "#5E17EB",
-      200: "#5E17EB",
-      300: "#5E17EB",
-      400: "#5E17EB",
-      500: "#5E17EB",
-      600: "#5E17EB",
-      700: "#5E17EB",
-      800: "#5E17EB",
-      900: "#5E17EB",
+      50: "#8F00FF",
+      100: "#8F00FF",
+      200: "#8F00FF",
+      300: "#8F00FF",
+      400: "#8F00FF",
+      500: "#8F00FF",
+      600: "#8F00FF",
+      700: "#8F00FF",
+      800: "#8F00FF",
+      900: "#8F00FF",
     },
   };
 
@@ -50,6 +54,9 @@ export const themeSettings = (mode) => {
                     medium: colorTokens.grey[400],
                     light: colorTokens.grey[700]
                 },
+                text: {
+                    primary: colorTokens.white[0],
+                },
                 background: {
                     default: colorTokens.grey[900],
                     alt: colorTokens.grey[800]
@@ -67,6 +74,9 @@ export const themeSettings = (mode) => {
                     mediumMain: colorTokens.grey[400],
                     medium: colorTokens.grey[300],
                     light: colorTokens.grey[50]
+                },
+                text: {
+                    primary: colorTokens.white[10],
                 },
                 background: {
                     default: colorTokens.grey[10],
