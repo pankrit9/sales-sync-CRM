@@ -22,7 +22,8 @@ const registerSchema = yup.object().shape({
     lastName: yup.string().required("required"),
     email: yup.string().email("Invalid email").required("required"),
     password: yup.string().required("required"),
-    company: yup.string().required("required")
+    company: yup.string().required("required"),
+    role: yup.string().required("required")
 });
 
 const loginSchema = yup.object().shape({
@@ -38,7 +39,8 @@ const initialValuesRegister = {
     lastName: "",
     email: "",
     password: "",
-    company: ""
+    company: "",
+    role: "",   // to determine if the user is a manager or staff
 }
 
 const initialValuesLogin = {
@@ -196,7 +198,7 @@ const Form = () => {
                             onBlur={handleBlur}
                             onChange={handleChange}
                             value={values.email}
-                            name="email"initialValueRegister
+                            name="email"
                             error={Boolean(touched.email) && Boolean(errors.email)}
                             helperText={touched.email && errors.email}
                             sx={{
@@ -216,6 +218,33 @@ const Form = () => {
                                 gridColumn: "span 4"
                             }}
                         />
+                        {isRegister && (
+                            <>
+                                <label>
+                                    <input 
+                                        type="radio"
+                                        name="role"
+                                        value="manager"
+                                        checked={values.role === "manager"}
+                                        onChange={handleChange}
+                                    />
+                                    Manager
+                                </label>
+                                <label>
+                                    <input 
+                                        type="radio"
+                                        name="role"
+                                        value="manager"
+                                        checked={values.role === "manager"}
+                                        onChange={handleChange}
+                                        sx={{
+                                            position:'absolute'
+                                        }}
+                                    />
+                                    Staff
+                                </label>
+                            </>
+                        )}
                     </Box>
 
 {/* ------------- BUTTONS SECTION ------------- */}
@@ -232,7 +261,7 @@ const Form = () => {
                                 "&:hover": { color: palette.primary.main},
                             }}
                         >
-                            {isLogin ? "LOGIN" : "REGISTER"}
+                        {isLogin ? "LOGIN" : "REGISTER"}
                         </Button>
     {/* SWITCH BETWEEN REGISTER AND LOGIN */}
                         <Typography
