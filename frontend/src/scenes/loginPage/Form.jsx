@@ -124,7 +124,7 @@ const Form = () => {
                     token: loggedIn.token,
                 })
             );   // dispatch the user info to the store
-            navigate("/home");  // navigate to the home page as the user is logged in
+            navigate("/products");  // navigate to the home page as the user is logged in
         }
     }
 

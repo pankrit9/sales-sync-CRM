@@ -27,9 +27,9 @@ function App() {
           <CssBaseline />
           <Routes>
             {/* SETTING UP THE ROUTES */}
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={<Home />} />
             <Route path="/resetpassword" element={<ResetPage />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/products" element={<Products />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/tasks" element={<Tasks />} />
