@@ -2,7 +2,7 @@
 export const colorTokens = {
     white: {
         0: "#FFFFFF",
-        0: "#FFFFFF",   // change to black (for dark mode)
+        10: "#FFFFFF",   // change to black (for dark mode)
     },
     grey: {
       0: "#FFFFFF",
