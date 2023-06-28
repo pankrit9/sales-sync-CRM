@@ -31,6 +31,11 @@ const loginSchema = yup.object().shape({
     password: yup.string().required("required"),
 });
 
+const forgotPasswordSchema =  yup.object().shape({
+    // lets user enter their email if they forgot their password
+    email: yup.string().email("Invalid email").required("required"),
+});
+
 const initialValuesRegister = {
     // schema for the validation
     // this for the initial values of the form
@@ -46,6 +51,10 @@ const initialValuesLogin = {
     password: "",
 }
 
+const initialValuesForgotPassword = {
+    email: "",
+}
+
 const Form = () => {
     const [pageType, setPageType] = useState("login");
     const { palette } = useTheme();
@@ -54,6 +63,7 @@ const Form = () => {
     const isNonMobile = useMediaQuery("(min-width: 600px)"); // hook built into mui to determine if the curr screen size is lower or higher to the value input in it
     const isLogin = pageType === "login"; // to determine if the user is on the login page or the register page
     const isRegister = pageType === "register";
+    const isForgotPassword = pageType === "forgot password";
 
     /**
      * 
@@ -116,9 +126,24 @@ const Form = () => {
         }
     }
 
+    const forgotPassword = async (values, onSubmitProps) => {
+        const loggedInResponse = await fetch(
+            // send the form data to the below api call
+            `${BACKEND_API}/auth/recover-password`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(values),
+                credentials: "omit",
+            }
+        );
+        const loggedIn = await loggedInResponse.json();
+        onSubmitProps.resetForm();  // reset the form
+    }
 
 /** logic behind when the user submits the form */
     const handleFormSubmit = async (values, onSubmitProps) => {
+        if (isForgotPassword) await forgotPassword(values, onSubmitProps);
         if (isLogin) await login(values, onSubmitProps);    // leave it for the backend
         if (isRegister) await register(values, onSubmitProps);
     };
@@ -150,47 +175,43 @@ const Form = () => {
                             }
                         }}
                     >
-                        {isRegister && (
+
+{/* REGISTER */}
+                {isRegister && (
                             <>
-{/* USER DETAILS */}
-                                <TextField
-                                    label="First Name"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.firstName}
-                                    name="firstName"
-                                    error={Boolean(touched.firstName) && Boolean(errors.firstName)}
-                                    helperText={touched.firstName && errors.firstName}
-                                    sx={{
-                                        gridColumn: "span 2"
-                                    }} />
-                                <TextField
-                                    label="Last Name"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.lastName}
-                                    name="lastName"
-                                    error={Boolean(touched.lastName) && Boolean(errors.lastName)}
-                                    helperText={touched.lastName && errors.lastName}
-                                    sx={{
-                                        gridColumn: "span 2"
-                                    }} />
-                                <TextField
-                                    label="company"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.location}
-                                    name="company"
-                                    error={Boolean(touched.location) && Boolean(errors.location)}
-                                    helperText={touched.location && errors.location}
-                                    sx={{
-                                        gridColumn: "span 4"
-                                    }} />
-                                
-                            </>
-                        )}
-       
-{/* LOGIN AND REGISTER */}
+                        <TextField
+                            label="First Name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.firstName}
+                            name="firstName"
+                            error={Boolean(touched.firstName) && Boolean(errors.firstName)}
+                            helperText={touched.firstName && errors.firstName}
+                            sx={{
+                                gridColumn: "span 2"
+                            }} />
+                        <TextField
+                            label="Last Name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.lastName}
+                            name="lastName"
+                            error={Boolean(touched.lastName) && Boolean(errors.lastName)}
+                            helperText={touched.lastName && errors.lastName}
+                            sx={{
+                                gridColumn: "span 2"
+                            }} />
+                        <TextField
+                            label="Company Name"
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.location}
+                            name="company"
+                            error={Boolean(touched.location) && Boolean(errors.location)}
+                            helperText={touched.location && errors.location}
+                            sx={{
+                                gridColumn: "span 4"
+                            }} />
                         <TextField
                             label="Email" 
                             onBlur={handleBlur}
@@ -216,12 +237,8 @@ const Form = () => {
                                 gridColumn: "span 4"
                             }}
                         />
-                    </Box>
-
-{/* ------------- BUTTONS SECTION ------------- */}
-                    <Box>
-    {/* LOGIN/REGISTER BUTTON */}
-                        <Button
+                    {/*    {/* LOGIN/REGISTER BUTTON */}   
+                    <Button
                             fullWidth
                             type="submit"
                             sx={{
@@ -235,10 +252,75 @@ const Form = () => {
                             {isLogin ? "LOGIN" : "REGISTER"}
                         </Button>
     {/* SWITCH BETWEEN REGISTER AND LOGIN */}
-                        <Typography
+                        <Button
                             onClick={() => {
                                 // if on login page, switch to register page, else switch to login page
                                 setPageType(isLogin ? "register" : "login");
+                                resetForm();
+                            }}
+                            fullWidth
+                            type="submit"
+                            sx={{
+                                margin: "2rem 0",
+                                padding: "1rem",
+                                backgroundColor: palette.primary.main,
+                                color: palette.background.alt,
+                                "&:hover": { color: palette.primary.main},
+                            }}
+                        >
+                            {isLogin 
+                                ? "Don't have a SaleSync account? Click here to sign Up Now!"
+                                : "Already have an account? Click here to login!"}
+                        </Button>    
+                    </>
+                )}
+       
+{/* LOGIN AND REGISTER */}
+                {isLogin && (           
+                        <>
+                        <TextField
+                            label="Email" 
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.email}
+                            name="email"initialValueRegister
+                            error={Boolean(touched.email) && Boolean(errors.email)}
+                            helperText={touched.email && errors.email}
+                            sx={{
+                                gridColumn: "span 4"
+                            }} 
+                        />
+                        <TextField
+                            label="Password"
+                            type="password" // to hide the value
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value={values.password}
+                            name="password" // to sync to the correct value from the initialValueRegister
+                            error={Boolean(touched.password) && Boolean(errors.password)}
+                            helperText={touched.password && errors.password}
+                            sx={{
+                                gridColumn: "span 4"
+                            }}
+                        />
+                            <Button
+                            fullWidth
+                            type="submit"
+                            sx={{
+                                margin: "2rem 0",
+                                padding: "1rem",
+                                backgroundColor: palette.primary.main,
+                                color: palette.background.alt,
+                                "&:hover": { color: palette.primary.main},
+                            }}
+                        >
+                            {isLogin ? "LOGIN" : "REGISTER"}
+                        </Button>
+
+                        <Typography
+                            onClick={() => {
+                                // if on login page, switch to forgot page, else switch to login page
+                                setPageType(isLogin ? "forgot password" : "login");
                                 resetForm();
                             }}
                             sx={{
@@ -251,10 +333,85 @@ const Form = () => {
                             }}
                         >
                             {isLogin 
-                                ? "Don't have an account? Sign Up here."
-                                : "Already have an account? Login here."}
+                                ? "Forgot my Password"  
+                                : "I've remembered my password, click here to login!"}
+                        </Typography>
+
+                        <Button
+                            onClick={() => {
+                                // if on login page, switch to register page, else switch to login page
+                                setPageType(isLogin ? "register" : "login");
+                                resetForm();
+                            }}
+                            fullWidth
+                            type="submit"
+                            sx={{
+                                margin: "2rem 0",
+                                padding: "1rem",
+                                backgroundColor: palette.primary.main,
+                                color: palette.background.alt,
+                                "&:hover": { color: palette.primary.main},
+                            }}
+                        >
+                            {isLogin 
+                                ? "Don't have a SaleSync account? Click here to sign Up Now!"
+                                : "Already have an account? Click here to login!"}
+                        </Button>
+                        </>
+                )}
+
+{/*FORGOT PASSWORD */}
+                {isForgotPassword && (                                   
+                    <>
+                    <TextField
+                        label="Email" 
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.email}
+                        name="email"initialValueRegister
+                        error={Boolean(touched.email) && Boolean(errors.email)}
+                        helperText={touched.email && errors.email}
+                        sx={{
+                            gridColumn: "span 4"
+                        }} 
+                    />
+                    <Box>
+                        <Button
+                            fullWidth
+                            type="submit"
+                            sx={{
+                                margin: "2rem 0",
+                                padding: "1rem",
+                                backgroundColor: palette.primary.main,
+                                color: palette.background.alt,
+                                "&:hover": { color: palette.primary.main},
+                            }}
+                        >
+                            {isLogin ? "LOGIN" : "SUBMIT"}
+                        </Button>
+                        <Typography
+                            onClick={() => {
+                                // if on login page, switch to forgot page, else switch to login page
+                                setPageType(isLogin ? "forgot password" : "login");
+                                resetForm();
+                            }}
+                            sx={{
+                                textDecoration: "underline",
+                                color: palette.primary.main,
+                                "&:hover": { 
+                                    cursor: "pointer",
+                                    color: palette.primary.light,
+                                }
+                            }}
+                        >
+                            {isLogin 
+                                ? "Forgot my Password"  
+                                : "I've remembered my password, click here to login!"}
                         </Typography>
                     </Box>
+                    </>
+                )}
+                </Box>
                 </form>
             )}
         </Formik>

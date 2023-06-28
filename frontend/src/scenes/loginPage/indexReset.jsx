@@ -5,9 +5,9 @@ import {
     useTheme,
     useMediaQuery,
 } from "@mui/material";
-import Form from "./Form";
-  
-const LoginPage = () => {
+import Resetpassword from "./resetpassword";
+
+const ResetPage = () => {
     const theme = useTheme();
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     
@@ -40,7 +40,7 @@ const LoginPage = () => {
                 p="1rem 6%"
                 textAlign="left"
             >
-                {/* FORM BOX */}
+                {/* FORM BOX*/}
                     <Box
                         width={isNonMobileScreens ? "50%" : "93%"} // if the screen is non-mobile, then the width is 50%, else 100%
                         p="2rem"    // using rem allows us to have consistantcy across screens
@@ -49,13 +49,13 @@ const LoginPage = () => {
                         backgroundColor={theme.palette.background.alt}
                     >
                         <Typography textAlign = "center" fontWeight="bold" variant="h2" sx={{ mb: "1.5rem"}}>
-                            Welcome to SaleSync, unlock the power of your sales data!
+                            A code will be send to your email.
                         </Typography>
-                        <Form />
+                        <Resetpassword />
                     </Box>
             </div>
         </div>
     );
 };
 
-export default LoginPage;
+export default ResetPage; 

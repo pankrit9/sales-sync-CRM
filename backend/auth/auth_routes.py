@@ -84,6 +84,6 @@ def change_password():
         # update the password for the given email
         db.Accounts.update_one( 
             { "email": request.json['email']},
-            { "$set": { "password": request.json['new_password']}})
-        
+            { "$set": { "password": bcrypt.generate_password_hash(request.json['new_password']).decode('utf-8')}}
+        )
         return jsonify({'message': "success"})
