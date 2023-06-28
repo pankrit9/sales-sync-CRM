@@ -12,7 +12,6 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Formik } from "formik";
-import { setLogin } from "../../state";
 import { BACKEND_API } from "../../api";
 
 // creating the validation schema to tell how the form library is going to store the information
@@ -21,12 +20,25 @@ const forgotPasswordSchema =  yup.object().shape({
     email: yup.string().email("Invalid email").required("required"),
 });
 
+const changePasswordSchema =  yup.object().shape({
+    // lets user enter their email if they forgot their password
+    email: yup.string().email("Invalid email").required("required"),
+}
+);
+
 const initialValuesForgotPassword = {
     email: "",
 }
 
-const resetpassword = () => {
-    const [pageType, setPageType] = useState("login");
+const initialValuesChangePassword = {
+    email: "",
+    code: "",
+    new_password: ""
+}
+
+
+const Resetpassword = () => {
+    const [pageType, setPageType] = useState("forgot password");
     const { palette } = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -56,6 +68,8 @@ const resetpassword = () => {
         );
         const loggedIn = await loggedInResponse.json();
         onSubmitProps.resetForm();  // reset the form
+        setPageType("change password");
+
     }
 
     /**
@@ -82,14 +96,14 @@ const resetpassword = () => {
 /** logic behind when the user submits the form */
     const handleFormSubmit = async (values, onSubmitProps) => {
         if (isForgotPassword) await forgotPassword(values, onSubmitProps);
-        if (isChangePassword) await forgotPassword(values, onSubmitProps);
+        if (isChangePassword) await changePassword(values, onSubmitProps);
     };
 
     return (
         <Formik
             onSubmit={handleFormSubmit}
-            initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
-            validationSchema={isLogin ? loginSchema : registerSchema}
+            initialValues={isForgotPassword ? initialValuesForgotPassword : initialValuesChangePassword}
+            validationSchema={isForgotPassword ? forgotPasswordSchema : changePasswordSchema}
         >
             {({
                 values,
@@ -121,7 +135,7 @@ const resetpassword = () => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.email}
-                        name="email"initialValueRegister
+                        name="email"initialValuesForgotPassword
                         error={Boolean(touched.email) && Boolean(errors.email)}
                         helperText={touched.email && errors.email}
                         sx={{
@@ -140,12 +154,12 @@ const resetpassword = () => {
                                 "&:hover": { color: palette.primary.main},
                             }}
                         >
-                            {isLogin ? "LOGIN" : "SUBMIT"}
+                            {"SUBMIT"}
                         </Button>
                         <Typography
                             onClick={() => {
                                 // if on login page, switch to forgot page, else switch to login page
-                                setPageType(isLogin ? "forgot password" : "login");
+                                setPageType(isForgotPassword ? "forgot password" : "login");
                                 resetForm();
                             }}
                             sx={{
@@ -157,10 +171,10 @@ const resetpassword = () => {
                                 }
                             }}
                         >
-                            {isLogin 
-                                ? "Forgot my Password"  
-                                : "I've remembered my password, click here to login!"}
+                            {"I've remembered my password, click here to login!"}
                         </Typography>
+
+                        
                     </Box>
                     </>
                 )}
@@ -169,13 +183,25 @@ const resetpassword = () => {
                 {isChangePassword && (
                     <>
                     <TextField
-                        label="Recovery Code" 
+                        label="Email" 
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.email}
-                        name="email"initialValueRegister
+                        name="email"initialValuesChangePassword
                         error={Boolean(touched.email) && Boolean(errors.email)}
                         helperText={touched.email && errors.email}
+                        sx={{
+                            gridColumn: "span 4"
+                        }} 
+                    />
+                    <TextField
+                        label="Recovery Code" 
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.code}
+                        name="code"initialValuesChangePassword
+                        error={Boolean(touched.code) && Boolean(errors.code)}
+                        helperText={touched.code && errors.code}
                         sx={{
                             gridColumn: "span 4"
                         }} 
@@ -185,31 +211,22 @@ const resetpassword = () => {
                         label="New Password" 
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        value={values.email}
-                        name="email"initialValueRegister
-                        error={Boolean(touched.email) && Boolean(errors.email)}
-                        helperText={touched.email && errors.email}
+                        value={values.new_password}
+                        name="new_password"initialValuesChangePassword
+                        error={Boolean(touched.new_password) && Boolean(errors.new_password)}
+                        helperText={touched.new_password && errors.new_password}
                         sx={{
                             gridColumn: "span 4"
                         }} 
                     />
-                    <TextField
-                        label="Confirm New Password" 
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.email}
-                        name="email"initialValueRegister
-                        error={Boolean(touched.email) && Boolean(errors.email)}
-                        helperText={touched.email && errors.email}
-                        sx={{
-                            gridColumn: "span 4"
-                        }} 
-                    />
+                    
+                    
                     <Box>
                         <Button
                             fullWidth
                             type="submit"
                             sx={{
+                                gridColumn:"span 4",
                                 margin: "2rem 0",
                                 padding: "1rem",
                                 backgroundColor: palette.primary.main,
@@ -217,7 +234,7 @@ const resetpassword = () => {
                                 "&:hover": { color: palette.primary.main},
                             }}
                         >
-                            {isLogin ? "LOGIN" : "SUBMIT"}
+                            { "SUBMIT"}
                         </Button>
                     </Box>
                     </>
@@ -229,4 +246,4 @@ const resetpassword = () => {
     )
 }
 
-export default resetpassword;
+export default Resetpassword;

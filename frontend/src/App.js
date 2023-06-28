@@ -12,7 +12,8 @@ import { themeSettings } from "./theme";
 import Navbar  from "./components/Navbar";
 import Rankings from "./pages/rankings";
 import Staff from "./pages/staff";
-import Resetpassword from "./scenes/loginPage"
+import ResetPage from "./scenes/loginPage/indexReset";
+
 function App() {
   const mode = useSelector((state) => state.mode); // grabs the value created at initial state in ./state/index.js
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]); // gets the theme, yet to pass to the material ui
@@ -26,7 +27,7 @@ function App() {
           <Routes>
             {/* SETTING UP THE ROUTES */}
             <Route path="/" element={<LoginPage />} />
-            <Route path="/resetpassword" element={<Resetpassword />} />
+            <Route path="/resetpassword" element={<ResetPage />} />
             <Route path="/home" element={<Navbar />} />
             <Route path="/products" element={<Products />} />
             <Route path="/sales" element={<Sales />} />
