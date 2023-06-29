@@ -5,15 +5,27 @@ manTasks = Blueprint('manager/tasks', __name__)
 staTasks = Blueprint('staff/tasks', __name__)
 #-----------------manager access-------------------#
 
+# @manTasks.route("/", methods=['GET'])
+# def see_products():
+    
+#     all_products = db.Products.find({})
+
+#     # convert Cursor type to list
+#     product_list = list(all_products)
+
+#     if not product_list:
+#         return jsonify({"message": "You don't have any products"})
+
+#     return jsonify(product_list)
 # See all tasks
 # For frontend: Is pagination a front end implementation? i.e.
 # scroll down and load additional. Not load all tasks onto the page
 # at once?
-@manTasks.route("/<uId>", methods=['GET'])
-def manager_tasks(uId):
+@manTasks.route("/", methods=['GET'])
+def manager_tasks():
     
     # gets all tasks from the Tasks Collection that the manager created
-    all_tasks = db.Tasks.find({"manager_assigned": uId})
+    all_tasks = db.Tasks.find({})
 
     # convert Cursor type to list
     tasks_list = list(all_tasks)
@@ -32,8 +44,10 @@ def manager_tasks(uId):
 # For frontend: If possible, can add drop down selection of staff to
 # assign based on staff accounts, instead of trying to string match
 # their names on input
-@manTasks.route("/create/<uId>", methods=['POST'])
-def manager_create_task(uId):
+@manTasks.route("/create", methods=['POST'])
+def manager_create_task():
+    print("recieved request to add task")
+    tasks = db.Tasks
     
     # Fetch all ids and convert them to integers
     all_task_ids = [int(task['_id']) for task in db.Tasks.find({}, {"_id": 1})]
@@ -49,24 +63,27 @@ def manager_create_task(uId):
     # object id
     new_task = {
         "_id": str(taskId),
-        "manager_assigned": uId,
-        "task_description": request.form['taskDescription'],
-        "client_assigned": request.form['client'],
-        "product": request.form['product'],
-        "product_quantity": request.form['productQuantity'],
-        "priority": request.form['priority'],
-        "due_date": request.form['dueDate'],
-        "staff_member_assigned": request.form['staffMemberAssigned'],
+        "manager_assigned": "manager",
+        "task_description": request.json.get('task_description'),
+        "client_assigned": request.json.get('client_assigned'),
+        "product": request.json.get('product'),
+        "product_quantity": request.json.get('product_quantity'),
+        "priority": request.json.get('priority'),
+        "due_date": request.json.get('due_date'),
+        "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": False
     }
 
     # inserts new task into collection
-    db.Tasks.insert_one(new_task)
+    result = tasks.insert_one(new_task)
 
-    # Returns success message to user
-    return jsonify({"message": "Task was succesfuly created."})
+    if result.inserted_id:
+        return jsonify({"message": "Successful"})
+    else:
+        return jsonify({"message": "error adding product"}), 500
 
-    # delete task
+
+# delete task
 @manTasks.route("/delete/<taskId>", methods=['POST'])
 def manager_task_delete(taskId):
     
@@ -97,49 +114,49 @@ def manager_task_edit(taskId):
 
 #-----------------staff access-------------------#
 
-@staTasks.route("/<uId>", methods=['GET'])
-def staff_tasks(uId):
+# @staTasks.route("/<uId>", methods=['GET'])
+# def staff_tasks(uId):
     
-    # gets all tasks from the Tasks Collection that are assigned to the staff member
-    all_tasks = db.Tasks.find({"staff_member_assigned": uId})
+#     # gets all tasks from the Tasks Collection that are assigned to the staff member
+#     all_tasks = db.Tasks.find({"staff_member_assigned": uId})
 
-    # convert Cursor type to list
-    tasks_list = list(all_tasks)
+#     # convert Cursor type to list
+#     tasks_list = list(all_tasks)
 
-    if not tasks_list:
-        return jsonify({"message": "You don't have any tasks"})
+#     if not tasks_list:
+#         return jsonify({"message": "You don't have any tasks"})
 
-    # Returns all tasks from Tasks Collection for that staff member
-    return jsonify(tasks_list)
+#     # Returns all tasks from Tasks Collection for that staff member
+#     return jsonify(tasks_list)
 
-# update completion 
-@staTasks.route("/status/<taskId>", methods=['POST'])
-def staff_status(taskId):
+# # update completion 
+# @staTasks.route("/status/<taskId>", methods=['POST'])
+# def staff_status(taskId):
 
-    # parse json object for data to update i.e. completed
-    status = request.get_json()
+#     # parse json object for data to update i.e. completed
+#     status = request.get_json()
     
-    # updates completion field according to button click 
-    result = db.Tasks.update_one({"_id": taskId}, {"$set": status})
+#     # updates completion field according to button click 
+#     result = db.Tasks.update_one({"_id": taskId}, {"$set": status})
 
-    if result.modified_count > 0:
-        return jsonify({"message": "Successful"})
-    else:
-        return jsonify({"message": "Unsuccessful"}), 400
+#     if result.modified_count > 0:
+#         return jsonify({"message": "Successful"})
+#     else:
+#         return jsonify({"message": "Unsuccessful"}), 400
 
-    # edit task
-    # for frontend: staff can edit their own assignment or their manager's assignment
-@staTasks.route("/edit/<taskId>", methods=['POST'])
-def staff_task_edit(taskId):
+#     # edit task
+#     # for frontend: staff can edit their own assignment or their manager's assignment
+# @staTasks.route("/edit/<taskId>", methods=['POST'])
+# def staff_task_edit(taskId):
     
-    # parse json object for data to update i.e. due date
-    edit = request.get_json()
+#     # parse json object for data to update i.e. due date
+#     edit = request.get_json()
 
-    # updates fields according to provided JSON
-    result = db.Tasks.update_one({"_id": taskId}, {"$set": edit})
+#     # updates fields according to provided JSON
+#     result = db.Tasks.update_one({"_id": taskId}, {"$set": edit})
 
-    if result.modified_count > 0:
-        return jsonify({"message": "Successful"})
-    else:
-        return jsonify({"message": "Unsuccessful"}), 400  
+#     if result.modified_count > 0:
+#         return jsonify({"message": "Successful"})
+#     else:
+#         return jsonify({"message": "Unsuccessful"}), 400  
     

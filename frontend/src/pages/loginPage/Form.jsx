@@ -141,7 +141,7 @@ const Form = () => {
                         token: loggedIn.token,
                     })
                 );   // dispatch the user info to the store
-                navigate("/home");  // navigate to the home page as the user is logged in
+                navigate("/");  // navigate to the home page as the user is logged in
             }
         } catch (error) {
             console.log(error);
@@ -275,8 +275,8 @@ const Form = () => {
                                     <input 
                                         type="radio"
                                         name="role"
-                                        value="manager"
-                                        checked={values.role === "manager"}
+                                        value="staff"
+                                        checked={values.role === "staff"}
                                         onChange={handleChange}
                                         sx={{
                                             position:'absolute'
