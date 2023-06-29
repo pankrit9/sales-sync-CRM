@@ -64,27 +64,37 @@ const Form = () => {
      * @param onSubmitProps -> essentially the formik props provides several formik methods 
      */
     const register = async (values, onSubmitProps) => {
-        // form data is used
-        const formData = new FormData();    // to handle the pictures
-        for (let value in values) {
-        // loop through each key-value in the values object and append to the form data
-            formData.append(value, values[value]);
-        }
-
-        const savedUserResponse = await fetch(
-            // send the form data to the below api call
-            `${BACKEND_API}/auth/register`,
-            {
-                method: "POST",
-                body: formData,
+        try {
+            // form data is used
+            const formData = new FormData();    // to handle the pictures
+            for (let value in values) {
+            // loop through each key-value in the values object and append to the form data
+                formData.append(value, values[value]);
             }
-        );
-        // to save whatver is returned from the backend, in a parsable form like json
-        const savedUser = await savedUserResponse.json();
-        onSubmitProps.resetForm();  // reset the form
 
-        if (savedUser) {
-            setPageType("login");   // if the user is registered, then we'll navigate them to the login page
+            const savedUserResponse = await fetch(
+                // send the form data to the below api call
+                `${BACKEND_API}/auth/register`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            if (!savedUserResponse.ok) {
+                // Handle the case when the server responds with an error status
+                throw new Error("Registration failed");
+            };
+
+            // to save whatver is returned from the backend, in a parsable form like json
+            const savedUser = await savedUserResponse.json();
+            onSubmitProps.resetForm();  // reset the form
+
+            if (savedUser) {
+                setPageType("login");   // if the user is registered, then we'll navigate them to the login page
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -94,27 +104,37 @@ const Form = () => {
      * @param onSubmitProps 
     */
     const login = async (values, onSubmitProps) => {
-        const loggedInResponse = await fetch(
-            // send the form data to the below api call
-            `${BACKEND_API}/auth/login`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-                credentials: "omit",
+        try {
+            const loggedInResponse = await fetch(
+                // send the form data to the below api call
+                `${BACKEND_API}/auth/login`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(values),
+                    credentials: "omit",
+                }
+            );
+            
+            if (!loggedInResponse.ok) {
+                // Handle the case when the server responds with an error status
+                throw new Error("Login failed");
+            };
+
+            const loggedIn = await loggedInResponse.json();
+            onSubmitProps.resetForm();  // reset the form
+            if (loggedIn) {
+                dispatch(
+                    setLogin({
+                        // comes from the redux state dir 
+                        user: loggedIn.user,
+                        token: loggedIn.token,
+                    })
+                );   // dispatch the user info to the store
+                navigate("/home");  // navigate to the home page as the user is logged in
             }
-        );
-        const loggedIn = await loggedInResponse.json();
-        onSubmitProps.resetForm();  // reset the form
-        if (loggedIn) {
-            dispatch(
-                setLogin({
-                    // comes from the redux state dir 
-                    user: loggedIn.user,
-                    token: loggedIn.token,
-                })
-            );   // dispatch the user info to the store
-            navigate("/home");  // navigate to the home page as the user is logged in
+        } catch (error) {
+            console.log(error);
         }
     }
 
