@@ -15,7 +15,7 @@ def login():
 
     # find user with the given email
     matching_user = db.Accounts.find_one({"email": request.json['email']})
-
+    
     if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
         # Created a token so users can be authenticated
         token = jwt.encode({
@@ -35,14 +35,23 @@ def register():
     # Encrypt the password
     encoded_password = bcrypt.generate_password_hash(
         request.form['password']).decode('utf-8')
+    
+    all_users_ids = [int(account['_id']) for account in db.Accounts.find({}, {"_id": 1})]
+
+    if not all_users_ids:
+        userId = 1
+    else:
+        max_id = max(all_users_ids)
+        userId = max_id + 1
 
     # Create a temporary user that will be added to the mongodb
     new_user = {
+        "_id": str(userId),
         "email": request.form['email'],
         "first_name": request.form['firstName'],
         "last_name": request.form['lastName'],
         "password": encoded_password,
-        #"position": request.form['position'],
+        "role": request.form['role'],
         "company": request.form['company']
     }
 
