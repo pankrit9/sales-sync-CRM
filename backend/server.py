@@ -6,6 +6,7 @@ from functools import wraps
 from pymongo import MongoClient
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+import certifi
 
 #from loginRegister.loginRegisterRoutes import login_page
 
@@ -20,7 +21,7 @@ SECRET_JWT = 'salesync'
 
 # db is the CRM database
 database_URL = "mongodb+srv://avengers:endgame@crm.e8aut5k.mongodb.net/"
-client = MongoClient(database_URL)
+client = MongoClient(database_URL, tlsCAFile=certifi.where())
 
 db = client.CRM
 
