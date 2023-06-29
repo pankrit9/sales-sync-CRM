@@ -10,8 +10,6 @@ function Home() {
     <>
       <Navbar2/>
       <HeroSection />
-      <Cards />
-      <Footer />
     </>
   );
 }

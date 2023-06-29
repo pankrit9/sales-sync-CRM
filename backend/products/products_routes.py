@@ -28,6 +28,7 @@ def add_products():
         "name" : request.json['name'],
         "stock" : request.json['stock'],
         "price" : request.json['price'],
+        "is_electronic": request.json['is_electronic'],
         "n_sold": 0,
         "revenue" : 0
     }
@@ -53,25 +54,43 @@ def sell_product(id):
     products = db.Products
 
     quantity_sold = int(request.json['quantity'])
-    
+    sold_by = request.json['staff']
     sold_product = products.find_one({"_id":id})
+
+    staff = db.Accounts.find_one({"_id":sold_by})
 
     if not sold_product:
         return jsonify({"message": "Product with given id not found"}), 404
     
     stock = int(sold_product['stock'])
     price = int(sold_product['price'])
+    is_electronic = bool(sold_product['is_electronic'])
     prev_revenue = int(sold_product['revenue'])
 
-    if quantity_sold > stock:
+    if quantity_sold > stock and not is_electronic:
         return jsonify({"message" : "You don't have enough stock available."}), 404
       
-    result = products.update_one(
-        {"_id":id},
-        { "$set": {"stock" : str(stock - quantity_sold),
-                    "n_sold" : str(quantity_sold),
-                    "revenue" : str(prev_revenue + price * quantity_sold)}}
+
+    db.Accounts.update_one(
+        {"_id":sold_by},
+        { "$set": {"revenue" : str(int(staff['revenue']) + price * quantity_sold)}}
     )
+
+    if not is_electronic:   
+        result = products.update_one(
+            {"_id":id},
+            { "$set": {"stock" : str(stock - quantity_sold),
+                        "n_sold" : str(quantity_sold),
+                        "revenue" : str(prev_revenue + price * quantity_sold)}}
+        )
+
+    else:
+        result = products.update_one(
+            {"_id":id},
+            { "$set": {"stock" : str(stock),
+                        "n_sold" : str(quantity_sold),
+                        "revenue" : str(prev_revenue + price * quantity_sold)}}
+         )
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})
     else:
@@ -95,6 +114,13 @@ def product_edit(id):
 
     # parse json object for data to update i.e. due date
     edit = request.get_json()
+
+    stock = int(edit['stock'])
+
+    result = db.Products.find_one({"_id":id})
+
+    if bool(result['is_electronic']) == True and stock > 0:
+        return jsonify({"message": "Electronic products cannot have any stock"}), 400 
 
     # updates fields according to provided JSON
     result = db.Products.update_one({"_id": id}, {"$set": edit})

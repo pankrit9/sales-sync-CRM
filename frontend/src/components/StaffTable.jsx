@@ -24,15 +24,15 @@ import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../api";
 import { useState, useEffect } from 'react';
 
-function createData(_id, name, stock, price, is_electronic, n_sold, revenue) {
+function createData( _id, email, first_name, last_name, password, role, company) {
   return {
     _id,
-    name,
-    stock,
-    price,
-    is_electronic,
-    n_sold,
-    revenue
+    email,
+    first_name,
+    last_name,
+    password,
+    role,
+    company
   };
 }
 
@@ -76,41 +76,29 @@ const headCells = [
     label: 'ID',
   },
   {
-    id: 'name',
+    id: 'first_name',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'Staff Name',
   },
   {
-    id: 'stock',
-    numeric: true,
+    id: 'Position',
+    numeric: false,
     disablePadding: false,
-    label: 'Stock',
+    label: 'Position',
   },
   {
-    id: 'price',
+    id: 'Sales',
     numeric: true,
     disablePadding: false,
-    label: 'Price ($AUD)',
+    label: 'Sales',
   },
   {
-    id: 'is_electronic',
+    id: 'Outstanding Tasks',
     numeric: true,
     disablePadding: false,
-    label: 'Electronic Product',
+    label: 'Outstanding Tasks',
   },
-  {
-    id: 'n_sold',
-    numeric: true,
-    disablePadding: false,
-    label: 'Number Sold',
-  },
-  {
-    id: 'revenue',
-    numeric: true,
-    disablePadding: false,
-    label: 'Revenue ($AUD)',
-  }
 ];
 
 function EnhancedTableHead(props) {
@@ -169,7 +157,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-async function deleteSelected(selectedIds, fetchData) {
+async function deleteSelectedTasks(selectedIds, fetchData) {
   // create a new array for the promises
   const deletePromises = selectedIds.map(id =>
     fetch(`${BACKEND_API}/products/delete/${id}`, {method: 'DELETE'})
@@ -183,11 +171,12 @@ async function deleteSelected(selectedIds, fetchData) {
     console.error(err);
   }
 }
-function EnhancedTableToolbar(props) {
+
+function EnhancedTableToolbarStaff(props) {
   const { numSelected, selectedIds, fetchData } = props;
 
   const handleDelete = async () => {
-    await deleteSelected(selectedIds, fetchData);
+    await deleteSelectedTasks(selectedIds, fetchData);
     props.fetchData()
   }
 
@@ -218,7 +207,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Products
+          Staff
         </Typography>
       )}
 
@@ -239,7 +228,7 @@ function EnhancedTableToolbar(props) {
   );
 }
 
-EnhancedTableToolbar.propTypes = {
+EnhancedTableToolbarStaff.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
@@ -317,7 +306,7 @@ export default function EnhancedTable({rows, fetchData}) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
+        <EnhancedTableToolbarStaff numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -365,18 +354,10 @@ export default function EnhancedTable({rows, fetchData}) {
                     >
                       {row._id}
                     </TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
-                    <TableCell align="right">{row.stock}</TableCell>
-                    <TableCell align="right">{row.price}</TableCell>
-                    <TableCell align="right">
-                      <Checkbox
-                        checked={row.is_electronic}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                        disabled
-                      />
-                    </TableCell>
-                    <TableCell align="right">{row.n_sold}</TableCell>
+                    <TableCell align="left">{row.first_name +" "+row.last_name}</TableCell>
+                    <TableCell align="left">{row.role}</TableCell>
                     <TableCell align="right">{row.revenue}</TableCell>
+                    <TableCell align="right">{row.tasks_n}</TableCell>
                   </TableRow>
                 );
               })}

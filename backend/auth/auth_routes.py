@@ -15,7 +15,7 @@ def login():
 
     # find user with the given email
     matching_user = db.Accounts.find_one({"email": request.json['email']})
-
+    
     if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
         # Created a token so users can be authenticated
         token = jwt.encode({
@@ -35,15 +35,26 @@ def register():
     # Encrypt the password
     encoded_password = bcrypt.generate_password_hash(
         request.form['password']).decode('utf-8')
+    
+    all_users_ids = [int(account['_id']) for account in db.Accounts.find({}, {"_id": 1})]
+
+    if not all_users_ids:
+        userId = 1
+    else:
+        max_id = max(all_users_ids)
+        userId = max_id + 1
 
     # Create a temporary user that will be added to the mongodb
     new_user = {
+        "_id": str(userId),
         "email": request.form['email'],
         "first_name": request.form['firstName'],
         "last_name": request.form['lastName'],
         "password": encoded_password,
-        #"position": request.form['position'],
-        "company": request.form['company']
+        "role": request.form['role'],
+        "company": request.form['company'],
+        "revenue": 0,
+        "tasks_n": 0
     }
 
     # Check whether the email is taken
@@ -88,3 +99,17 @@ def change_password():
         )
         return jsonify({'message': "success"})
     return jsonify({'message': "Incorrect details."})
+
+
+@auth.route("/", methods=['GET'])
+def get_staff():
+    
+    staff = db.Accounts.find({'role': 'staff'})
+
+    # convert Cursor type to list
+    staff_list = list(staff)
+
+    if not staff_list:
+        return jsonify({"message": "There is no staff registered"})
+
+    return jsonify(staff_list)
