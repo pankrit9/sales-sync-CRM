@@ -9,11 +9,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../api";
 import { useState, useEffect } from "react";
 
-export default function SellBtn({fetchData}) {
+export default function AddBtn({fetchData}) {
   const [open, setOpen] = React.useState(false);
-  const [quantity, setQuantity] = React.useState("");
-  const [_id, setId] = React.useState("");
-  const [staff, setStaff] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [stock, setStock] = React.useState("");
+  const [price, setPrice] = React.useState("");
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -22,15 +23,15 @@ export default function SellBtn({fetchData}) {
     setOpen(false);
   };
 
-  const handleEdit = async () => {
+  const handleAdd = async () => {
     const product = {
-      _id,
-      quantity,
-      staff
+      name,
+      stock,
+      price
     };
   
-    const response = await fetch(`${BACKEND_API}/products/sell/${_id}`, {
-      method: "PUT",
+    const response = await fetch(`${BACKEND_API}/products/add`, {
+      method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
@@ -43,59 +44,59 @@ export default function SellBtn({fetchData}) {
       setOpen(false);
     } else {
       const errorData = await response.json();
-      console.error("Error making sale: ", errorData);
-      alert("Error making sale: " + (errorData.message || "Unknown Error"));
+      console.error("Error adding product: ", errorData);
+      alert("Error adding product: " + (errorData.message || "Unknown Error"));
     }
   };
   
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Make Sale
+        Add Product
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Make Sale</DialogTitle>
+        <DialogTitle>Search by manager</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please add in a new sale.
+            Please add in the details of a new product below.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            id="_id"
-            label="Product ID"
+            id="name"
+            label="Product Name"
             type="text"
             fullWidth
             variant="standard"
-            value={_id}
-            onChange={(e) => setId(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="quantity"
-            label="Quantity Sold"
+            id="stock"
+            label="Stock"
             type="text"
             fullWidth
             variant="standard"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="staff"
-            label="Sold by"
+            id="price"
+            label="Price"
             type="text"
             fullWidth
             variant="standard"
-            value={staff}
-            onChange={(e) => setStaff(e.target.value)}
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleEdit}>Sell</Button>
+          <Button onClick={handleAdd}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

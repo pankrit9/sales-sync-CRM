@@ -255,8 +255,8 @@ const Form = () => {
                                     <input 
                                         type="radio"
                                         name="role"
-                                        value="manager"
-                                        checked={values.role === "manager"}
+                                        value="staff"
+                                        checked={values.role === "staff"}
                                         onChange={handleChange}
                                         sx={{
                                             position:'absolute'

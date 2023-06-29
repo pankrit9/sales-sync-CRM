@@ -25,7 +25,7 @@ function Products() {
         if (!query) {
           return products;
         } else {
-          return products.filter((d) => d['name'].toLowerCase().includes(query));
+          return products.filter((d) => d['name'].toLowerCase().includes(query.toLowerCase()));
         }
     };
 
@@ -39,7 +39,7 @@ function Products() {
             <Navbar/>
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Products</h1>
             
-            <div className="container">
+            <div className="container-search">
                 <div className="tools">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 </div>

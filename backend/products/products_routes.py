@@ -53,8 +53,10 @@ def sell_product(id):
     products = db.Products
 
     quantity_sold = int(request.json['quantity'])
-    
+    sold_by = request.json['staff']
     sold_product = products.find_one({"_id":id})
+
+    staff = db.Accounts.find_one({"_id":sold_by})
 
     if not sold_product:
         return jsonify({"message": "Product with given id not found"}), 404
@@ -71,6 +73,11 @@ def sell_product(id):
         { "$set": {"stock" : str(stock - quantity_sold),
                     "n_sold" : str(quantity_sold),
                     "revenue" : str(prev_revenue + price * quantity_sold)}}
+    )
+
+    db.Accounts.update_one(
+        {"_id":sold_by},
+        { "$set": {"revenue" : str(staff['revenue'] + price * quantity_sold)}}
     )
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})

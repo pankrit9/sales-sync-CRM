@@ -6,7 +6,8 @@
     position: fixed;
  
 }
-.container {
+.container-search {
+    left: 80px;
     display: flex;
     width: 100%;
     position: fixed;

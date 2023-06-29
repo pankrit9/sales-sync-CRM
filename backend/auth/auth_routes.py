@@ -52,7 +52,9 @@ def register():
         "last_name": request.form['lastName'],
         "password": encoded_password,
         "role": request.form['role'],
-        "company": request.form['company']
+        "company": request.form['company'],
+        "revenue": 0,
+        "tasks_n": 0
     }
 
     # Check whether the email is taken
@@ -97,3 +99,17 @@ def change_password():
         )
         return jsonify({'message': "success"})
     return jsonify({'message': "Incorrect details."})
+
+
+@auth.route("/", methods=['GET'])
+def get_staff():
+    
+    staff = db.Accounts.find({'role': 'staff'})
+
+    # convert Cursor type to list
+    staff_list = list(staff)
+
+    if not staff_list:
+        return jsonify({"message": "There is no staff registered"})
+
+    return jsonify(staff_list)
