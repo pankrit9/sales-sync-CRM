@@ -28,7 +28,7 @@ const LoginPage = () => {
                         color: theme.palette.text.primary,
                     }}
                     >
-                    SalesSync
+                    SaleSync
                 </Typography>
                 <Typography
                     fontWeight="bold"
@@ -55,8 +55,8 @@ const LoginPage = () => {
                         borderRadius="1.5rem"
                         backgroundColor={theme.palette.background.alt}
                     >
-                        <Typography fontWeight="bold" variant="h1" sx={{ mb: "1.5rem"}}>
-                            Welcome to SalesSync, unlock the power of your sales data!
+                        <Typography textAlign = "center" fontWeight="bold" variant="h2" sx={{ mb: "1.5rem"}}>
+                            Welcome to SaleSync, unlock the power of your sales data!
                         </Typography>
                         <Form />
                     </Box>

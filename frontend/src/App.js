@@ -1,10 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./scenes/loginPage";
+import Products from "./pages/products";
+import Sales from "./pages/sales";
+import Tasks from "./pages/tasks";
+import Clients from "./pages/clients";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
+import Navbar  from "./components/Navbar";
+import Rankings from "./pages/rankings";
+import Staff from "./pages/staff";
+import ResetPage from "./scenes/loginPage/indexReset";
+import Home from "./homePage/pages/Home";
 
 function App() {
   const mode = useSelector((state) => state.mode); // grabs the value created at initial state in ./state/index.js
@@ -18,7 +27,15 @@ function App() {
           <CssBaseline />
           <Routes>
             {/* SETTING UP THE ROUTES */}
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/resetpassword" element={<ResetPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/sales" element={<Sales />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/clients" element={<Clients />} />
+            <Route path="/rankings" element={<Rankings />} />
+            <Route path="/staff" element={<Staff />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

@@ -1,8 +1,8 @@
 // color design tokens export
 export const colorTokens = {
     white: {
-        0: "#FFFFFF",
-        10: "#FFFFFF",   // change to black (for dark mode)
+        0: "#000000",
+        10: "#000000",   // change to black (for dark mode)
     },
     grey: {
       0: "#FFFFFF",

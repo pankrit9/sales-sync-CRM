@@ -1,0 +1,51 @@
+.search-bar {
+    width: auto;
+    display: flex;
+    justify-content: center;
+
+    position: fixed;
+ 
+}
+.container {
+    display: flex;
+    width: 100%;
+    position: fixed;
+}
+.tools {
+    right: 500px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
+
+}
+.edit-btn-product {
+    right: 230px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
+
+}
+.search-icon {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+
+}
+.add-btn-product {
+    right: 362px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
+
+}
+.sell-btn-product {
+    right: 120px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+}
