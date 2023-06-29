@@ -1,3 +1,4 @@
+import certifi
 import json
 import datetime
 import jwt
@@ -19,8 +20,9 @@ SECRET_JWT = 'salesync'
 #app.register_blueprint(login_page, url_prefix="/login")
 
 # db is the CRM database
-database_URL = "mongodb+srv://avengers:endgame@crm.e8aut5k.mongodb.net/"
-client = MongoClient(database_URL)
+# database_URL = "mongodb+srv://avengers:endgame@crm.e8aut5k.mongodb.net/"
+# client = MongoClient(database_URL)
+client = MongoClient("mongodb+srv://avengers_infinite:endgame2.0@crm.e8aut5k.mongodb.net/", tlsCAFile=certifi.where());
 
 db = client.CRM
 
