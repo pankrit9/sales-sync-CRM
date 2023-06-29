@@ -355,9 +355,9 @@ export default function EnhancedTable({rows, fetchData}) {
                       {row._id}
                     </TableCell>
                     <TableCell align="left">{row.first_name +" "+row.last_name}</TableCell>
-                    <TableCell align="left">{row.position}</TableCell>
+                    <TableCell align="left">{row.role}</TableCell>
                     <TableCell align="right">{row.revenue}</TableCell>
-                    <TableCell align="right">{row.tasks_no}</TableCell>
+                    <TableCell align="right">{row.tasks_n}</TableCell>
                   </TableRow>
                 );
               })}

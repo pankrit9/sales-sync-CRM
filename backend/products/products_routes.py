@@ -73,7 +73,7 @@ def sell_product(id):
 
     db.Accounts.update_one(
         {"_id":sold_by},
-        { "$set": {"revenue" : str(staff['revenue'] + price * quantity_sold)}}
+        { "$set": {"revenue" : str(int(staff['revenue']) + price * quantity_sold)}}
     )
 
     if not is_electronic:   
