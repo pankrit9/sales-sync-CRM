@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./scenes/loginPage";
+import LoginPage from "./pages/loginPage";
 import Products from "./pages/products";
 import Sales from "./pages/sales";
 import Tasks from "./pages/tasks";
@@ -12,7 +12,7 @@ import { themeSettings } from "./theme";
 import Navbar  from "./components/Navbar";
 import Rankings from "./pages/rankings";
 import Staff from "./pages/staff";
-import ResetPage from "./scenes/loginPage/indexReset";
+import ResetPage from "./pages/loginPage/indexReset";
 import Home from "./homePage/pages/Home";
 
 function App() {

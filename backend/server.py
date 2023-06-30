@@ -1,3 +1,4 @@
+import certifi
 import json
 import datetime
 import jwt
@@ -8,6 +9,7 @@ from flask_cors import CORS
 from auth.auth_routes import auth
 from tasks.tasks_routes import manTasks, staTasks
 from products.products_routes import products
+import certifi
 
 
 app = Flask(__name__)

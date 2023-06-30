@@ -3,6 +3,7 @@ export const colorTokens = {
     white: {
         0: "#000000",
         10: "#000000",   // change to black (for dark mode)
+        50: "#FFFFFF",
     },
     grey: {
       0: "#FFFFFF",
@@ -55,7 +56,7 @@ export const themeSettings = (mode) => {
                     light: colorTokens.grey[700]
                 },
                 text: {
-                    primary: colorTokens.white[0],
+                    primary: colorTokens.white[50],
                 },
                 background: {
                     default: colorTokens.grey[900],
