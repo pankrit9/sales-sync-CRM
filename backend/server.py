@@ -9,6 +9,7 @@ from flask_cors import CORS
 from auth.auth_routes import auth
 from tasks.tasks_routes import manTasks, staTasks
 from products.products_routes import products
+from sales.sales_route import records
 import certifi
 
 
@@ -25,6 +26,7 @@ app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(manTasks, url_prefix="/manager/tasks")
 app.register_blueprint(staTasks, url_prefix="/staff/tasks")
 app.register_blueprint(products, url_prefix="/products")
+app.register_blueprint(records, url_prefix="/records")
 
 # This might be usefull later on
 def token_required(f):
