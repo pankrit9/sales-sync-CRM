@@ -36,15 +36,17 @@ const Tasks = () => {
     return (
         <>
             <Navbar />
-            <h1 className="header" style={{ paddingLeft: '140px', marginTop: '50px', fontSize: '60px' }}>Tasks</h1>
+            <h1 className="header" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', paddingLeft: '140px', marginTop: '50px', fontSize: '60px', alignItems: 'center' }}>
+                <span>Tasks</span>
+                <div className="add-btn-task" style={{ justifySelf: 'end', paddingRight: '140px' }}>
+                    <CreateTaskBtn fetchData={fetchData} />
+                </div>
+            </h1>
 
-            <div className="task_container">
+            <div className="task_container" style={{display: 'grid'}} >
                 {/* <div className="tools">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 </div> */}
-                <div className="add-btn-task" style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '140px' }}>
-                    <CreateTaskBtn fetchData={fetchData} />
-                </div>
             </div>
             <div style={{ marginLeft: '140px', marginRight: '120px', marginTop: '80px' }}>
                 {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData} /> : <p>Currently no tasks for you</p>}

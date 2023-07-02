@@ -24,10 +24,10 @@ import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../api";
 import { useState, useEffect } from 'react';
 
-function createData(_id, manager_assinged, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
+function createData(_id, manager_assigned, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
     return {
         _id,
-        manager_assinged,
+        manager_assigned,
         task_description,
         client_assigned,
         product,
@@ -68,16 +68,16 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    {
-        id: "_id",
-        numeric: false,
-        disablePadding: true,
-        label: "Task",
-    },
+    // {
+    //     id: "_id",
+    //     numeric: false,
+    //     disablePadding: true,
+    //     label: "Task",
+    // },
     {
         id: "manager_assigned",
         numeric: false,
-        disablePadding: true,
+        disablePadding: false,
         label: "Manager"
     },
     {
@@ -98,12 +98,12 @@ const headCells = [
         disablePadding: false,
         label: "Product",
     },
-    {
-        id: "product_quantity",
-        numeric: false,
-        disablePadding: false,
-        label: "Product Quantity",
-    },
+    // {
+    //     id: "product_quantity",
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: "Product Quantity",
+    // },
     {
         id: "priority",
         numeric: false,
@@ -214,7 +214,7 @@ function EnhancedTableToolbar(props) {
                     id="tableTitle"
                     component="div"
                 >
-                    Products
+                    Tasks
                 </Typography>
             )}
 
@@ -253,6 +253,7 @@ export default function EnhancedTable({ rows, fetchData }) {
         setSelected([]);
     };
 
+    // select rows 
     const handleClick = (event, _id) => {
         const selectedIndex = selected.indexOf(_id);
         let newSelected = [];
@@ -320,41 +321,42 @@ export default function EnhancedTable({ rows, fetchData }) {
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => {
-                                const isItemSelected = isSelected(row._id);
-                                const labelId = `enhanced-table-checkbox-${index}`;
+                                // const isItemSelected = isSelected(row._id);
+                                // const labelId = `enhanced-table-checkbox-${index}`;
 
                                 return (
                                     <TableRow
                                         hover
-                                        onClick={(event) => handleClick(event, row._id)}
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
+                                        // onClick={(event) => handleClick(event, row._id)}
+                                        // role="checkbox"
+                                        // aria-checked={isItemSelected}
                                         tabIndex={-1}
                                         key={row._id}
-                                        selected={isItemSelected}
+                                        // selected={isItemSelected}
                                         sx={{ cursor: 'pointer' }}
                                     >
-                                        <TableCell padding="checkbox">
+                                        {/* <TableCell padding="checkbox">
                                             <Checkbox
                                                 color="primary"
                                                 checked={isItemSelected}
                                                 inputProps={{
                                                     'aria-labelledby': labelId,
                                                 }}
-                                            />
-                                        </TableCell>
+                                            /> */}
+                                        {/* </TableCell> */}
                                         <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            padding="none"
+                                            // component="th"
+                                            // id={labelId}
+                                            // scope="row"
+                                            // padding-left="checkbox"
+                                            align="center"
                                         >
-                                            {row._id}
+                                            {row.manager_assigned}
                                         </TableCell>
                                         <TableCell align="centre">{row.task_description}</TableCell>
                                         <TableCell align="centre">{row.client_assigned}</TableCell>
                                         <TableCell align="centre">{row.product}</TableCell>
-                                        <TableCell align="centre">{row.product_quantity}</TableCell>
+                                        {/* <TableCell align="centre">{row.product_quantity}</TableCell> */}
                                         <TableCell align="centre">{row.priority}</TableCell>
                                         <TableCell align="centre">{row.due_date}</TableCell>
                                         <TableCell align="centre">{row.staff_member_assigned}</TableCell>

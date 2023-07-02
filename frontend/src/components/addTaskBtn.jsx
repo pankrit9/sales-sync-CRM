@@ -8,6 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { BACKEND_API } from "../api";
 import { useState, useEffect } from "react";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function AddBtn({ fetchData }) {
     const [open, setOpen] = React.useState(false);
@@ -64,7 +65,12 @@ export default function AddBtn({ fetchData }) {
 
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button 
+                variant="contained" 
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={handleClickOpen}
+            >
                 Add task
             </Button>
             <Dialog open={open} onClose={handleClose}>

@@ -63,7 +63,7 @@ def manager_create_task():
     # object id
     new_task = {
         "_id": str(taskId),
-        "manager_assigned": "manager",
+        "manager_assigned": request.json.get('manager_assigned'),
         "task_description": request.json.get('task_description'),
         "client_assigned": request.json.get('client_assigned'),
         "product": request.json.get('product'),
