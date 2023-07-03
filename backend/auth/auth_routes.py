@@ -1,7 +1,7 @@
 import datetime
 import jwt
 from config import db, bcrypt
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from auth.registerLoginHelpers import check_email_password, recovery_email
 
 # All the api requests that start with auth will be guided here
@@ -12,21 +12,28 @@ auth = Blueprint('auth', __name__)
 
 @auth.route("/login", methods=['POST'])
 def login():
-
+    token = ""
     # find user with the given email
     matching_user = db.Accounts.find_one({"email": request.json['email']})
+    
+    if not matching_user:
+        return jsonify({"message": "Incorrect details.", "token": token})
     
     if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
         # Created a token so users can be authenticated
         token = jwt.encode({
             'email': request.json['email'],
             'first_name': matching_user['first_name'],
-            #'position': matching_user['position'],
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=180)
+            #'role': matching_user['role'],
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=600)
         }, 'Avengers')  # Secret key is 'Avengers'
+        session["logged_in"] = True
 
         # return token for the session
-        return jsonify({'token': token})
+        return jsonify({"message": "Login successful", "token": token})
+    else:
+        return jsonify({"message": "Incorrect details.", "token": token})
+        
 
 
 @auth.route("/register", methods=['POST'])

@@ -185,6 +185,9 @@ function EnhancedTableToolbarStaff(props) {
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
+        color:"white",
+        background : "#8F00FF",
+        borderRadius:   "20px 20px 0px 0px",
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
@@ -320,6 +323,7 @@ export default function EnhancedTable({rows, fetchData}) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              style
             />
             <TableBody>
               {visibleRows.map((row, index) => {
