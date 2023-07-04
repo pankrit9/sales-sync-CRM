@@ -1,8 +1,8 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import Navbar  from "../components/navbars/Navbar";
-
-const Sales = () => {
+import Navbar  from "../../components/navbars/Navbar";
+ 
+const Rankings = () => {
   return (
     <>
         <div>
@@ -11,11 +11,11 @@ const Sales = () => {
         
         <div >
             <Link to="#" className='menu-bars'>
-                Sales statistics
+                SPRINT 2
             </Link>
         </div>
     </>
   )
 }
 
-export default Sales
+export default Rankings
