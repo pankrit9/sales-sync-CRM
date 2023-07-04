@@ -5,7 +5,7 @@ from decorators import manager_required, jwt_required
 
 manTasks = Blueprint('manager/tasks', __name__)
 staTasks = Blueprint('staff/tasks', __name__)
-Tasks = Blueprint('tasks', __name__)
+tasks = Blueprint('tasks', __name__)
 
 
 
@@ -26,20 +26,21 @@ Tasks = Blueprint('tasks', __name__)
 # @manager_required     # role is being fetched and checked here
 
 
-@Tasks.route("/getTasks/<role>/<userId>", methods=['GET'])
-@jwt_required   # this returns the current user
-def get_tasks(role, userId, current_user):
-    print("role: ", role)
-    print("userId: ", userId)
-    print("current_user: ", current_user)
 
-    if current_user != userId:
-        return jsonify({"message": "You are not authorized to view this page"}), 403
+@tasks.route("/<id>", methods=['GET'])
+def get_tasks(id):
+    # print("userId: ", id)
+
+    curr_user = db.Accounts.find_one({"_id": id})
+    print("curr_user: ", curr_user)
+
     try:
-        if role == "manager":
-            task_query = {"manager_assigned": userId}
-        elif role == "staff":
-            task_query = {"staff_member_assigned": userId}
+        if curr_user["role"] == "manager":
+            task_query = {"manager_assigned": curr_user["first_name"]}
+            # task_query = {"manager_assigned": "test"}
+            print("task_query: ", task_query)
+        elif curr_user["role"] == "staff":
+            task_query = {"staff_member_assigned": curr_user["first_name"]}
         else:
             return jsonify({"message": "Invalid role"}), 400
         
@@ -49,11 +50,10 @@ def get_tasks(role, userId, current_user):
         # convert the cursor to a list
         tasks_list = list(tasks)
 
-        print("tasks_list: ", tasks_list)
-
         # return the list of tasks
         return jsonify(tasks_list)
     except Exception as e:
+        print("Error: ", e)
         return jsonify({"message": str(e)}), 500
 
 
@@ -64,8 +64,7 @@ def get_tasks(role, userId, current_user):
 # For frontend: Is pagination a front end implementation? i.e.
 # scroll down and load additional. Not load all tasks onto the page
 # at once?
-@Tasks.route("/", methods=['GET'])
-
+@tasks.route("/", methods=['GET'])
 def manager_tasks():
     
     # gets all tasks from the Tasks Collection that the manager created

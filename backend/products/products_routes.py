@@ -12,7 +12,6 @@ products = Blueprint('products', __name__)
 
 # We have POST, PUT, DELETE and GET 
 @products.route("/add", methods = ['POST'])
-@jwt_required
 def add_products():
     products = db.Products
 
@@ -45,7 +44,6 @@ def add_products():
 
 # We have POST, PUT, DELETE and GET 
 @products.route("/delete/<id>", methods = ['DELETE'])
-@jwt_required
 def delete_product(id):
     print("id: ", id, "\n")
     products = db.Products
@@ -55,7 +53,6 @@ def delete_product(id):
     return jsonify({"message": "success product deleted"})
 
 @products.route("/sell/<id>", methods = ['PUT'])
-@jwt_required
 def sell_product(id):
     products = db.Products
 
@@ -103,7 +100,6 @@ def sell_product(id):
         return jsonify({"message": "Unsuccessful"}), 404 
 
 @products.route("/<token>", methods=['GET'])
-@jwt_required
 def see_products(token):
     
     all_products = db.Products.find({})
@@ -117,7 +113,6 @@ def see_products(token):
     return jsonify(product_list)
 
 @products.route("/edit/<id>", methods=['POST'])
-@jwt_required
 def product_edit(id):
 
     # parse json object for data to update i.e. due date
