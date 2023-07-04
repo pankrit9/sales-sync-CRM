@@ -7,8 +7,6 @@ manTasks = Blueprint('manager/tasks', __name__)
 staTasks = Blueprint('staff/tasks', __name__)
 tasks = Blueprint('tasks', __name__)
 
-
-
 # STRUCTURE
 
 # route: '/'
