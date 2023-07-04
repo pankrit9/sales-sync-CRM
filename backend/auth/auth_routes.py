@@ -16,12 +16,16 @@ def login():
     # find user with the given email
     matching_user = db.Accounts.find_one({"email": request.json['email']})
     
+    if matching_user is None:
+        return jsonify({"message": "User not found"}), 404
+    
     if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
         # Created a token so users can be authenticated
         token = jwt.encode({
+            'user_id': str(matching_user['_id']),
             'email': request.json['email'],
             'first_name': matching_user['first_name'],
-            #'position': matching_user['position'],
+            'role': matching_user['role'],
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=180)
         }, 'Avengers')  # Secret key is 'Avengers'
 

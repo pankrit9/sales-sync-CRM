@@ -2,6 +2,8 @@ import datetime
 import jwt
 from config import db
 from flask import Blueprint, jsonify, request
+from decorators import jwt_required, manager_required, token_required
+# from flask_jwt_extended import jwt_required
 
 # All the api requests that start with auth will be guided here
 # so if someone request auth/login then it direct them to this file and then
@@ -10,6 +12,7 @@ products = Blueprint('products', __name__)
 
 # We have POST, PUT, DELETE and GET 
 @products.route("/add", methods = ['POST'])
+@jwt_required
 def add_products():
     products = db.Products
 
@@ -42,7 +45,9 @@ def add_products():
 
 # We have POST, PUT, DELETE and GET 
 @products.route("/delete/<id>", methods = ['DELETE'])
+@jwt_required
 def delete_product(id):
+    print("id: ", id, "\n")
     products = db.Products
 
     products.delete_one({"_id":id})
@@ -50,6 +55,7 @@ def delete_product(id):
     return jsonify({"message": "success product deleted"})
 
 @products.route("/sell/<id>", methods = ['PUT'])
+@jwt_required
 def sell_product(id):
     products = db.Products
 
@@ -96,8 +102,9 @@ def sell_product(id):
     else:
         return jsonify({"message": "Unsuccessful"}), 404 
 
-@products.route("/", methods=['GET'])
-def see_products():
+@products.route("/<token>", methods=['GET'])
+@jwt_required
+def see_products(token):
     
     all_products = db.Products.find({})
 
@@ -110,6 +117,7 @@ def see_products():
     return jsonify(product_list)
 
 @products.route("/edit/<id>", methods=['POST'])
+@jwt_required
 def product_edit(id):
 
     # parse json object for data to update i.e. due date

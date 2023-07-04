@@ -22,8 +22,6 @@ bcrypt.init_app(app)
 
 # Blueprints
 app.register_blueprint(auth, url_prefix="/auth")
-app.register_blueprint(manTasks, url_prefix="/manager/tasks")
-app.register_blueprint(staTasks, url_prefix="/staff/tasks")
 app.register_blueprint(products, url_prefix="/products")
 
 # This might be usefull later on
@@ -57,3 +55,4 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
+# RECOMMENDATION if production env: Flask application should be run using a production-grade WSGI server such as Gunicorn or uWSGI
