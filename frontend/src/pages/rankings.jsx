@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import Navbar  from "../components/Navbar";
+import Navbar  from "../components/navbars/Navbar";
  
 const Rankings = () => {
   return (

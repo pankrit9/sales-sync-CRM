@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
-import Navbar  from "../components/Navbar";
-import { SearchBar } from '../components/SearchBar';
-import CreateTaskBtn from "../components/addTaskBtn";
-import EnhancedTable from "../components/tasksTable";
-import { BACKEND_API } from "../api";
+import Navbar  from "../../components/navbars/Navbar";
+import { SearchBar } from '../../components/SearchBar';
+import AddTaskBtn from "../../components/tasksComps/addTaskBtn";
+import EnhancedTable from "../../components/tasksComps/tasksTable";
+import { BACKEND_API } from "../../api";
+import { useSelector } from 'react-redux';
+
 // import { SearchBar } from '../components/SearchBar'; // search tasks
 
  
@@ -13,8 +15,22 @@ const Tasks = () => {
     const [tasks, setTask] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     
+    const state = useSelector(state => state);
+    console.log(state);  // Print the entire state to the console
+
+    const role = useSelector(state => state.role);     // fetch the curr role of user
+    if (role) {
+        console.log("Current role is: " + role);
+    } else {
+        console.log("Current role is: " + "undefined");
+    }
+
+    const _id = useSelector((state) => state.user);
+    console.log("Current user id is: " + _id);
+
+    // fetch tasks on the basis of current role and id of user
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/manager/tasks`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/tasks/getTasks/${role}/${_id}`, {method: "GET"});
         const data = await response.json();
         setTask(data);
     }, []);
@@ -26,7 +42,7 @@ const Tasks = () => {
           return tasks.filter((d) => d['name'].toLowerCase().includes(query));
         }
     };
-
+    
     useEffect(() => {
         fetchData();
     }, [fetchData]);
@@ -39,7 +55,10 @@ const Tasks = () => {
             <h1 className="header" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', paddingLeft: '140px', marginTop: '50px', fontSize: '60px', alignItems: 'center' }}>
                 <span>Tasks</span>
                 <div className="add-btn-task" style={{ justifySelf: 'end', paddingRight: '140px' }}>
-                    <CreateTaskBtn fetchData={fetchData} />
+                    {
+                        // only manager can add tasks
+                        role === 'manager' && <AddTaskBtn fetchData={fetchData} userId = {_id}/>
+                    }
                 </div>
             </h1>
 

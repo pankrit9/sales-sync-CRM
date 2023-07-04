@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/loginPage";
-import Products from "./pages/products";
+import Products from "./pages/productsPage/products";
 import Sales from "./pages/sales";
-import Tasks from "./pages/tasks";
+import Tasks from "./pages/tasksPage/tasks";
 import Clients from "./pages/clients";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
-import Navbar  from "./components/Navbar";
+import Navbar  from "./components/navbars/Navbar";
 import Rankings from "./pages/rankings";
-import Staff from "./pages/staff";
+import Staff from "./pages/staffsPage/staff";
 import ResetPage from "./pages/loginPage/indexReset";
 import Home from "./homePage/pages/Home";
 

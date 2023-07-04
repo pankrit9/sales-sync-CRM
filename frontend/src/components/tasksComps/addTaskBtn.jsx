@@ -6,11 +6,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { BACKEND_API } from "../api";
+import { BACKEND_API } from "../../api";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 
-export default function AddBtn({ fetchData }) {
+export default function AddBtn({ fetchData, userId }) {
     const [open, setOpen] = React.useState(false);
     const [manager_assigned, setManager] = React.useState("");
     const [task_description, setTaskDescription] = React.useState("");
@@ -42,7 +42,7 @@ export default function AddBtn({ fetchData }) {
         };
 
         console.log("task: add request.... ");
-        const response = await fetch(`${BACKEND_API}/manager/tasks/create`, {
+        const response = await fetch(`${BACKEND_API}/tasks/${userId}/create`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

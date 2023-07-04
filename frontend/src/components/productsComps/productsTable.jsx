@@ -21,18 +21,18 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { BACKEND_API } from "../api";
+import { BACKEND_API } from "../../api";
 import { useState, useEffect } from 'react';
 
-function createData( _id, email, first_name, last_name, password, role, company) {
+function createData(_id, name, stock, price, is_electronic, n_sold, revenue) {
   return {
     _id,
-    email,
-    first_name,
-    last_name,
-    password,
-    role,
-    company
+    name,
+    stock,
+    price,
+    is_electronic,
+    n_sold,
+    revenue
   };
 }
 
@@ -76,29 +76,41 @@ const headCells = [
     label: 'ID',
   },
   {
-    id: 'first_name',
+    id: 'name',
     numeric: false,
     disablePadding: false,
-    label: 'Staff Name',
+    label: 'Name',
   },
   {
-    id: 'Position',
-    numeric: false,
-    disablePadding: false,
-    label: 'Position',
-  },
-  {
-    id: 'Sales',
+    id: 'stock',
     numeric: true,
     disablePadding: false,
-    label: 'Sales',
+    label: 'Stock',
   },
   {
-    id: 'Outstanding Tasks',
+    id: 'price',
     numeric: true,
     disablePadding: false,
-    label: 'Outstanding Tasks',
+    label: 'Price ($AUD)',
   },
+  {
+    id: 'is_electronic',
+    numeric: true,
+    disablePadding: false,
+    label: 'Electronic Product',
+  },
+  {
+    id: 'n_sold',
+    numeric: true,
+    disablePadding: false,
+    label: 'Number Sold',
+  },
+  {
+    id: 'revenue',
+    numeric: true,
+    disablePadding: false,
+    label: 'Revenue ($AUD)',
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -157,7 +169,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-async function deleteSelectedTasks(selectedIds, fetchData) {
+async function deleteSelected(selectedIds, fetchData) {
   // create a new array for the promises
   const deletePromises = selectedIds.map(id =>
     fetch(`${BACKEND_API}/products/delete/${id}`, {method: 'DELETE'})
@@ -171,12 +183,11 @@ async function deleteSelectedTasks(selectedIds, fetchData) {
     console.error(err);
   }
 }
-
-function EnhancedTableToolbarStaff(props) {
+function EnhancedTableToolbar(props) {
   const { numSelected, selectedIds, fetchData } = props;
 
   const handleDelete = async () => {
-    await deleteSelectedTasks(selectedIds, fetchData);
+    await deleteSelected(selectedIds, fetchData);
     props.fetchData()
   }
 
@@ -207,7 +218,7 @@ function EnhancedTableToolbarStaff(props) {
           id="tableTitle"
           component="div"
         >
-          Staff
+          Products
         </Typography>
       )}
 
@@ -228,7 +239,7 @@ function EnhancedTableToolbarStaff(props) {
   );
 }
 
-EnhancedTableToolbarStaff.propTypes = {
+EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
@@ -306,7 +317,7 @@ export default function EnhancedTable({rows, fetchData}) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbarStaff numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
+        <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -354,10 +365,18 @@ export default function EnhancedTable({rows, fetchData}) {
                     >
                       {row._id}
                     </TableCell>
-                    <TableCell align="left">{row.first_name +" "+row.last_name}</TableCell>
-                    <TableCell align="left">{row.role}</TableCell>
+                    <TableCell align="right">{row.name}</TableCell>
+                    <TableCell align="right">{row.stock}</TableCell>
+                    <TableCell align="right">{row.price}</TableCell>
+                    <TableCell align="right">
+                      <Checkbox
+                        checked={row.is_electronic}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                        disabled
+                      />
+                    </TableCell>
+                    <TableCell align="right">{row.n_sold}</TableCell>
                     <TableCell align="right">{row.revenue}</TableCell>
-                    <TableCell align="right">{row.tasks_n}</TableCell>
                   </TableRow>
                 );
               })}
