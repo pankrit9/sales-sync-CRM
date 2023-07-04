@@ -7,7 +7,7 @@ from functools import wraps
 from config import db, bcrypt
 from flask_cors import CORS
 from auth.auth_routes import auth
-from tasks.tasks_routes import manTasks, staTasks
+from tasks.tasks_routes import manTasks, staTasks, tasks
 from products.products_routes import products
 from sales.sales_route import records
 import certifi
@@ -23,10 +23,9 @@ bcrypt.init_app(app)
 
 # Blueprints
 app.register_blueprint(auth, url_prefix="/auth")
-app.register_blueprint(manTasks, url_prefix="/manager/tasks")
-app.register_blueprint(staTasks, url_prefix="/staff/tasks")
 app.register_blueprint(products, url_prefix="/products")
 app.register_blueprint(records, url_prefix="/records")
+app.register_blueprint(tasks, url_prefix="/tasks")
 
 # This might be usefull later on
 def token_required(f):
@@ -55,7 +54,6 @@ def home():
     return
 
 
-
-
 if __name__ == '__main__':
     app.run(debug=True)
+# RECOMMENDATION if production env: Flask application should be run using a production-grade WSGI server such as Gunicorn or uWSGI

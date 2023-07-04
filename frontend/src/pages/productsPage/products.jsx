@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
-import Navbar  from "../components/Navbar";
-import EnhancedTable from "../components/productsTable";
-import AddBtn from "../components/addProdBtn";
-import EditBtn from "../components/editProdBtn";
-import SellBtn from "../components/sellProdBtn";
-import { BACKEND_API } from "../api";
-import { SearchBar } from '../components/SearchBar';
-import "../components/Searchbar.css"
+import Navbar  from "../../components/navbars/Navbar";
+import EnhancedTable from "../../components/productsComps/productsTable";
+import AddBtn from "../../components/productsComps/addProdBtn";
+import EditBtn from "../../components/productsComps/editProdBtn";
+import SellBtn from "../../components/productsComps/sellProdBtn";
+import { BACKEND_API } from "../../api";
+import { SearchBar } from '../../components/SearchBar';
+import '../../components/Searchbar.css';
+import { useSelector } from 'react-redux';
 
 function Products() {
     
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const state = useSelector(state => state);
     
 
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/products/${state.token}`, {method: "GET"});
         const data = await response.json();
         setProducts(data);
     }, []);

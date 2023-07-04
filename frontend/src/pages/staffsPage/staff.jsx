@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
-import Navbar  from "../components/Navbar";
-import EnhancedTable from "../components/StaffTable";
-import AddBtn from "../components/addProdBtn";
-import EditBtn from "../components/editProdBtn";
-import SellBtn from "../components/sellProdBtn";
-import { BACKEND_API } from "../api";
-import { SearchBarStaff } from '../components/SearchBarStaff';
-import "../components/Searchbar.css"
+import Navbar  from "../../components/navbars/Navbar";
+import EnhancedTable from "../../components/staffComps/StaffTable";
+import AddBtn from "../../components/productsComps/addProdBtn";
+import EditBtn from "../../components/productsComps/editProdBtn";
+import SellBtn from "../../components/productsComps/sellProdBtn";
+import { BACKEND_API } from "../../api";
+import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
+import "../../components/Searchbar.css"
 
 const Staff = () => {
   const [staffs, setStaff] = useState([]);

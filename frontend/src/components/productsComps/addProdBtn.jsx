@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { BACKEND_API } from "../api";
+import { BACKEND_API } from "../../api";
 import { useState, useEffect } from "react";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
