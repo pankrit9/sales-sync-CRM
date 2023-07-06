@@ -99,8 +99,8 @@ def sell_product(id):
     else:
         return jsonify({"message": "Unsuccessful"}), 404 
 
-@products.route("/<token>", methods=['GET'])
-def see_products(token):
+@products.route("/", methods=['GET'])
+def see_products():
     
     all_products = db.Products.find({})
 

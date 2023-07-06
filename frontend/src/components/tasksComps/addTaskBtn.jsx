@@ -13,22 +13,24 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Grid from "@mui/material/Grid";
+import { useSelector } from 'react-redux';
 
 
 export default function AddBtn({ fetchData, userId }) {
     const [open, setOpen] = React.useState(false);
-    // const [manager_assigned, setManager] = React.useState("");
     const [task_description, setTaskDescription] = React.useState("");
     const [client_assigned, setClient] = React.useState("");
     const [product, setProduct] = React.useState("");
     const [product_quantity, setProductQuantity] = React.useState("");
     const [priority, setPriority] = React.useState("");
     const [due_date, setDueDate] = React.useState("");
-    
     const [staff_member_assigned, setStaffMemberAssigned] = React.useState("");
+    
     const [products, setProducts] = React.useState([]);
+    const [staff_members, setStaffMembers] = React.useState([]);
 
-    console.log("managerId while adding button: ", userId);
+    const _id = useSelector((state) => state.user);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -41,6 +43,21 @@ export default function AddBtn({ fetchData, userId }) {
     useEffect(() => {
         fetchProducts();
     }, []);
+    useEffect(() => {
+        fetchStaffMembers();
+    }, []);
+
+    const fetchStaffMembers = async () => {
+        try {
+            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
+            const data = await response.json();
+            console.log("staff members from backend: ", data);
+            setStaffMembers(data);
+            console.log("staff members stored in list: ", staff_members);
+        } catch (error) {
+            console.error("Error fetching staff members: ", error);
+        }
+    };
 
     const fetchProducts = async () => {
         try {
@@ -52,16 +69,10 @@ export default function AddBtn({ fetchData, userId }) {
         } catch (error) {
             console.error("Error fetching products: ", error);
         }
-    }
-
-    useEffect(() => {
-        console.log("products stored in list: ", products);
-    }, [products]);
-
+    };
 
     const handleAdd = async () => {
         const task = {
-            // manager_assigned,
             task_description,
             client_assigned,
             product,
@@ -72,7 +83,7 @@ export default function AddBtn({ fetchData, userId }) {
         };
 
         console.log("task: add request.... ");
-        const response = await fetch(`${BACKEND_API}/tasks/create/${userId}`, {
+        const response = await fetch(`${BACKEND_API}/tasks/create/${_id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -105,21 +116,12 @@ export default function AddBtn({ fetchData, userId }) {
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add task</DialogTitle>
-                <DialogContent>
+                <DialogContent 
+                    style={{ margin: "10px 0" }}
+                >
                     <DialogContentText>
                         Please add in the details of a new task below.
                     </DialogContentText>
-                    {/* <TextField
-                        autoFocus
-                        margin="dense"
-                        id="manager_assigned"
-                        label="Manager"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={manager_assigned}
-                        onChange={(e) => setManager(e.target.value)}
-                    /> */}
                     <TextField
                         autoFocus
                         margin="dense"
@@ -142,44 +144,6 @@ export default function AddBtn({ fetchData, userId }) {
                         value={client_assigned}
                         onChange={(e) => setClient(e.target.value)}
                     />
-                    <FormControl fullWidth>
-                        <InputLabel id="product">Product</InputLabel>
-                        <Select
-                            labelId="product"
-                            id="product"
-                            value={product}
-                            onChange={(e) => setProduct(e.target.value)}
-                            autoWidth
-                        >
-                            {products.map((productItem) => (
-                                <MenuItem key={productItem._id} value={productItem.name}>
-                                    {productItem.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    {/* <TextField
-                        autoFocus
-                        margin="dense"
-                        id="product"
-                        label="Attach Product"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={product}
-                        onChange={(e) => setProduct(e.target.value)}
-                    /> */}
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="product_quantity"
-                        label="Qty"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={product_quantity}
-                        onChange={(e) => setProductQuantity(e.target.value)}
-                    />
                     <TextField
                         autoFocus
                         margin="dense"
@@ -196,23 +160,68 @@ export default function AddBtn({ fetchData, userId }) {
                         margin="dense"
                         id="due_date"
                         label="Due Date"
-                        type="text"
+                        type="date"
                         fullWidth
                         variant="standard"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                         value={due_date}
                         onChange={(e) => setDueDate(e.target.value)}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="staff_member_assigned"
-                        label="Assign Staff"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={staff_member_assigned}
-                        onChange={(e) => setStaffMemberAssigned(e.target.value)}
-                    />
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <FormControl 
+                                fullWidth
+                                style={{ margin: '10px 0' }}
+                            >
+                                <InputLabel id="product">Product</InputLabel>
+                                <Select
+                                    labelId="product"
+                                    id="product"
+                                    value={product}
+                                    onChange={(e) => setProduct(e.target.value)}
+                                    autoWidth
+                                >
+                                    {products.map((productItem) => (
+                                        <MenuItem key={productItem._id} value={productItem.name}>
+                                            {productItem.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                id="product_quantity"
+                                label="Qty"
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={product_quantity}
+                                onChange={(e) => setProductQuantity(e.target.value)}
+                            />
+                        </Grid>
+                    </Grid>
+
+                    <FormControl fullWidth>
+                        <InputLabel id="staff_member_assigned">Assign Staff</InputLabel>
+                        <Select
+                            labelId="staff_member_assigned"
+                            id="staff_member_assigned"
+                            value={staff_member_assigned}
+                            onChange={(e) => setStaffMemberAssigned(e.target.value)}
+                            autoWidth
+                        >
+                            {staff_members.map((staffMember) => (
+                                <MenuItem key={staffMember._id} value={staffMember.first_name}>
+                                    {staffMember.first_name} {staffMember.last_name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>

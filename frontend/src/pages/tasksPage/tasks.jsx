@@ -59,6 +59,7 @@ const Tasks = () => {
                 <div className="add-btn-task" style={{ justifySelf: 'end', paddingRight: '140px' }}>
                     {
                         // only manager can add tasks
+                        // role === 'manager' && <AddTaskBtn fetchData={fetchData} />
                         role === 'manager' && <AddTaskBtn fetchData={fetchData} userId = {_id}/>
                     }
                 </div>

@@ -23,6 +23,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
 import { useState, useEffect } from 'react';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
 
 function createData(task_id, manager_assigned, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
     return {
@@ -184,50 +187,7 @@ EnhancedTableHead.propTypes = {
 function EnhancedTableToolbar(props) {
     const { numSelected, selectedIds, fetchData } = props;
 
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(
-                            theme.palette.primary.main,
-                            theme.palette.action.activatedOpacity
-                        ),
-                }),
-            }}
-        >
-            {numSelected > 0 ? (
-                <Typography
-                    sx={{ flex: "1 1 100%" }}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography
-                    sx={{ flex: "1 1 100%" }}
-                    variant="h6"
-                    id="tableTitle"
-                    component="div"
-                >
-                    Tasks
-                </Typography>
-            )}
-
-            {/* {numSelected > 0 ? (
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
-            )} */}
-        </Toolbar>
-    );
+    
 }
 
 export default function EnhancedTable({ rows, fetchData }) {
@@ -351,7 +311,13 @@ export default function EnhancedTable({ rows, fetchData }) {
                                         {/* <TableCell align="centre">{row.product_quantity}</TableCell> */}
                                         <TableCell align="centre">{row.priority}</TableCell>
                                         <TableCell align="centre">{row.due_date}</TableCell>
-                                        <TableCell align="centre">{row.staff_member_assigned}</TableCell>
+                                        <TableCell align="centre">
+                                            <Tooltip title={row.staff_member_assigned}>
+                                                <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                                    {(row.staff_member_assigned[0]+row.staff_member_assigned[1]).toUpperCase()}
+                                                </Avatar>
+                                            </Tooltip>
+                                        </TableCell>
                                         <TableCell align="centre">{row.complete}</TableCell>
                                     </TableRow>
                                 );

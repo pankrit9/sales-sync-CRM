@@ -24,7 +24,6 @@ tasks = Blueprint('tasks', __name__)
 # @manager_required     # role is being fetched and checked here
 
 
-
 @tasks.route("/<id>", methods=['GET'])
 def get_tasks(id):
     # print("userId: ", id)
@@ -55,30 +54,6 @@ def get_tasks(id):
         return jsonify({"message": str(e)}), 500
 
 
-
-#-----------------manager access-------------------#
-
-# See all tasks
-# For frontend: Is pagination a front end implementation? i.e.
-# scroll down and load additional. Not load all tasks onto the page
-# at once?
-@tasks.route("/", methods=['GET'])
-def manager_tasks():
-    
-    # gets all tasks from the Tasks Collection that the manager created
-    all_tasks = db.Tasks.find({})
-
-    # convert Cursor type to list
-    tasks_list = list(all_tasks)
-
-    if not tasks_list:
-        print({"message": "You don't have any tasks\n"})
-        return jsonify({"message": "You don't have any tasks"})
-
-    # Returns all tasks from Tasks Collection
-    print({"message": "tasks list retrieved\n"})
-    return jsonify(tasks_list)
-
 # Creates new task
 # For frontend: cannot submit if required fields aren't provided
 # required fields = taskDescription, Priority, Due Date, Assign Staff
@@ -87,10 +62,14 @@ def manager_tasks():
 # For frontend: If possible, can add drop down selection of staff to
 # assign based on staff accounts, instead of trying to string match
 # their names on input
-@manTasks.route("/create", methods=['POST'])
-@manager_required   # only manager can add tasks
-def manager_create_task():
+# @manTasks.route("/create/", methods=['POST'])
+# def manager_create_task():
+@tasks.route("/create/<uId>", methods=['POST'])
+def manager_create_task(uId):
     print("recieved request to add task\n")
+    curr_user = db.Accounts.find_one({"_id": uId})
+    print("curr_user: ", curr_user)
+
     tasks = db.Tasks
     
     # Fetch all ids and convert them to integers
@@ -107,7 +86,8 @@ def manager_create_task():
     # object id
     new_task = {
         "_id": str(taskId),
-        "manager_assigned": request.json.get('manager_assigned'),
+        # manager_assigned needs to store the id of the current user who is creating the task
+        "manager_assigned": curr_user["first_name"],
         "task_description": request.json.get('task_description'),
         "client_assigned": request.json.get('client_assigned'),
         "product": request.json.get('product'),

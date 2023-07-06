@@ -277,7 +277,7 @@ const Form = () => {
                                     <input
                                         type="radio"
                                         name="role"
-                                        value="manager"
+                                        value="staff"
                                         checked={values.role === "staff"}
                                         onChange={handleChange}
                                         // sx={{

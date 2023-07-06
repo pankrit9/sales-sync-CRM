@@ -30,7 +30,7 @@ const Staff = () => {
 
   useEffect(() => {
       fetchData();
-  }, [fetchData]);
+  }, []);
 
   const dataFiltered = filterData(searchQuery, staffs);
   return (
