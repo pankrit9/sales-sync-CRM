@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/loginPage";
 import Products from "./pages/productsPage/products";
-import Sales from "./pages/sales";
+import Sales from "./pages/salesPage/sales";
 import Tasks from "./pages/tasksPage/tasks";
 import Clients from "./pages/clients";
 import { useMemo } from "react";
