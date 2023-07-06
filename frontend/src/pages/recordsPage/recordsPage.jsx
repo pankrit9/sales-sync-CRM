@@ -61,9 +61,9 @@ const Records = () => {
           </h1>
 
           <div className="task_container" style={{display: 'grid'}} >
-              {/* <div className="tools">
-                  <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-              </div> */}
+               <div className="tools">
+                  <SearchBarStaff searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+              </div> 
           </div>
           <div style={{ marginLeft: '140px', marginRight: '120px', marginTop: '80px' }}>
               {dataFiltered.length > 0 ? <RecordsTable rows={dataFiltered} fetchData={fetchData} /> : <p>No records found.</p>}

@@ -186,7 +186,7 @@ function EnhancedTableToolbarStaff(props) {
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
         color:"white",
-        background : "#8F00FF",
+        background : "#000000",
         borderRadius:   "20px 20px 0px 0px",
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
@@ -198,7 +198,7 @@ function EnhancedTableToolbarStaff(props) {
         <Typography
           sx={{ flex: '1 1 100%' }}
           color="inherit"
-          variant="subtitle1"
+          variant="h5"
           component="div"
         >
           {numSelected} selected
@@ -206,7 +206,7 @@ function EnhancedTableToolbarStaff(props) {
       ) : (
         <Typography
           sx={{ flex: '1 1 100%' }}
-          variant="h6"
+          variant="h5"
           id="tableTitle"
           component="div"
         >

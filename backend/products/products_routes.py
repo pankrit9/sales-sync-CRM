@@ -70,7 +70,9 @@ def sell_product(id):
     price = int(sold_product['price'])
     is_electronic = bool(sold_product['is_electronic'])
     prev_revenue = int(sold_product['revenue'])
-
+    status = request.json['payment_status']
+    method = request.json['payment_method']
+    
     if quantity_sold > stock and not is_electronic:
         return jsonify({"message" : "You don't have enough stock available."}), 404
       
@@ -80,7 +82,7 @@ def sell_product(id):
         { "$set": {"revenue" : str(int(staff['revenue']) + price * quantity_sold)}}
     )
 
-    register_sale("today",staff["first_name"],sold_by ,price * quantity_sold, [])
+    register_sale("today",staff["first_name"],sold_by ,price * quantity_sold, [], status,method)
 
     if not is_electronic:   
         result = products.update_one(
@@ -138,7 +140,7 @@ def product_edit(id):
         return jsonify({"message": "Unsuccessful"}), 400 
 
 
-def register_sale(deadline,staff, staffId, amount, products_sold):
+def register_sale(deadline,staff, staffId, amount, products_sold,status, payment_method):
 
     # Fetch all ids and convert them to integers
     all_records_ids = [int(record['_id']) for record in db.Sales.find({}, {"_id": 1})]
@@ -152,11 +154,13 @@ def register_sale(deadline,staff, staffId, amount, products_sold):
 
     db.Sales.insert_one({
         "_id": recordId,
-        "status":"Paid",
+        "payment_status":status,
         "deadline": deadline,
         "products_sold": products_sold,
         "staff":staff,
         "staff_id":staffId,
-        "date": datetime.now(),
-        "amount":amount
+        "date": str(datetime.now().date()),
+        "client_id": "To be Implemented",
+        "amount":amount,
+        "payment_method":payment_method
     })

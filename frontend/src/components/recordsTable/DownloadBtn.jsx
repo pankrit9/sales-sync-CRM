@@ -10,6 +10,7 @@ import { BACKEND_API } from "../../api";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import * as BsIcons from "react-icons/bs";
+import { Typography } from "@mui/material";
 export default function DownloadBtn({ fetchData, userId }) {
     const [open, setOpen] = React.useState(false);
     const [manager_assigned, setManager] = React.useState("");
@@ -70,11 +71,12 @@ export default function DownloadBtn({ fetchData, userId }) {
                 color="primary"
                 startIcon={<BsIcons.BsCloudDownload />}
                 onClick={handleClickOpen}
+                
             >
-                Download Report
+                <Typography>Download Report</Typography>
             </Button>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add task</DialogTitle>
+                <DialogTitle>Download PDF version</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Please add in the details of a new task below.

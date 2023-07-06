@@ -76,6 +76,12 @@ const headCells = [
     label: 'Reference #',
   },
   {
+    id: 'client_id',
+    numeric: false,
+    disablePadding: false,
+    label: 'Client',
+  },
+  {
     id: 'staff',
     numeric: true,
     disablePadding: false,
@@ -91,6 +97,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Record Date',
+  },
+  {
+    id: 'payment_method',
+    numeric: true,
+    disablePadding: false,
+    label: 'Payment Method',
   },
   {
     id: 'amount',
@@ -207,7 +219,7 @@ function RecordsToolbar(props) {
       ) : (
         <Typography
           sx={{ flex: '1 1 100%' }}
-          variant="h6"
+          variant="h5"
           id="tableTitle"
           component="div"
         >
@@ -359,11 +371,29 @@ export default function RecordsTable({rows, fetchData}) {
                     >
                       {row._id}
                     </TableCell>
+                    <TableCell align="left">{row.client_id}</TableCell>
                     <TableCell align="right">{row.staff}</TableCell>
                     <TableCell align="right">{row.deadline}</TableCell>
                     <TableCell align="right">{row.date}</TableCell>
+                    <TableCell align="right">{row.payment_method}</TableCell>
                     <TableCell align="right">${row.amount}</TableCell>
-                    <TableCell align="right">{row.status}</TableCell>
+                    <TableCell align="right">
+                      <Typography
+                        style={{ 
+                          color:"white",
+                          fontWeight:"bold",
+                          fontSize:'0.75rem',
+                          borderRadius: 8,
+                          padding:"3px 10px",
+                          display: "inline-block",
+                          backgroundColor:
+                          ((row.payment_status === 'Paid' && 'green') ||
+                          (row.payment_status === 'Overdue' && 'red') ||
+                          (row.payment_status === 'Pending' && 'blue')
+                          )
+                        }}
+                      >{row.payment_status}</Typography>
+                    </TableCell>
                   </TableRow>
                 );
               })}
