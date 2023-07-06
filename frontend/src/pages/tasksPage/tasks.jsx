@@ -30,9 +30,11 @@ const Tasks = () => {
 
     // fetch tasks on the basis of current role and id of user
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/tasks/getTasks/${role}/${_id}`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/tasks/${_id}`, {method: "GET"});
         const data = await response.json();
         setTask(data);
+        console.log("tasks data from backend: ", data);
+        console.log("tasks data in tasks list: ", tasks);
     }, []);
     
     const filterData = (query, tasks) => {
@@ -45,7 +47,7 @@ const Tasks = () => {
     
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
 
     const dataFiltered = filterData(searchQuery, tasks);
 

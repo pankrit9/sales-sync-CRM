@@ -9,17 +9,26 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { BACKEND_API } from "../../api";
 import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 
 export default function AddBtn({ fetchData, userId }) {
     const [open, setOpen] = React.useState(false);
-    const [manager_assigned, setManager] = React.useState("");
+    // const [manager_assigned, setManager] = React.useState("");
     const [task_description, setTaskDescription] = React.useState("");
     const [client_assigned, setClient] = React.useState("");
     const [product, setProduct] = React.useState("");
     const [product_quantity, setProductQuantity] = React.useState("");
     const [priority, setPriority] = React.useState("");
     const [due_date, setDueDate] = React.useState("");
-    const [staff_member_assigned, setStaffMember] = React.useState("");
+    
+    const [staff_member_assigned, setStaffMemberAssigned] = React.useState("");
+    const [products, setProducts] = React.useState([]);
+
+    console.log("managerId while adding button: ", userId);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -29,9 +38,30 @@ export default function AddBtn({ fetchData, userId }) {
         setOpen(false);
     };
 
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    const fetchProducts = async () => {
+        try {
+            const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
+            const data = await response.json();
+            console.log("products from backend: ", data);
+            setProducts(data);
+            console.log("products stored in list: ", products);
+        } catch (error) {
+            console.error("Error fetching products: ", error);
+        }
+    }
+
+    useEffect(() => {
+        console.log("products stored in list: ", products);
+    }, [products]);
+
+
     const handleAdd = async () => {
         const task = {
-            manager_assigned,
+            // manager_assigned,
             task_description,
             client_assigned,
             product,
@@ -42,7 +72,7 @@ export default function AddBtn({ fetchData, userId }) {
         };
 
         console.log("task: add request.... ");
-        const response = await fetch(`${BACKEND_API}/tasks/${userId}/create`, {
+        const response = await fetch(`${BACKEND_API}/tasks/create/${userId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -79,7 +109,7 @@ export default function AddBtn({ fetchData, userId }) {
                     <DialogContentText>
                         Please add in the details of a new task below.
                     </DialogContentText>
-                    <TextField
+                    {/* <TextField
                         autoFocus
                         margin="dense"
                         id="manager_assigned"
@@ -89,7 +119,7 @@ export default function AddBtn({ fetchData, userId }) {
                         variant="standard"
                         value={manager_assigned}
                         onChange={(e) => setManager(e.target.value)}
-                    />
+                    /> */}
                     <TextField
                         autoFocus
                         margin="dense"
@@ -112,7 +142,23 @@ export default function AddBtn({ fetchData, userId }) {
                         value={client_assigned}
                         onChange={(e) => setClient(e.target.value)}
                     />
-                    <TextField
+                    <FormControl fullWidth>
+                        <InputLabel id="product">Product</InputLabel>
+                        <Select
+                            labelId="product"
+                            id="product"
+                            value={product}
+                            onChange={(e) => setProduct(e.target.value)}
+                            autoWidth
+                        >
+                            {products.map((productItem) => (
+                                <MenuItem key={productItem._id} value={productItem.name}>
+                                    {productItem.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    {/* <TextField
                         autoFocus
                         margin="dense"
                         id="product"
@@ -122,7 +168,7 @@ export default function AddBtn({ fetchData, userId }) {
                         variant="standard"
                         value={product}
                         onChange={(e) => setProduct(e.target.value)}
-                    />
+                    /> */}
                     <TextField
                         autoFocus
                         margin="dense"
@@ -165,7 +211,7 @@ export default function AddBtn({ fetchData, userId }) {
                         fullWidth
                         variant="standard"
                         value={staff_member_assigned}
-                        onChange={(e) => setStaffMember(e.target.value)}
+                        onChange={(e) => setStaffMemberAssigned(e.target.value)}
                     />
                 </DialogContent>
                 <DialogActions>

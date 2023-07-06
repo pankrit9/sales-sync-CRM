@@ -14,13 +14,14 @@ function Products() {
     
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const state = useSelector(state => state);
+    // const state = useSelector(state => state);
     
 
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/products/${state.token}`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
         const data = await response.json();
         setProducts(data);
+        console.log("products data: ", data);
     }, []);
 
     const filterData = (query, products) => {
@@ -33,7 +34,7 @@ function Products() {
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
 
     const dataFiltered = filterData(searchQuery, products);
     return (
