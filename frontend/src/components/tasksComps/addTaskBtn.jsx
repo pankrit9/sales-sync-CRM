@@ -26,6 +26,7 @@ export default function AddBtn({ fetchData, userId }) {
     const [priority, setPriority] = React.useState("");
     const [due_date, setDueDate] = React.useState("");
     const [staff_member_assigned, setStaffMemberAssigned] = React.useState("");
+    const [complete, setStatus] = React.useState("In Progress");
     
     const [products, setProducts] = React.useState([]);
     const [staff_members, setStaffMembers] = React.useState([]);
@@ -80,6 +81,7 @@ export default function AddBtn({ fetchData, userId }) {
             priority,
             due_date,
             staff_member_assigned,
+            complete,
         };
 
         console.log("task: add request.... ");

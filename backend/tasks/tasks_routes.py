@@ -95,7 +95,7 @@ def manager_create_task(uId):
         "priority": request.json.get('priority'),
         "due_date": request.json.get('due_date'),
         "staff_member_assigned": request.json.get('staff_member_assigned'),
-        "complete": False
+        "complete": request.json.get('complete'),
     }
 
     # inserts new task into collection

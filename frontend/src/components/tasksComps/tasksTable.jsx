@@ -185,9 +185,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-    const { numSelected, selectedIds, fetchData } = props;
-
-    
+    const { numSelected, selectedIds, fetchData } = props;   
 }
 
 export default function EnhancedTable({ rows, fetchData }) {
@@ -197,13 +195,13 @@ export default function EnhancedTable({ rows, fetchData }) {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
+    
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
     };
-
+    
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected = rows.map((n) => n.task_id);
@@ -212,12 +210,12 @@ export default function EnhancedTable({ rows, fetchData }) {
         }
         setSelected([]);
     };
-
+    
     // select rows 
     const handleClick = (event, task_id) => {
         const selectedIndex = selected.indexOf(task_id);
         let newSelected = [];
-
+        
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, task_id);
         } else if (selectedIndex === 0) {
@@ -228,40 +226,47 @@ export default function EnhancedTable({ rows, fetchData }) {
             newSelected = newSelected.concat(
                 selected.slice(0, selectedIndex),
                 selected.slice(selectedIndex + 1)
-            );
-        }
-
-        setSelected(newSelected);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
-
-    const isSelected = (task_id) => selected.indexOf(task_id) !== -1;
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
+                );
+            }
+            
+            setSelected(newSelected);
+        };
+        
+        const handleChangePage = (event, newPage) => {
+            setPage(newPage);
+        };
+        
+        const handleChangeRowsPerPage = (event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+        };
+        const handleChangeDense = (event) => {
+            setDense(event.target.checked);
+        };
+        
+        const isSelected = (task_id) => selected.indexOf(task_id) !== -1;
+        
+        // Avoid a layout jump when reaching the last page with empty rows.
+        const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
+        
+        const visibleRows = React.useMemo(() =>
+        stableSort(rows, getComparator(order, orderBy)).slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
-    );
+            [order, orderBy, page, rowsPerPage],
+        );
+                
+        
+        const colors = [deepOrange[500], deepOrange[300], deepPurple[500], deepPurple[300], green[500], green[300], red[500], red[300], blue[500], blue[300]];
+        
+        const getRandomColor = () => {
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            return colors[randomIndex];
+        };
 
-    return (
+        return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData} />
@@ -313,7 +318,7 @@ export default function EnhancedTable({ rows, fetchData }) {
                                         <TableCell align="centre">{row.due_date}</TableCell>
                                         <TableCell align="centre">
                                             <Tooltip title={row.staff_member_assigned}>
-                                                <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                                <Avatar sx={{ bgcolor: getRandomColor() }}>
                                                     {(row.staff_member_assigned[0]+row.staff_member_assigned[1]).toUpperCase()}
                                                 </Avatar>
                                             </Tooltip>
