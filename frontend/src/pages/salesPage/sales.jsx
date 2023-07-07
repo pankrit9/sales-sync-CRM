@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
 import Navbar  from "../../components/navbars/Navbar";
 import PieChart from "../../components/salesComps/pieChart";
@@ -11,8 +11,38 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CheckIcon from "@mui/icons-material/Check";
 import StatBox from "../../components/salesComps/statBox"
+import { BACKEND_API } from "../../api";
 
-const Sales = () => {
+function Sales() {
+  //should taskData be linked to a get data call?
+  const [taskData, setTaskData] = useState([]);
+  const [revenueData, setRevenueData] = useState([]);
+  const [clientData, setClientData] = useState([]);
+
+  const fetchTaskData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/tasks`, {method: "GET"});
+    const data = await response.json();
+    setTaskData(data);
+  }
+
+  const fetchRevenueData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/revenue`, {method: "GET"});
+    const data = await response.json();
+    setRevenueData(data);
+  }
+
+  const fetchClientData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/clients`, {method: "GET"});
+    const data = await response.json();
+    setClientData(data);
+  }
+
+  useEffect(() => {
+    fetchTaskData();
+    fetchRevenueData();
+    fetchClientData();
+  }, []);
+
   return (
     <>
     <Navbar/>
@@ -48,7 +78,7 @@ const Sales = () => {
           bgcolor="rgba(105, 105, 105, 0.5)"
         >
           <StatBox
-            title="12,361"
+            title={taskData}
             subtitle="Tasks"
             increase="+14%"
             icon={
@@ -66,7 +96,7 @@ const Sales = () => {
           bgcolor="rgba(105, 105, 105, 0.5)"
         >
           <StatBox
-            title="431,225"
+            title={`$${revenueData.toLocaleString()}`}
             subtitle="Revenue"
             increase="+21%"
             icon={
@@ -84,7 +114,7 @@ const Sales = () => {
           bgcolor="rgba(105, 105, 105, 0.5)"
         >
           <StatBox
-            title="32,441"
+            title={clientData}
             subtitle="Clients"
             increase="+5%"
             icon={

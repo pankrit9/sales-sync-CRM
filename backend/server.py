@@ -9,6 +9,7 @@ from flask_cors import CORS
 from auth.auth_routes import auth
 from tasks.tasks_routes import manTasks, staTasks, tasks
 from products.products_routes import products
+from sales.sales_routes import sales
 import certifi
 
 
@@ -24,6 +25,7 @@ bcrypt.init_app(app)
 app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(products, url_prefix="/products")
 app.register_blueprint(tasks, url_prefix="/tasks")
+app.register_blueprint(sales, url_prefix="/sales")
 
 # This might be usefull later on
 def token_required(f):
