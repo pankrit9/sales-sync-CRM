@@ -25,7 +25,7 @@ const LoginPage = () => {
                     fontWeight="bold"
                     style={{
                         fontSize:"100px",
-                        color: theme.palette.text.primary,
+                        color: "white"
                     }}
                     >
                     SaleSync

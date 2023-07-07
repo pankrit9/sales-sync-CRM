@@ -26,7 +26,7 @@ export default function AddBtn({ fetchData, userId }) {
     const [priority, setPriority] = React.useState("");
     const [due_date, setDueDate] = React.useState("");
     const [staff_member_assigned, setStaffMemberAssigned] = React.useState("");
-    const [complete, setStatus] = React.useState("In Progress");
+    const [complete, setStatus] = React.useState("Not Started");
     
     const [products, setProducts] = React.useState([]);
     const [staff_members, setStaffMembers] = React.useState([]);
@@ -44,6 +44,7 @@ export default function AddBtn({ fetchData, userId }) {
     useEffect(() => {
         fetchProducts();
     }, []);
+
     useEffect(() => {
         fetchStaffMembers();
     }, []);
@@ -52,9 +53,7 @@ export default function AddBtn({ fetchData, userId }) {
         try {
             const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
             const data = await response.json();
-            console.log("staff members from backend: ", data);
             setStaffMembers(data);
-            console.log("staff members stored in list: ", staff_members);
         } catch (error) {
             console.error("Error fetching staff members: ", error);
         }
@@ -63,10 +62,8 @@ export default function AddBtn({ fetchData, userId }) {
     const fetchProducts = async () => {
         try {
             const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
-            const data = await response.json();
-            console.log("products from backend: ", data);
+            const data = await response.json();;
             setProducts(data);
-            console.log("products stored in list: ", products);
         } catch (error) {
             console.error("Error fetching products: ", error);
         }
@@ -84,7 +81,7 @@ export default function AddBtn({ fetchData, userId }) {
             complete,
         };
 
-        console.log("task: add request.... ");
+        console.log("addTask: add request.... ");
         const response = await fetch(`${BACKEND_API}/tasks/create/${_id}`, {
             method: "POST",
             headers: {

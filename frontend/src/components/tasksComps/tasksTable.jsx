@@ -13,8 +13,9 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import EditTaskBtn from "../../components/tasksComps/editTaskBtn";
+import EditIcon from '@mui/icons-material/Edit';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
@@ -26,6 +27,7 @@ import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
+import { EditBtn } from "../../components/tasksComps/editTaskBtn";
 
 function createData(task_id, manager_assigned, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
     return {
@@ -244,8 +246,6 @@ export default function EnhancedTable({ rows, fetchData }) {
             setDense(event.target.checked);
         };
         
-        const isSelected = (task_id) => selected.indexOf(task_id) !== -1;
-        
         // Avoid a layout jump when reaching the last page with empty rows.
         const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -296,7 +296,7 @@ export default function EnhancedTable({ rows, fetchData }) {
                                         // role="checkbox"
                                         // aria-checked={isItemSelected}
                                         tabIndex={-1}
-                                        key={row.task_id}
+                                        key={row._id}
                                         // selected={isItemSelected}
                                         sx={{ cursor: 'pointer' }}
                                     >
@@ -324,6 +324,14 @@ export default function EnhancedTable({ rows, fetchData }) {
                                             </Tooltip>
                                         </TableCell>
                                         <TableCell align="centre">{row.complete}</TableCell>
+                                        <TableCell align="centre">
+                                            {/* {visibleRows.map((row, index) => {
+                                                // Log the row object for inspection
+                                                console.log("row:", row);
+                                                console.log("index:", index);
+                                            })} */}
+                                            <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} />
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}
