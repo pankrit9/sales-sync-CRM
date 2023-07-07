@@ -26,16 +26,13 @@ tasks = Blueprint('tasks', __name__)
 
 @tasks.route("/<id>", methods=['GET'])
 def get_tasks(id):
-    # print("userId: ", id)
-
     curr_user = db.Accounts.find_one({"_id": id})
-    print("curr_user: ", curr_user)
 
     try:
         if curr_user["role"] == "manager":
             task_query = {"manager_assigned": curr_user["first_name"]}
             # task_query = {"manager_assigned": "test"}
-            print("task_query: ", task_query)
+
         elif curr_user["role"] == "staff":
             task_query = {"staff_member_assigned": curr_user["first_name"]}
         else:
@@ -50,7 +47,7 @@ def get_tasks(id):
         # return the list of tasks
         return jsonify(tasks_list)
     except Exception as e:
-        print("Error: ", e)
+
         return jsonify({"message": str(e)}), 500
 
 
@@ -66,10 +63,8 @@ def get_tasks(id):
 # def manager_create_task():
 @tasks.route("/create/<uId>", methods=['POST'])
 def manager_create_task(uId):
-    print("recieved request to add task\n")
     curr_user = db.Accounts.find_one({"_id": uId})
-    print("curr_user: ", curr_user)
-
+    
     tasks = db.Tasks
     
     # Fetch all ids and convert them to integers
@@ -102,38 +97,37 @@ def manager_create_task(uId):
     result = tasks.insert_one(new_task)
 
     if result.inserted_id:
-        print({"message": "Successful\n"})
+
         return jsonify({"message": "Successful"})
     else:
-        print({"message": "error adding product\n"})
+
         return jsonify({"message": "error adding product"}), 500
 
 
 # delete task
-@manTasks.route("/delete/<taskId>", methods=['POST'])
-@manager_required   # only manager can delete tasks
+@tasks.route("/delete/<taskId>", methods=['POST'])
 def manager_task_delete(taskId):
     
     # delete task from db based on task ID
     result = db.Tasks.delete_one({"_id":taskId})
 
     if result.deleted_count > 0:
-        print({"message": "Successful\n"})
         return jsonify({"message": "Successful"})
     else:
-        print({"message": "Unsuccessful\n"})
         return jsonify({"message": "Unsuccessful"}), 400
 
     # edit task
     # for frontend: managers cannot edit status, only staff can
     # managers cannot edit task id either
 
-@manTasks.route("/edit/<taskId>", methods=['POST'])
-@manager_required   # only manager can edit tasks
-def manager_task_edit(taskId):
-
+# If staff tries to edit task, allow to edit only the status
+# if manager tries to edit task, allow to edit everything except task id
+@tasks.route("/edit/<uId>/<taskId>", methods=['POST'])
+def manager_task_edit(uId, taskId):
+    
     # parse json object for data to update i.e. due date
     edit = request.get_json()
+    print("edit: ", edit)
 
     # updates fields according to provided JSON
     result = db.Tasks.update_one({"_id": taskId}, {"$set": edit})
@@ -143,7 +137,7 @@ def manager_task_edit(taskId):
         return jsonify({"message": "Successful"})
     else:
         print({"message": "Unsuccessful\n"})
-        return jsonify({"message": "Unsuccessful"}), 400    
+        return jsonify({"message": "Unsuccessful"}), 400
 
 #-----------------staff access-------------------#
 
@@ -163,7 +157,7 @@ def manager_task_edit(taskId):
 #     return jsonify(tasks_list)
 
 # update completion 
-@staTasks.route("/status/<taskId>", methods=['POST'])
+@tasks.route("/status/<taskId>", methods=['POST'])
 def staff_status(taskId):
 
     # parse json object for data to update i.e. completed

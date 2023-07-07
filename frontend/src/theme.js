@@ -57,6 +57,7 @@ export const themeSettings = (mode) => {
                 },
                 text: {
                     primary: colorTokens.white[50],
+                    main: colorTokens.white[10],
                 },
                 background: {
                     default: colorTokens.grey[900],
@@ -77,7 +78,7 @@ export const themeSettings = (mode) => {
                     light: colorTokens.grey[50]
                 },
                 text: {
-                    primary: colorTokens.white[10],
+                    primary: colorTokens.white[0],
                 },
                 background: {
                     default: colorTokens.grey[10],
