@@ -50,16 +50,6 @@ function Sales() {
     <Box m="10px" style={{ marginLeft: '140px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Box>
-          <Button
-            sx={{
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "30px 20px",
-            }}
-          >
-          </Button>
-        </Box>
       </Box>
 
       {/* GRID & CHARTS */}

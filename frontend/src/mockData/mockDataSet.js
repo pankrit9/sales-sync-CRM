@@ -3,85 +3,24 @@ export const mockDataPieChart = [
       "id": "c",
       "label": "c",
       "value": 87,
-      "color": "hsl(175, 70%, 50%)"
+
     },
     {
       "id": "rust",
       "label": "rust",
       "value": 100,
-      "color": "hsl(25, 70%, 50%)"
+ 
     },
     {
       "id": "css",
       "label": "css",
       "value": 595,
-      "color": "hsl(343, 70%, 50%)"
-    },
-    {
-      "id": "erlang",
-      "label": "erlang",
-      "value": 308,
-      "color": "hsl(118, 70%, 50%)"
-    },
-    {
-      "id": "java",
-      "label": "java",
-      "value": 307,
-      "color": "hsl(275, 70%, 50%)"
-    },
-    {
-      "id": "sass",
-      "label": "sass",
-      "value": 362,
-      "color": "hsl(167, 70%, 50%)"
-    },
-    {
-      "id": "hack",
-      "label": "hack",
-      "value": 221,
-      "color": "hsl(92, 70%, 50%)"
-    },
-    {
-      "id": "haskell",
-      "label": "haskell",
-      "value": 530,
-      "color": "hsl(270, 70%, 50%)"
+
     },
     {
       "id": "make",
       "label": "make",
       "value": 154,
-      "color": "hsl(69, 70%, 50%)"
-    },
-    {
-      "id": "elixir",
-      "label": "elixir",
-      "value": 306,
-      "color": "hsl(124, 70%, 50%)"
-    },
-    {
-      "id": "go",
-      "label": "go",
-      "value": 107,
-      "color": "hsl(302, 70%, 50%)"
-    },
-    {
-      "id": "lisp",
-      "label": "lisp",
-      "value": 107,
-      "color": "hsl(234, 70%, 50%)"
-    },
-    {
-      "id": "ruby",
-      "label": "ruby",
-      "value": 141,
-      "color": "hsl(312, 70%, 50%)"
-    },
-    {
-      "id": "stylus",
-      "label": "stylus",
-      "value": 232,
-      "color": "hsl(231, 70%, 50%)"
     },
     {
       "id": "python",
@@ -105,7 +44,6 @@ export const mockDataPieChart = [
       "id": "php",
       "label": "php",
       "value": 489,
-      "color": "hsl(220, 70%, 50%)"
     }
   ]
 
