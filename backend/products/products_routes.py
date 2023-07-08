@@ -1,5 +1,6 @@
 import datetime
 import jwt
+from datetime import datetime
 from config import db
 from flask import Blueprint, jsonify, request
 from decorators import jwt_required, manager_required, token_required
@@ -69,7 +70,9 @@ def sell_product(id):
     price = int(sold_product['price'])
     is_electronic = bool(sold_product['is_electronic'])
     prev_revenue = int(sold_product['revenue'])
-
+    status = request.json['payment_status']
+    method = request.json['payment_method']
+    
     if quantity_sold > stock and not is_electronic:
         return jsonify({"message" : "You don't have enough stock available."}), 404
       
@@ -78,6 +81,8 @@ def sell_product(id):
         {"_id":sold_by},
         { "$set": {"revenue" : str(int(staff['revenue']) + price * quantity_sold)}}
     )
+
+    register_sale("today",staff["first_name"],sold_by ,price * quantity_sold, [], status,method)
 
     if not is_electronic:   
         result = products.update_one(
@@ -94,6 +99,7 @@ def sell_product(id):
                         "n_sold" : str(quantity_sold),
                         "revenue" : str(prev_revenue + price * quantity_sold)}}
          )
+        
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})
     else:
@@ -132,3 +138,29 @@ def product_edit(id):
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "Unsuccessful"}), 400 
+
+
+def register_sale(deadline,staff, staffId, amount, products_sold,status, payment_method):
+
+    # Fetch all ids and convert them to integers
+    all_records_ids = [int(record['_id']) for record in db.Sales.find({}, {"_id": 1})]
+    
+    # Generate a taskId based on largest ID in collection
+    if not all_records_ids:
+        recordId = 1
+    else:
+        max_id = max(all_records_ids)
+        recordId = max_id + 1
+
+    db.Sales.insert_one({
+        "_id": recordId,
+        "payment_status":status,
+        "deadline": deadline,
+        "products_sold": products_sold,
+        "staff":staff,
+        "staff_id":staffId,
+        "date": str(datetime.now().date()),
+        "client_id": "To be Implemented",
+        "amount":amount,
+        "payment_method":payment_method
+    })

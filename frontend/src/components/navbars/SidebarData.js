@@ -5,6 +5,7 @@ import * as IoIcons from "react-icons/io";
 import * as BsIcons from "react-icons/bs";
 import * as FaIcons6 from "react-icons/fa6";
 import * as VscIcons from "react-icons/vsc";
+import * as TbIcons from "react-icons/tb"
 import { setMode } from '../../state';
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme, IconButton } from '@mui/material';
@@ -52,13 +53,19 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
+        title: 'Records',
+        path: '/records',
+        icon: <TbIcons.TbReportMoney/>,
+        cName: 'nav-text'
+    },
+    {
         title: 'Mode',
         icon: <VscIcons.VscColorMode/>,
         cName: 'nav-text mode'
     },
     {
         title: 'SIGN OUT',
-        path: '/signout',
+        path: '/',
         icon: <VscIcons.VscSignOut/>,
         cName: 'nav-text out'
     }

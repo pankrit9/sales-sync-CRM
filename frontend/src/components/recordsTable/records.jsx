@@ -22,17 +22,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from 'react';
-
-function createData( _id, email, first_name, last_name, password, role, company) {
+import { IconContext } from 'react-icons/lib'
+import * as BsIcons from "react-icons/bs";
+function createData(_id, name, stock, price, is_electronic, n_sold, revenue) {
   return {
     _id,
-    email,
-    first_name,
-    last_name,
-    password,
-    role,
-    company
+    name,
+    stock,
+    price,
+    is_electronic,
+    n_sold,
+    revenue
   };
 }
 
@@ -73,32 +73,49 @@ const headCells = [
     id: '_id',
     numeric: false,
     disablePadding: true,
-    label: 'ID',
+    label: 'Reference #',
   },
   {
-    id: 'first_name',
+    id: 'client_id',
     numeric: false,
     disablePadding: false,
-    label: 'Staff Name',
+    label: 'Client',
   },
   {
-    id: 'Position',
-    numeric: false,
-    disablePadding: false,
-    label: 'Position',
-  },
-  {
-    id: 'Sales',
+    id: 'staff',
     numeric: true,
     disablePadding: false,
-    label: 'Sales',
+    label: 'Salesperson',
   },
   {
-    id: 'Outstanding Tasks',
+    id: 'deadline',
     numeric: true,
     disablePadding: false,
-    label: 'Outstanding Tasks',
+    label: 'Payment Due',
+  },{
+    id: 'date',
+    numeric: true,
+    disablePadding: false,
+    label: 'Record Date',
   },
+  {
+    id: 'payment_method',
+    numeric: true,
+    disablePadding: false,
+    label: 'Payment Method',
+  },
+  {
+    id: 'amount',
+    numeric: true,
+    disablePadding: false,
+    label: 'Amount ($AUD)',
+  },
+  {
+    id: 'status',
+    numeric: true,
+    disablePadding: false,
+    label: 'Status',
+  }
 ];
 
 function EnhancedTableHead(props) {
@@ -157,7 +174,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-async function deleteSelectedTasks(selectedIds, fetchData) {
+async function deleteSelected(selectedIds, fetchData) {
   // create a new array for the promises
   const deletePromises = selectedIds.map(id =>
     fetch(`${BACKEND_API}/products/delete/${id}`, {method: 'DELETE'})
@@ -172,11 +189,11 @@ async function deleteSelectedTasks(selectedIds, fetchData) {
   }
 }
 
-function EnhancedTableToolbarStaff(props) {
+function RecordsToolbar(props) {
   const { numSelected, selectedIds, fetchData } = props;
 
-  const handleDelete = async () => {
-    await deleteSelectedTasks(selectedIds, fetchData);
+  const handleDownload = async () => {
+    await deleteSelected(selectedIds, fetchData);
     props.fetchData()
   }
 
@@ -188,20 +205,16 @@ function EnhancedTableToolbarStaff(props) {
         color:"white",
         background : "#000000",
         borderRadius:   "20px 20px 0px 0px",
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
       }}
     >
       {numSelected > 0 ? (
         <Typography
           sx={{ flex: '1 1 100%' }}
           color="inherit"
-          variant="h5"
+          variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          Click "download" to download {numSelected} selected item(s) as PDF
         </Typography>
       ) : (
         <Typography
@@ -210,14 +223,14 @@ function EnhancedTableToolbarStaff(props) {
           id="tableTitle"
           component="div"
         >
-          Staff
+          Records
         </Typography>
       )}
-
+      <IconContext.Provider value={{color: '#ffffff'}}>
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton onClick={handleDelete}>
-            <DeleteIcon />
+          <IconButton onClick={handleDownload} >
+            <BsIcons.BsCloudDownload />
           </IconButton>
         </Tooltip>
       ) : (
@@ -227,15 +240,16 @@ function EnhancedTableToolbarStaff(props) {
           </IconButton>
         </Tooltip>
       )}
+      </IconContext.Provider>
     </Toolbar>
   );
 }
 
-EnhancedTableToolbarStaff.propTypes = {
+RecordsToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({rows, fetchData}) {
+export default function RecordsTable({rows, fetchData}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('_id');
   const [selected, setSelected] = React.useState([]);
@@ -309,7 +323,7 @@ export default function EnhancedTable({rows, fetchData}) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbarStaff numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
+        <RecordsToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -323,7 +337,6 @@ export default function EnhancedTable({rows, fetchData}) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
-              style
             />
             <TableBody>
               {visibleRows.map((row, index) => {
@@ -358,10 +371,29 @@ export default function EnhancedTable({rows, fetchData}) {
                     >
                       {row._id}
                     </TableCell>
-                    <TableCell align="left">{row.first_name +" "+row.last_name}</TableCell>
-                    <TableCell align="left">{row.role}</TableCell>
-                    <TableCell align="right">{row.revenue}</TableCell>
-                    <TableCell align="right">{row.tasks_n}</TableCell>
+                    <TableCell align="left">{row.client_id}</TableCell>
+                    <TableCell align="right">{row.staff}</TableCell>
+                    <TableCell align="right">{row.deadline}</TableCell>
+                    <TableCell align="right">{row.date}</TableCell>
+                    <TableCell align="right">{row.payment_method}</TableCell>
+                    <TableCell align="right">${row.amount}</TableCell>
+                    <TableCell align="right">
+                      <Typography
+                        style={{ 
+                          color:"white",
+                          fontWeight:"bold",
+                          fontSize:'0.75rem',
+                          borderRadius: 8,
+                          padding:"3px 10px",
+                          display: "inline-block",
+                          backgroundColor:
+                          ((row.payment_status === 'Paid' && 'green') ||
+                          (row.payment_status === 'Overdue' && 'red') ||
+                          (row.payment_status === 'Pending' && 'blue')
+                          )
+                        }}
+                      >{row.payment_status}</Typography>
+                    </TableCell>
                   </TableRow>
                 );
               })}
