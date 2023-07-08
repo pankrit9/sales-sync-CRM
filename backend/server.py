@@ -10,8 +10,6 @@ from auth.auth_routes import auth
 from tasks.tasks_routes import manTasks, staTasks, tasks
 from products.products_routes import products
 from sales.sales_routes import sales
-import certifi
-
 
 app = Flask(__name__)
 CORS(app)
