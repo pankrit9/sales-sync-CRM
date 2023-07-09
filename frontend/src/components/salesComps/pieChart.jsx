@@ -1,14 +1,14 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/pie
 import { ResponsivePieCanvas } from '@nivo/pie'
-import { mockDataPieChart as data } from '../../mockData/mockDataSet'
+//import { mockDataPieChart as data } from '../../mockData/mockDataSet'
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const PieChart = () => {
+const PieChart = ({data}) => {
     return (
         <ResponsivePieCanvas
             data={data}
@@ -51,56 +51,6 @@ const PieChart = () => {
                     rotation: -45,
                     lineWidth: 6,
                     spacing: 10
-                }
-            ]}
-            fill={[
-                {
-                    match: {
-                        id: 'ruby'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'c'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'go'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'python'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'scala'
-                    },
-                    id: 'lines'
-                },
-                {
-                    match: {
-                        id: 'lisp'
-                    },
-                    id: 'lines'
-                },
-                {
-                    match: {
-                        id: 'elixir'
-                    },
-                    id: 'lines'
-                },
-                {
-                    match: {
-                        id: 'javascript'
-                    },
-                    id: 'lines'
                 }
             ]}
         />

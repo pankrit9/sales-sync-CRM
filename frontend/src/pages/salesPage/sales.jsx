@@ -18,6 +18,7 @@ function Sales() {
   const [taskData, setTaskData] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
   const [clientData, setClientData] = useState([]);
+  const [productData, setProductData] = useState([]);
 
   const fetchTaskData = async () => {
     const response = await fetch(`${BACKEND_API}/sales/tasks`, {method: "GET"});
@@ -37,10 +38,17 @@ function Sales() {
     setClientData(data);
   }
 
+  const fetchProductData = async () => {
+    const response = await fetch(`${BACKEND_API}/products/piechart`, {method: "GET"});
+    const data = await response.json();
+    setProductData(data);
+  }
+
   useEffect(() => {
     fetchTaskData();
     fetchRevenueData();
     fetchClientData();
+    fetchProductData();
   }, []);
 
   return (
@@ -180,7 +188,7 @@ function Sales() {
             </Typography>
           </Box>
           <Box height="250px" mt="-20px">
-            <PieChart />
+            <PieChart data={productData}/>
           </Box>
         </Box>
 

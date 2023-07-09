@@ -55,9 +55,7 @@ def add_products():
 def delete_product(id):
     print("id: ", id, "\n")
     products = db.Products
-
     products.delete_one({"_id":id})
-
     return jsonify({"message": "success product deleted"})
 
 @products.route("/sell/<id>", methods = ['PUT'])
@@ -148,6 +146,27 @@ def product_edit(id):
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "Unsuccessful"}), 400 
+
+@products.route("/piechart", methods=['GET'])
+def piechart_data():
+    all_products = db.Products.find({})
+
+    # convert Cursor type to list
+    product_list = list(all_products)
+
+    if not product_list:
+        return jsonify({"message": "You don't have any products"})
+    
+    data = []
+
+    for product in product_list:
+        data.append({
+            "id": product['name'],
+            "label": product['name'],
+            "value": product['n_sold'],
+        })
+
+    return jsonify(data)
     
 def register_sale(deadline,staff, staffId, amount, products_sold,status, payment_method):
 
