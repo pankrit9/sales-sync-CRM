@@ -36,6 +36,13 @@ def add_products():
         "revenue" : 0
     }
 
+    if request.json['name'] == '':
+        return jsonify({"message": "Must enter product name"}), 500
+    elif request.json['price'] == '':
+        return jsonify({"message": "Must enter price"}), 500
+    elif request.json['stock'] == '':
+        return jsonify({"message": "Stock must be 0 or greater"}), 500
+
     result = products.insert_one(new_product)
 
     if result.inserted_id:
@@ -121,6 +128,9 @@ def see_products():
 @products.route("/edit/<id>", methods=['POST'])
 def product_edit(id):
 
+    if not id:
+        return jsonify({"message": "Must enter ID of product to edit"}), 400
+
     # parse json object for data to update i.e. due date
     edit = request.get_json()
 
@@ -138,8 +148,7 @@ def product_edit(id):
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "Unsuccessful"}), 400 
-
-
+    
 def register_sale(deadline,staff, staffId, amount, products_sold,status, payment_method):
 
     # Fetch all ids and convert them to integers
