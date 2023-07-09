@@ -27,6 +27,7 @@ import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
+import Grid from "@mui/material/Grid";
 import { useSelector } from 'react-redux';
 
 function createData(task_id, manager_assigned, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
@@ -349,10 +350,16 @@ export default function EnhancedTable({ rows, fetchData }) {
                                         </TableCell>
                                         <TableCell align="centre">{row.complete}</TableCell>
                                         <TableCell align="centre">
-                                            <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} staff_members={staff_members} />
-                                            {
-                                                role === 'manager' && <DeleteTaskBtn task_id={row._id} />
-                                            }
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={6}>
+                                                    <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} staff_members={staff_members} />
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    {
+                                                        role === 'manager' && <DeleteTaskBtn task_id={row._id} />
+                                                    }
+                                                </Grid>
+                                            </Grid>
                                         </TableCell>
                                     </TableRow>
                                 );
