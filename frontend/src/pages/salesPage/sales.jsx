@@ -95,7 +95,7 @@ function Sales() {
         >
           <StatBox
             title={`$${revenueData.toLocaleString()}`}
-            subtitle="Revenue"
+            subtitle="Client LTV {NEED TO UPDATE}"
             increase="+21%"
             icon={
               <PointOfSaleIcon
@@ -235,7 +235,7 @@ function Sales() {
             p="15px"
           >
             <Typography variant="h5" fontWeight="600">
-              Placeholder for another statistic
+              Lead source
             </Typography>
           </Box>
           <Box height="250px" mt="-20px">
