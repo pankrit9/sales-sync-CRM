@@ -232,7 +232,7 @@ export default function AddBtn({ fetchData, userId }) {
                                 margin="dense"
                                 id="product_quantity"
                                 label="Qty"
-                                type="text"
+                                type="number"
                                 fullWidth
                                 variant="standard"
                                 value={product_quantity}

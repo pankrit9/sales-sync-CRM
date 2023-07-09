@@ -1,6 +1,7 @@
 from config import db
 from flask import Blueprint, jsonify, request
 from decorators import manager_required, jwt_required
+from datetime import datetime
 
 
 manTasks = Blueprint('manager/tasks', __name__)
@@ -81,7 +82,7 @@ def manager_create_task(uId):
     # object id
     new_task = {
         "_id": str(taskId),
-        # manager_assigned needs to store the id of the current user who is creating the task
+        "assigning_date": datetime.now(),
         "manager_assigned": curr_user["first_name"],
         "task_description": request.json.get('task_description'),
         "client_assigned": request.json.get('client_assigned'),
@@ -97,10 +98,8 @@ def manager_create_task(uId):
     result = tasks.insert_one(new_task)
 
     if result.inserted_id:
-
         return jsonify({"message": "Successful"})
     else:
-
         return jsonify({"message": "error adding product"}), 500
 
 

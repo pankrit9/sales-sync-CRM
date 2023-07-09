@@ -111,18 +111,6 @@ export default function EditBtn({ fetchData, task_id, initialData, staff_members
                             <TextField
                                 autoFocus
                                 margin="dense"
-                                id="priority"
-                                label="Priority"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                value={formData.priority}
-                                onChange={handleInputChange}
-                                name="priority"
-                            />
-                            <TextField
-                                autoFocus
-                                margin="dense"
                                 id="due_date"
                                 label="Due Date"
                                 type="date"
@@ -135,7 +123,21 @@ export default function EditBtn({ fetchData, task_id, initialData, staff_members
                                 onChange={handleInputChange}
                                 name="due_date"
                             />
-                            <FormControl fullWidth>
+                            <FormControl fullWidth style={{ margin: '10px 0' }}>
+                                <InputLabel id="complete">Priority</InputLabel>
+                                <Select
+                                    labelId="priority"
+                                    id="priority"
+                                    value={formData.priority}
+                                    onChange={handleInputChange}
+                                    name="priority"
+                                    autoWidth
+                                >
+                                    <MenuItem value="High Priority">High Priority</MenuItem>
+                                    <MenuItem value="Low Priority">Low Priority</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth style={{ margin: '10px 0' }}>
                                 <InputLabel id="staff_member_assigned">Assign Staff</InputLabel>
                                 <Select
                                     labelId="staff_member_assigned"
