@@ -105,8 +105,9 @@ def manager_create_task(uId):
 
 
 # delete task
-@tasks.route("/delete/<taskId>", methods=['POST'])
+@tasks.route("/delete/<taskId>", methods=['DELETE'])
 def manager_task_delete(taskId):
+    print("task id: ", taskId)
     
     # delete task from db based on task ID
     result = db.Tasks.delete_one({"_id":taskId})

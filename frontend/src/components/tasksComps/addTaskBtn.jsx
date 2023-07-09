@@ -30,6 +30,7 @@ export default function AddBtn({ fetchData, userId }) {
     
     const [products, setProducts] = React.useState([]);
     const [staff_members, setStaffMembers] = React.useState([]);
+    const [clients, setClients] = React.useState([]);
 
     const _id = useSelector((state) => state.user);
 
@@ -49,8 +50,23 @@ export default function AddBtn({ fetchData, userId }) {
         fetchStaffMembers();
     }, []);
 
+    // useEffect(() => {
+    //     fetchClients();
+    // }, []);
+
+    // const fetchClients = async () => {
+    //     try {
+    //         const response = await fetch(`${BACKEND_API}/clients`, {method: "GET"});
+    //         const data = await response.json();
+    //         setClients(data);
+    //     } catch (error) {
+    //         console.error("Error fetching clients: ", error);
+    //     }
+    // };
+
     const fetchStaffMembers = async () => {
         try {
+            console.log("fetchStaffMembers: fetching staff members.... ")
             const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
             const data = await response.json();
             setStaffMembers(data);
@@ -143,17 +159,37 @@ export default function AddBtn({ fetchData, userId }) {
                         value={client_assigned}
                         onChange={(e) => setClient(e.target.value)}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="priority"
-                        label="Priority"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                    />
+                    {/* <FormControl fullWidth style={{ margin: '10px 0' }}>
+                        <InputLabel id="client_assigned">Choose Client</InputLabel>
+                        <Select
+                            labelId="client_assigned"
+                            id="client_assigned"
+                            value={client_assigned}
+                            onChange={(e) => setClient(e.target.value)}
+                            name="client_assigned"
+                            autoWidth
+                        >
+                            {clients.map((client) => (
+                                <MenuItem key={client._id} value={client.name}>
+                                    {client.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl> */}
+                    <FormControl fullWidth style={{ margin: '10px 0' }}>
+                        <InputLabel id="complete">Priority</InputLabel>
+                        <Select
+                            labelId="priority"
+                            id="priority"
+                            value={priority}
+                            onChange={(e) => setPriority(e.target.value)}
+                            name="priority"
+                            autoWidth
+                        >
+                            <MenuItem value="High Priority">High Priority</MenuItem>
+                            <MenuItem value="Low Priority">Low Priority</MenuItem>
+                        </Select>
+                    </FormControl>
                     <TextField
                         autoFocus
                         margin="dense"
