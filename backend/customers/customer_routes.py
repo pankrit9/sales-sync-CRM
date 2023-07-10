@@ -19,7 +19,11 @@ def add_customer():
         "pending_value" : 0,
         "tasks": "",
         "staff" : "",
-        "email" : request.json['email']
+        "email" : request.json['email'],
+        "lead_source" : request.json['lead_source'],
+        "client_position":  request.json['client_position'],
+        "mobile_number" :  request.json['mobile_number'],
+        "address" : request.json['address']
     }
 
     customers.insert_one(new_customer)
