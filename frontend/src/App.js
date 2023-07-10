@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/loginPage";
 import Products from "./pages/productsPage/products";
+import Sales from "./pages/salesPage/sales";
 import Records from "./pages/recordsPage/recordsPage";
 import Tasks from "./pages/tasksPage/tasks";
 import Clients from "./pages/clientsPage/clients";
@@ -35,6 +36,7 @@ function App() {
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/clients" element={<Clients />} />
             <Route path="/rankings" element={<Rankings />} />
+            <Route path="/sales" element={<Sales />} />
             <Route path="/records" element={<Records />} />
             <Route path="/staff" element={<Staff />} />
           </Routes>

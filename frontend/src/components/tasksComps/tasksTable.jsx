@@ -13,20 +13,26 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditTaskBtn from "../../components/tasksComps/editTaskBtn";
+import DeleteTaskBtn from "../../components/tasksComps/deleteTaskBtn";
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
 import { useState, useEffect } from 'react';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
+import Grid from "@mui/material/Grid";
+import { useSelector } from 'react-redux';
 
-function createData(_id, manager_assigned, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
+function createData(task_id, manager_assigned, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
     return {
-        _id,
+        task_id,
         manager_assigned,
         task_description,
         client_assigned,
@@ -69,7 +75,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
     // {
-    //     id: "_id",
+    //     id: "task_id",
     //     numeric: false,
     //     disablePadding: true,
     //     label: "Task",
@@ -182,84 +188,61 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-    const { numSelected, selectedIds, fetchData } = props;
-
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                    bgcolor: (theme) =>
-                        alpha(
-                            theme.palette.primary.main,
-                            theme.palette.action.activatedOpacity
-                        ),
-                }),
-            }}
-        >
-            {numSelected > 0 ? (
-                <Typography
-                    sx={{ flex: "1 1 100%" }}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography
-                    sx={{ flex: "1 1 100%" }}
-                    variant="h6"
-                    id="tableTitle"
-                    component="div"
-                >
-                    Tasks
-                </Typography>
-            )}
-
-            {/* {numSelected > 0 ? (
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
-            )} */}
-        </Toolbar>
-    );
+    const { numSelected, selectedIds, fetchData } = props;   
 }
 
 export default function EnhancedTable({ rows, fetchData }) {
     const [order, setOrder] = React.useState("asc");
-    const [orderBy, setOrderBy] = React.useState("_id");
+    const [orderBy, setOrderBy] = React.useState("task_id");
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    
+    const [staff_members, setStaffMembers] = React.useState([]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
         setOrderBy(property);
     };
-
+    
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n._id);
+            const newSelected = rows.map((n) => n.task_id);
             setSelected(newSelected);
             return;
         }
         setSelected([]);
     };
 
+    useEffect(() => {
+        if (role === "manager") {
+            console.log("calling ffetchstaffmembers edit")
+            fetchStaffMembers();
+        }
+    }, []);
+    const fetchStaffMembers = async () => {
+        try {
+            console.log("fetchStaffMembers edit: fetching staff members.... ")
+            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
+            const data = await response.json();
+            setStaffMembers(data);
+        } catch (error) {
+            console.error("Error fetching staff members: ", error);
+        }
+    };
+    
     // select rows 
-    const handleClick = (event, _id) => {
-        const selectedIndex = selected.indexOf(_id);
-        let newSelected = [];
+    const handleClick = (event, task_id) => {
+    
+        console.log("staff_members: ", staff_members)
 
+        const selectedIndex = selected.indexOf(task_id);
+        let newSelected = [];
+        
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, _id);
+            newSelected = newSelected.concat(selected, task_id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -268,40 +251,47 @@ export default function EnhancedTable({ rows, fetchData }) {
             newSelected = newSelected.concat(
                 selected.slice(0, selectedIndex),
                 selected.slice(selectedIndex + 1)
-            );
-        }
-
-        setSelected(newSelected);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
-
-    const isSelected = (_id) => selected.indexOf(_id) !== -1;
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
+                );
+            }
+            
+            setSelected(newSelected);
+        };
+        
+        const handleChangePage = (event, newPage) => {
+            setPage(newPage);
+        };
+        
+        const handleChangeRowsPerPage = (event) => {
+            setRowsPerPage(parseInt(event.target.value, 10));
+            setPage(0);
+        };
+        const handleChangeDense = (event) => {
+            setDense(event.target.checked);
+        };
+        
+        // Avoid a layout jump when reaching the last page with empty rows.
+        const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
+        
+        const visibleRows = React.useMemo(() =>
+        stableSort(rows, getComparator(order, orderBy)).slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage,
             ),
-        [order, orderBy, page, rowsPerPage],
-    );
+            [order, orderBy, page, rowsPerPage],
+        );
+                
+        
+        const colors = [deepOrange[500], deepOrange[300], deepPurple[500], deepPurple[300], green[500], green[300], red[500], red[300], blue[500], blue[300]];
+        
+        const getRandomColor = () => {
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            return colors[randomIndex];
+        };
 
-    return (
+        const role = useSelector(state => state.role);
+
+        return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData} />
@@ -321,13 +311,13 @@ export default function EnhancedTable({ rows, fetchData }) {
                         />
                         <TableBody>
                             {visibleRows.map((row, index) => {
-                                // const isItemSelected = isSelected(row._id);
+                                // const isItemSelected = isSelected(row.task_id);
                                 // const labelId = `enhanced-table-checkbox-${index}`;
 
                                 return (
                                     <TableRow
                                         hover
-                                        // onClick={(event) => handleClick(event, row._id)}
+                                        // onClick={(event) => handleClick(event, row.task_id)}
                                         // role="checkbox"
                                         // aria-checked={isItemSelected}
                                         tabIndex={-1}
@@ -344,23 +334,33 @@ export default function EnhancedTable({ rows, fetchData }) {
                                                 }}
                                             /> */}
                                         {/* </TableCell> */}
-                                        <TableCell
-                                            // component="th"
-                                            // id={labelId}
-                                            // scope="row"
-                                            // padding-left="checkbox"
-                                            align="center"
-                                        >
-                                            {row.manager_assigned}
-                                        </TableCell>
+                                        <TableCell align="center">{row.manager_assigned}</TableCell>
                                         <TableCell align="centre">{row.task_description}</TableCell>
                                         <TableCell align="centre">{row.client_assigned}</TableCell>
                                         <TableCell align="centre">{row.product}</TableCell>
                                         {/* <TableCell align="centre">{row.product_quantity}</TableCell> */}
                                         <TableCell align="centre">{row.priority}</TableCell>
                                         <TableCell align="centre">{row.due_date}</TableCell>
-                                        <TableCell align="centre">{row.staff_member_assigned}</TableCell>
+                                        <TableCell align="centre">
+                                            <Tooltip title={row.staff_member_assigned}>
+                                                <Avatar sx={{ bgcolor: getRandomColor() }}>
+                                                    {(row.staff_member_assigned[0]+row.staff_member_assigned[1]).toUpperCase()}
+                                                </Avatar>
+                                            </Tooltip>
+                                        </TableCell>
                                         <TableCell align="centre">{row.complete}</TableCell>
+                                        <TableCell align="centre">
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={6}>
+                                                    <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} staff_members={staff_members} />
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    {
+                                                        role === 'manager' && <DeleteTaskBtn task_id={row._id} />
+                                                    }
+                                                </Grid>
+                                            </Grid>
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}

@@ -1,4 +1,3 @@
-import certifi
 import json
 import datetime
 import jwt
@@ -7,10 +6,11 @@ from functools import wraps
 from config import db, bcrypt
 from flask_cors import CORS
 from auth.auth_routes import auth
-from tasks.tasks_routes import manTasks, staTasks, tasks
+from tasks.tasks_routes import tasks
 from products.products_routes import products
-from sales.sales_route import records
+from sales.records_routes import records
 from clients.clients_routes import clients
+from sales.sales_routes import sales
 import certifi
 
 
@@ -27,7 +27,9 @@ app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(products, url_prefix="/products")
 app.register_blueprint(records, url_prefix="/records")
 app.register_blueprint(tasks, url_prefix="/tasks")
+app.register_blueprint(sales, url_prefix="/sales")
 app.register_blueprint(clients, url_prefix="/clients")
+
 # This might be usefull later on
 def token_required(f):
     '''

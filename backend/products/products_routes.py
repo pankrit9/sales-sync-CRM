@@ -3,8 +3,6 @@ import jwt
 from datetime import datetime
 from config import db
 from flask import Blueprint, jsonify, request
-from decorators import jwt_required, manager_required, token_required
-# from flask_jwt_extended import jwt_required
 
 # All the api requests that start with auth will be guided here
 # so if someone request auth/login then it direct them to this file and then
@@ -36,6 +34,13 @@ def add_products():
         "revenue" : 0
     }
 
+    if request.json['name'] == '':
+        return jsonify({"message": "Must enter product name"}), 500
+    elif request.json['price'] == '':
+        return jsonify({"message": "Must enter price"}), 500
+    elif request.json['stock'] == '':
+        return jsonify({"message": "Stock must be 0 or greater"}), 500
+
     result = products.insert_one(new_product)
 
     if result.inserted_id:
@@ -48,11 +53,68 @@ def add_products():
 def delete_product(id):
     print("id: ", id, "\n")
     products = db.Products
-
     products.delete_one({"_id":id})
-
     return jsonify({"message": "success product deleted"})
 
+@products.route("/", methods=['GET'])
+def see_products():
+    
+    all_products = db.Products.find({})
+
+    # convert Cursor type to list
+    product_list = list(all_products)
+
+    if not product_list:
+        return jsonify({"message": "You don't have any products"})
+
+    return jsonify(product_list)
+
+@products.route("/edit/<id>", methods=['POST'])
+def product_edit(id):
+
+    if not id:
+        return jsonify({"message": "Must enter ID of product to edit"}), 400
+
+    # parse json object for data to update i.e. due date
+    edit = request.get_json()
+
+    stock = int(edit['stock'])
+
+    result = db.Products.find_one({"_id":id})
+
+    if bool(result['is_electronic']) == True and stock > 0:
+        return jsonify({"message": "Electronic products cannot have any stock"}), 400 
+
+    # updates fields according to provided JSON
+    result = db.Products.update_one({"_id": id}, {"$set": edit})
+
+    if result.modified_count > 0:
+        return jsonify({"message": "Successful"})
+    else:
+        return jsonify({"message": "Unsuccessful"}), 400 
+
+@products.route("/piechart", methods=['GET'])
+def piechart_data():
+    all_products = db.Products.find({})
+
+    # convert Cursor type to list
+    product_list = list(all_products)
+
+    if not product_list:
+        return jsonify({"message": "You don't have any products"})
+    
+    data = []
+
+    for product in product_list:
+        data.append({
+            "id": product['name'],
+            "label": product['name'],
+            "value": product['n_sold'],
+        })
+
+    return jsonify(data)
+
+""""" - this has been moved to task_routes
 @products.route("/sell/<id>", methods = ['PUT'])
 def sell_product(id):
     products = db.Products
@@ -104,42 +166,7 @@ def sell_product(id):
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "Unsuccessful"}), 404 
-
-@products.route("/<token>", methods=['GET'])
-def see_products(token):
     
-    all_products = db.Products.find({})
-
-    # convert Cursor type to list
-    product_list = list(all_products)
-
-    if not product_list:
-        return jsonify({"message": "You don't have any products"})
-
-    return jsonify(product_list)
-
-@products.route("/edit/<id>", methods=['POST'])
-def product_edit(id):
-
-    # parse json object for data to update i.e. due date
-    edit = request.get_json()
-
-    stock = int(edit['stock'])
-
-    result = db.Products.find_one({"_id":id})
-
-    if bool(result['is_electronic']) == True and stock > 0:
-        return jsonify({"message": "Electronic products cannot have any stock"}), 400 
-
-    # updates fields according to provided JSON
-    result = db.Products.update_one({"_id": id}, {"$set": edit})
-
-    if result.modified_count > 0:
-        return jsonify({"message": "Successful"})
-    else:
-        return jsonify({"message": "Unsuccessful"}), 400 
-
-
 def register_sale(deadline,staff, staffId, amount, products_sold,status, payment_method):
 
     # Fetch all ids and convert them to integers
@@ -164,3 +191,4 @@ def register_sale(deadline,staff, staffId, amount, products_sold,status, payment
         "amount":amount,
         "payment_method":payment_method
     })
+"""

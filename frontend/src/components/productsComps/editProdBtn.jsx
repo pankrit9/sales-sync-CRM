@@ -2,6 +2,10 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -15,6 +19,17 @@ export default function EditBtn({fetchData}) {
   const [stock, setStock] = React.useState("");
   const [price, setPrice] = React.useState("");
   const [_id, setId] = React.useState("");
+  const [productIds, setProductIds] = useState([]);
+
+  useEffect(() => {
+    const getProductIds = async () => {
+      const response = await fetch(`${BACKEND_API}/products`); 
+      const products = await response.json();
+      setProductIds(products.map(product => product._id));
+    };
+    
+    getProductIds();
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -27,10 +42,19 @@ export default function EditBtn({fetchData}) {
   const handleEdit = async () => {
     const product = {
       _id,
-      name,
-      stock,
-      price
     };
+    
+    if (name !== "") {
+      product.name = name;
+    }
+    
+    if (stock !== "") {
+      product.stock = stock;
+    }
+    
+    if (price !== "") {
+      product.price = price;
+    }
   
     const response = await fetch(`${BACKEND_API}/products/edit/${_id}`, {
       method: "POST",
@@ -62,22 +86,27 @@ export default function EditBtn({fetchData}) {
           <DialogContentText>
             Please add in the new details for the product you want to update.
           </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="_id"
-            label="Product ID"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={_id}
-            onChange={(e) => setId(e.target.value)}
-          />
+          <div style={{marginTop: '30px'}}></div>
+          <FormControl fullWidth>
+            <InputLabel id="_id">Product ID</InputLabel>
+            <Select
+              labelId="_id"
+              id="_id"
+              autoFocus
+              value={_id}
+              label="Product ID"
+              onChange={(e) => setId(e.target.value)}
+            >
+              {productIds.map((id) => (
+                <MenuItem value={id} key={id}>{id}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Name"
+            label="New Name"
             type="text"
             fullWidth
             variant="standard"
@@ -88,7 +117,7 @@ export default function EditBtn({fetchData}) {
             autoFocus
             margin="dense"
             id="stock"
-            label="Stock"
+            label="New Stock"
             type="text"
             fullWidth
             variant="standard"
@@ -99,7 +128,7 @@ export default function EditBtn({fetchData}) {
             autoFocus
             margin="dense"
             id="price"
-            label="Price"
+            label="New Price"
             type="text"
             fullWidth
             variant="standard"

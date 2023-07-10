@@ -12,18 +12,20 @@ clients = Blueprint('clients', __name__)
 @clients.route("/add", methods = ['POST'])
 def add_client():
     clients = db.Clients
-    all_ids = [int(clients['_id']) for clients in db.Clients.find({}, {"_id": 1})]
+    
+    # Fetch all ids and convert them to integers
+    all_client_ids = [int(client['_id']) for client in db.Clients.find({}, {"_id": 1})]
     
     # Generate a taskId based on largest ID in collection
-    if not all_ids:
-        clientId = 1
+    if not all_client_ids:
+        client_id = 1
     else:
-        max_id = max(all_ids)
-        clientId = max_id + 1
+        max_id = max(all_client_ids)
+        client_id = max_id + 1
 
     new_client = {
-        "_id" : clientId,
-        "client" : request.json['client'],
+        "_id": client_id,
+        "client": request.json['name'],
         "lifetime_value" : 0,
         "pending_value" : 0,
         "tasks": "",
@@ -32,7 +34,8 @@ def add_client():
         "lead_source" : request.json['lead_source'],
         "client_position":  request.json['client_position'],
         "mobile_number" :  request.json['mobile_number'],
-        "address" : request.json['address']
+        "address" : request.json['address'],
+        "last_sale": ""
     }
 
     clients.insert_one(new_client)
