@@ -10,7 +10,7 @@ from auth.auth_routes import auth
 from tasks.tasks_routes import manTasks, staTasks, tasks
 from products.products_routes import products
 from sales.sales_route import records
-from customers.customer_routes import customers
+from clients.clients_routes import clients
 import certifi
 
 
@@ -27,7 +27,7 @@ app.register_blueprint(auth, url_prefix="/auth")
 app.register_blueprint(products, url_prefix="/products")
 app.register_blueprint(records, url_prefix="/records")
 app.register_blueprint(tasks, url_prefix="/tasks")
-app.register_blueprint(customers, url_prefix="/customers")
+app.register_blueprint(clients, url_prefix="/clients")
 # This might be usefull later on
 def token_required(f):
     '''

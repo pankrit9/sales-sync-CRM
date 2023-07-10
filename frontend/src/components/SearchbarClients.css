@@ -1,0 +1,45 @@
+.search-bar {
+    width: auto;
+    display: flex;
+    justify-content: center;
+
+    position: fixed;
+ 
+}
+.container-search {
+    left: 80px;
+    display: flex;
+    width: 100%;
+    position: fixed;
+}
+.tools {
+    right: 500px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
+
+}
+.edit-btn-clients {
+    right: 230px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
+
+}
+.search-icon {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+
+}
+.add-btn-clients {
+    right: 362px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 10px;
+
+}
