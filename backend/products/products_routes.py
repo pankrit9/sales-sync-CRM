@@ -72,7 +72,6 @@ def sell_product(id):
     prev_revenue = int(sold_product['revenue'])
     status = request.json['payment_status']
     method = request.json['payment_method']
-    
     if quantity_sold > stock and not is_electronic:
         return jsonify({"message" : "You don't have enough stock available."}), 404
       
