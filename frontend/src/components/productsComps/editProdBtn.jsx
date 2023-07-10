@@ -42,10 +42,19 @@ export default function EditBtn({fetchData}) {
   const handleEdit = async () => {
     const product = {
       _id,
-      name,
-      stock,
-      price
     };
+    
+    if (name !== "") {
+      product.name = name;
+    }
+    
+    if (stock !== "") {
+      product.stock = stock;
+    }
+    
+    if (price !== "") {
+      product.price = price;
+    }
   
     const response = await fetch(`${BACKEND_API}/products/edit/${_id}`, {
       method: "POST",
