@@ -71,3 +71,15 @@ def client_edit(id):
     else:
         return jsonify({"message": "Unsuccessful"}), 400 
 
+@clients.route("/", methods=['GET'])
+def see_clients():
+    
+    all_clients = db.Clients.find({})
+
+    # convert Cursor type to list
+    client_list = list(all_clients)
+
+    if not client_list:
+        return jsonify({"message": "You don't have any clients"})
+
+    return jsonify(client_list)
