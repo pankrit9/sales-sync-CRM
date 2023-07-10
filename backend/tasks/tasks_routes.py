@@ -78,7 +78,7 @@ def manager_create_task(uId):
     # object id
     new_task = {
         "_id": str(taskId),
-        "assigning_date": datetime.now(),
+        "entry_date": datetime.now(),
         "manager_assigned": curr_user["first_name"],
         "task_description": request.json.get('task_description'),
         "client_assigned": request.json.get('client_assigned'),
@@ -124,7 +124,102 @@ def manager_task_edit(uId, taskId):
     # updates fields according to provided JSON
     result = db.Tasks.update_one({"_id": taskId}, {"$set": edit})
 
+    if edit['complete'] == "Completed":
+        db.Tasks.update_one({"_id": taskId}, {"$set": {'completion_date': datetime.now()}})
+    
+    if edit['complete'] == "Completed" and (db.Tasks.find_one({"_id": taskId}))['product']: 
+        product_name = (db.Tasks.find_one({"_id": taskId}))['product']
+        product_id = (db.Products.find_one({"name": product_name}))['_id']
+        qty_sold = (db.Tasks.find_one({"_id": taskId}))['product_quantity']
+        sold_by = (db.Tasks.find_one({"_id": taskId}))['staff_member_assigned']
+        update_products(product_id, qty_sold)
+        update_accounts(product_id, qty_sold, sold_by)
+        update_sales(product_id, qty_sold, sold_by)
+
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "Unsuccessful"}), 400
+
+
+def update_products(id, qty_sold):
+    products = db.Products
+
+    quantity_sold = int(qty_sold)
+    sold_product = products.find_one({"_id":id})
+
+    if not sold_product:
+        return jsonify({"message": "Product with given id not found"}), 404
+    
+    stock = int(sold_product['stock'])
+    price = int(sold_product['price'])
+    is_electronic = bool(sold_product['is_electronic'])
+    prev_revenue = int(sold_product['revenue'])
+    #status = request.json['payment_status']
+    #method = request.json['payment_method']
+    
+    if quantity_sold > stock and not is_electronic:
+        return jsonify({"message" : "You don't have enough stock available."}), 404
+
+    if not is_electronic:   
+        result = products.update_one(
+            {"_id":id},
+            { "$set": {"stock" : stock - quantity_sold,
+                        "n_sold" : quantity_sold,
+                        "revenue" : prev_revenue + price * quantity_sold}}
+        )
+
+    else:
+        result = products.update_one(
+            {"_id":id},
+            { "$set": {"stock" : stock,
+                        "n_sold" : quantity_sold,
+                        "revenue" : prev_revenue + price * quantity_sold}}
+         )
+    
+    if result.modified_count > 0:
+        return jsonify({"message": "Successful"})
+    else:
+        return jsonify({"message": "Unsuccessful"}), 404 
+
+
+def update_accounts(id, qty_sold, sold_by):
+    products = db.Products
+
+    staff = db.Accounts.find_one({"first_name":sold_by})
+    quantity_sold = int(qty_sold)
+    sold_product = products.find_one({"_id":id})
+    price = int(sold_product['price'])
+
+    db.Accounts.update_one(
+        {"first_name": sold_by},
+        { "$set": {"revenue": str(int(staff['revenue']) + price * quantity_sold)}}
+    )
+
+def update_sales(product_id, qty_sold, sold_by):
+    product_price = int((db.Products.find_one({"_id":product_id}))['price'])
+    
+    # Fetch all ids and convert them to integers
+    all_sale_ids = [int(sale['_id']) for sale in db.Sales.find({}, {"_id": 1})]
+    
+    # Generate a taskId based on largest ID in collection
+    if not all_sale_ids:
+        sale_id = 1
+    else:
+        max_id = max(all_sale_ids)
+        sale_id = max_id + 1
+
+    db.Sales.insert_one({
+        "_id": sale_id,
+        "product_id": int(product_id),
+        "quantity_sold": int(qty_sold),
+        "product_price": product_price,
+        "sold_by": sold_by,
+        "date_of_sale": datetime.now(),
+        "client_id": "To be Implemented",
+        "revenue": int(qty_sold) + product_price,
+        #"staff": staff,
+        #"payment_method":payment_method
+        #"payment_status":status,
+        #"deadline": deadline,
+    })

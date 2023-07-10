@@ -56,58 +56,6 @@ def delete_product(id):
     products.delete_one({"_id":id})
     return jsonify({"message": "success product deleted"})
 
-@products.route("/sell/<id>", methods = ['PUT'])
-def sell_product(id):
-    products = db.Products
-
-    quantity_sold = int(request.json['quantity'])
-    sold_by = request.json['staff']
-    sold_product = products.find_one({"_id":id})
-
-    staff = db.Accounts.find_one({"_id":sold_by})
-
-    if not sold_product:
-        return jsonify({"message": "Product with given id not found"}), 404
-    
-    stock = int(sold_product['stock'])
-    price = int(sold_product['price'])
-    is_electronic = bool(sold_product['is_electronic'])
-    prev_revenue = int(sold_product['revenue'])
-    status = request.json['payment_status']
-    method = request.json['payment_method']
-    
-    if quantity_sold > stock and not is_electronic:
-        return jsonify({"message" : "You don't have enough stock available."}), 404
-      
-
-    db.Accounts.update_one(
-        {"_id":sold_by},
-        { "$set": {"revenue" : str(int(staff['revenue']) + price * quantity_sold)}}
-    )
-
-    register_sale("today",staff["first_name"],sold_by ,price * quantity_sold, [], status,method)
-
-    if not is_electronic:   
-        result = products.update_one(
-            {"_id":id},
-            { "$set": {"stock" : str(stock - quantity_sold),
-                        "n_sold" : str(quantity_sold),
-                        "revenue" : str(prev_revenue + price * quantity_sold)}}
-        )
-
-    else:
-        result = products.update_one(
-            {"_id":id},
-            { "$set": {"stock" : str(stock),
-                        "n_sold" : str(quantity_sold),
-                        "revenue" : str(prev_revenue + price * quantity_sold)}}
-         )
-        
-    if result.modified_count > 0:
-        return jsonify({"message": "Successful"})
-    else:
-        return jsonify({"message": "Unsuccessful"}), 404 
-
 @products.route("/", methods=['GET'])
 def see_products():
     
@@ -165,6 +113,59 @@ def piechart_data():
         })
 
     return jsonify(data)
+
+""""" - this has been moved to task_routes
+@products.route("/sell/<id>", methods = ['PUT'])
+def sell_product(id):
+    products = db.Products
+
+    quantity_sold = int(request.json['quantity'])
+    sold_by = request.json['staff']
+    sold_product = products.find_one({"_id":id})
+
+    staff = db.Accounts.find_one({"_id":sold_by})
+
+    if not sold_product:
+        return jsonify({"message": "Product with given id not found"}), 404
+    
+    stock = int(sold_product['stock'])
+    price = int(sold_product['price'])
+    is_electronic = bool(sold_product['is_electronic'])
+    prev_revenue = int(sold_product['revenue'])
+    status = request.json['payment_status']
+    method = request.json['payment_method']
+    
+    if quantity_sold > stock and not is_electronic:
+        return jsonify({"message" : "You don't have enough stock available."}), 404
+      
+
+    db.Accounts.update_one(
+        {"_id":sold_by},
+        { "$set": {"revenue" : str(int(staff['revenue']) + price * quantity_sold)}}
+    )
+
+    register_sale("today",staff["first_name"],sold_by ,price * quantity_sold, [], status,method)
+
+    if not is_electronic:   
+        result = products.update_one(
+            {"_id":id},
+            { "$set": {"stock" : str(stock - quantity_sold),
+                        "n_sold" : str(quantity_sold),
+                        "revenue" : str(prev_revenue + price * quantity_sold)}}
+        )
+
+    else:
+        result = products.update_one(
+            {"_id":id},
+            { "$set": {"stock" : str(stock),
+                        "n_sold" : str(quantity_sold),
+                        "revenue" : str(prev_revenue + price * quantity_sold)}}
+         )
+        
+    if result.modified_count > 0:
+        return jsonify({"message": "Successful"})
+    else:
+        return jsonify({"message": "Unsuccessful"}), 404 
     
 def register_sale(deadline,staff, staffId, amount, products_sold,status, payment_method):
 
@@ -190,3 +191,4 @@ def register_sale(deadline,staff, staffId, amount, products_sold,status, payment
         "amount":amount,
         "payment_method":payment_method
     })
+"""
