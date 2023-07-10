@@ -25,12 +25,11 @@ import EditIcon from '@mui/icons-material/Edit';
 // if staff is editting
     // can only edit the following fields:
         // task status
-export default function EditBtn({ fetchData, task_id, initialData }) {
+export default function EditBtn({ fetchData, task_id, initialData, staff_members }) {
     const [formData, setFormData] = useState(initialData);
     const [open, setOpen] = React.useState(false);
-    const [loading, setLoading] = useState(false);
 
-    const [staff_members, setStaffMembers] = React.useState([]);
+    // const [staff_members, setStaffMembers] = React.useState([]);
 
     const _id = useSelector((state) => state.user);
     const role = useSelector((state) => state.role);
@@ -56,21 +55,23 @@ export default function EditBtn({ fetchData, task_id, initialData }) {
     };
 
 
-    useEffect(() => {
-        if (role === "manager") {
-            fetchStaffMembers();
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (role === "manager") {
+    //         console.log("calling ffetchstaffmembers edit")
+    //         fetchStaffMembers();
+    //     }
+    // }, []);
 
-    const fetchStaffMembers = async () => {
-        try {
-            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
-            const data = await response.json();
-            setStaffMembers(data);
-        } catch (error) {
-            console.error("Error fetching staff members: ", error);
-        }
-    };
+    // const fetchStaffMembers = async () => {
+    //     try {
+    //         console.log("fetchStaffMembers edit: fetching staff members.... ")
+    //         const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
+    //         const data = await response.json();
+    //         setStaffMembers(data);
+    //     } catch (error) {
+    //         console.error("Error fetching staff members: ", error);
+    //     }
+    // };
 
     const handleEdit = async () => {
         console.log("editTask: edit requested... ", formData);
@@ -110,18 +111,6 @@ export default function EditBtn({ fetchData, task_id, initialData }) {
                             <TextField
                                 autoFocus
                                 margin="dense"
-                                id="priority"
-                                label="Priority"
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                value={formData.priority}
-                                onChange={handleInputChange}
-                                name="priority"
-                            />
-                            <TextField
-                                autoFocus
-                                margin="dense"
                                 id="due_date"
                                 label="Due Date"
                                 type="date"
@@ -134,7 +123,21 @@ export default function EditBtn({ fetchData, task_id, initialData }) {
                                 onChange={handleInputChange}
                                 name="due_date"
                             />
-                            <FormControl fullWidth>
+                            <FormControl fullWidth style={{ margin: '10px 0' }}>
+                                <InputLabel id="complete">Priority</InputLabel>
+                                <Select
+                                    labelId="priority"
+                                    id="priority"
+                                    value={formData.priority}
+                                    onChange={handleInputChange}
+                                    name="priority"
+                                    autoWidth
+                                >
+                                    <MenuItem value="High Priority">High Priority</MenuItem>
+                                    <MenuItem value="Low Priority">Low Priority</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth style={{ margin: '10px 0' }}>
                                 <InputLabel id="staff_member_assigned">Assign Staff</InputLabel>
                                 <Select
                                     labelId="staff_member_assigned"

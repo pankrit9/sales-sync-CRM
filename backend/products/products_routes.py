@@ -3,8 +3,6 @@ import jwt
 from datetime import datetime
 from config import db
 from flask import Blueprint, jsonify, request
-from decorators import jwt_required, manager_required, token_required
-# from flask_jwt_extended import jwt_required
 
 # All the api requests that start with auth will be guided here
 # so if someone request auth/login then it direct them to this file and then

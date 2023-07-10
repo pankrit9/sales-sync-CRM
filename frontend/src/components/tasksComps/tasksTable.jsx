@@ -14,12 +14,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditTaskBtn from "../../components/tasksComps/editTaskBtn";
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteTaskBtn from "../../components/tasksComps/deleteTaskBtn";
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
@@ -27,7 +27,8 @@ import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
-import { EditBtn } from "../../components/tasksComps/editTaskBtn";
+import Grid from "@mui/material/Grid";
+import { useSelector } from 'react-redux';
 
 function createData(task_id, manager_assigned, task_description, client_assigned, product, product_quantity, priority, due_date, staff_member_assigned, complete) {
     return {
@@ -198,6 +199,8 @@ export default function EnhancedTable({ rows, fetchData }) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     
+    const [staff_members, setStaffMembers] = React.useState([]);
+
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
@@ -212,9 +215,29 @@ export default function EnhancedTable({ rows, fetchData }) {
         }
         setSelected([]);
     };
+
+    useEffect(() => {
+        if (role === "manager") {
+            console.log("calling ffetchstaffmembers edit")
+            fetchStaffMembers();
+        }
+    }, []);
+    const fetchStaffMembers = async () => {
+        try {
+            console.log("fetchStaffMembers edit: fetching staff members.... ")
+            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
+            const data = await response.json();
+            setStaffMembers(data);
+        } catch (error) {
+            console.error("Error fetching staff members: ", error);
+        }
+    };
     
     // select rows 
     const handleClick = (event, task_id) => {
+    
+        console.log("staff_members: ", staff_members)
+
         const selectedIndex = selected.indexOf(task_id);
         let newSelected = [];
         
@@ -265,6 +288,8 @@ export default function EnhancedTable({ rows, fetchData }) {
             const randomIndex = Math.floor(Math.random() * colors.length);
             return colors[randomIndex];
         };
+
+        const role = useSelector(state => state.role);
 
         return (
         <Box sx={{ width: '100%' }}>
@@ -325,12 +350,16 @@ export default function EnhancedTable({ rows, fetchData }) {
                                         </TableCell>
                                         <TableCell align="centre">{row.complete}</TableCell>
                                         <TableCell align="centre">
-                                            {/* {visibleRows.map((row, index) => {
-                                                // Log the row object for inspection
-                                                console.log("row:", row);
-                                                console.log("index:", index);
-                                            })} */}
-                                            <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} />
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={6}>
+                                                    <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} staff_members={staff_members} />
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    {
+                                                        role === 'manager' && <DeleteTaskBtn task_id={row._id} />
+                                                    }
+                                                </Grid>
+                                            </Grid>
                                         </TableCell>
                                     </TableRow>
                                 );

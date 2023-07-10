@@ -6,7 +6,7 @@ from functools import wraps
 from config import db, bcrypt
 from flask_cors import CORS
 from auth.auth_routes import auth
-from tasks.tasks_routes import manTasks, staTasks, tasks
+from tasks.tasks_routes import tasks
 from products.products_routes import products
 from sales.records_routes import records
 from customers.customer_routes import customers
