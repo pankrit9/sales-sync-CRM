@@ -19,6 +19,8 @@ function Sales() {
   const [revenueData, setRevenueData] = useState([]);
   const [clientData, setClientData] = useState([]);
   const [productData, setProductData] = useState([]);
+  const [LTVData, setLTVData] = useState([]);
+  const [winRateData, setWinRateData] = useState([]);
 
   const fetchTaskData = async () => {
     const response = await fetch(`${BACKEND_API}/sales/tasks`, {method: "GET"});
@@ -44,11 +46,25 @@ function Sales() {
     setProductData(data);
   }
 
+  const fetchLTVData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/ltv`, {method: "GET"});
+    const data = await response.json();
+    setLTVData(data);
+  }
+
+  const fetchWinRateData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/winrate`, {method: "GET"});
+    const data = await response.json();
+    setWinRateData(data);
+  }
+
   useEffect(() => {
     fetchTaskData();
     fetchRevenueData();
     fetchClientData();
     fetchProductData();
+    fetchLTVData();
+    fetchWinRateData();
   }, []);
 
   return (
@@ -94,8 +110,8 @@ function Sales() {
           bgcolor="rgba(105, 105, 105, 0.5)"
         >
           <StatBox
-            title={`$${revenueData.toLocaleString()}`}
-            subtitle="Client LTV {NEED TO UPDATE}"
+            title={`$${LTVData.toLocaleString()}`}
+            subtitle="Client LTV"
             increase="+21%"
             icon={
               <PointOfSaleIcon
@@ -130,7 +146,7 @@ function Sales() {
           bgcolor="rgba(105, 105, 105, 0.5)"
         >
           <StatBox
-            title="45%"
+            title={`${(winRateData * 100).toFixed(2)}%`}
             subtitle="Win Rate"
             increase="+10%"
             icon={

@@ -132,9 +132,11 @@ def manager_task_edit(uId, taskId):
         product_id = (db.Products.find_one({"name": product_name}))['_id']
         qty_sold = (db.Tasks.find_one({"_id": taskId}))['product_quantity']
         sold_by = (db.Tasks.find_one({"_id": taskId}))['staff_member_assigned']
+        client = (db.Tasks.find_one({"_id": taskId}))['client_assigned']
         update_products(product_id, qty_sold)
         update_accounts(product_id, qty_sold, sold_by)
         update_sales(product_id, qty_sold, sold_by)
+        update_clients(client)
 
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})
@@ -223,3 +225,6 @@ def update_sales(product_id, qty_sold, sold_by):
         #"payment_status":status,
         #"deadline": deadline,
     })
+
+def update_clients(client):
+    db.Clients.update_one({"client" : client}, {"$set": {'last_sale': datetime.now()}})
