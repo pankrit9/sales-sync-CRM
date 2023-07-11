@@ -74,6 +74,12 @@ def manager_create_task(uId):
         max_id = max(all_task_ids)
         taskId = max_id + 1
 
+    stock = (db.Products.find_one({"name": request.json.get('product')}))['stock']
+    is_electronic = (db.Products.find_one({"name": request.json.get('product')}))['is_electronic']
+    
+    if int(request.json.get('product_quantity')) > int(stock) and not is_electronic:
+        return jsonify({"message" : "You don't have enough stock available."}), 404
+    
     # note, need to have '_id' in order to avoid mongodb creating an
     # object id
     new_task = {
@@ -94,6 +100,15 @@ def manager_create_task(uId):
     result = tasks.insert_one(new_task)
 
     if result.inserted_id:
+        quantity_staged = request.json.get('product_quantity')
+        db.Products.update_one(
+            {"name": request.json.get('product')},
+            {"$set": {"stock" : int(stock) - int(quantity_staged)}})
+        tasks_n = (db.Accounts.find_one({"first_name" : request.json.get('staff_member_assigned')}))['tasks_n']
+        db.Accounts.update_one(
+            {"first_name" : request.json.get('staff_member_assigned')},
+            {"$set": {"tasks_n": int(tasks_n) + 1}}
+        )
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "error adding product"}), 500
@@ -103,11 +118,22 @@ def manager_create_task(uId):
 @tasks.route("/delete/<taskId>", methods=['DELETE'])
 def manager_task_delete(taskId):
     print("task id: ", taskId)
+
+    deduct = False
+    if (db.Tasks.find_one({"_id":taskId}))['complete'] != 'Completed':
+        deduct = True
+        staff_name = db.Tasks.find_one({"_id":taskId})['staff_member_assigned']
     
     # delete task from db based on task ID
     result = db.Tasks.delete_one({"_id":taskId})
 
     if result.deleted_count > 0:
+        if deduct:
+            tasks_n = (db.Accounts.find_one({"first_name": staff_name}))['tasks_n']
+            db.Accounts.update_one(
+                {"first_name" : staff_name},
+                {"$set": {"tasks_n": int(tasks_n) - 1}}
+            )
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "Unsuccessful"}), 400
@@ -153,31 +179,26 @@ def update_products(id, qty_sold):
     if not sold_product:
         return jsonify({"message": "Product with given id not found"}), 404
     
-    stock = int(sold_product['stock'])
     price = int(sold_product['price'])
+    n_sold = int(sold_product['n_sold'])
     is_electronic = bool(sold_product['is_electronic'])
     prev_revenue = int(sold_product['revenue'])
     #status = request.json['payment_status']
     #method = request.json['payment_method']
-    
-    if quantity_sold > stock and not is_electronic:
-        return jsonify({"message" : "You don't have enough stock available."}), 404
 
     if not is_electronic:   
         result = products.update_one(
             {"_id":id},
-            { "$set": {"stock" : stock - quantity_sold,
-                        "n_sold" : quantity_sold,
+            { "$set": { "n_sold" : n_sold + quantity_sold,
                         "revenue" : prev_revenue + price * quantity_sold}}
         )
 
     else:
         result = products.update_one(
             {"_id":id},
-            { "$set": {"stock" : stock,
-                        "n_sold" : quantity_sold,
+            { "$set": { "n_sold" : n_sold + quantity_sold,
                         "revenue" : prev_revenue + price * quantity_sold}}
-         )
+        )
     
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})
@@ -196,6 +217,12 @@ def update_accounts(id, qty_sold, sold_by):
     db.Accounts.update_one(
         {"first_name": sold_by},
         { "$set": {"revenue": str(int(staff['revenue']) + price * quantity_sold)}}
+    )
+
+    tasks_n = (db.Accounts.find_one({"first_name" : sold_by}))['tasks_n']
+    db.Accounts.update_one(
+            {"first_name" : sold_by},
+            {"$set": {"tasks_n": int(tasks_n) - 1}}
     )
 
 def update_sales(product_id, qty_sold, sold_by):

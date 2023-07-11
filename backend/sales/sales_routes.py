@@ -59,4 +59,8 @@ def get_win_rate():
     win_rate = n_clients_with_sale / n_clients
 
     return jsonify(win_rate)
-
+"""""
+@sales.route("/leadsource", methods = ['GET'])
+def get_lead_source():
+    db.Clients.
+"""
