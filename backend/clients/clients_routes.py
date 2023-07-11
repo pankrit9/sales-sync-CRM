@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import jwt
 from config import db
 from flask import Blueprint, jsonify, request
@@ -25,7 +25,7 @@ def add_client():
 
     new_client = {
         "_id": client_id,
-        "client": request.json['name'],
+        "client": request.json['client'],
         "lifetime_value" : 0,
         "pending_value" : 0,
         "tasks": "",
@@ -35,7 +35,8 @@ def add_client():
         "client_position":  request.json['client_position'],
         "mobile_number" :  request.json['mobile_number'],
         "address" : request.json['address'],
-        "last_sale": ""
+        "last_sale": "",
+        "creation_date": datetime.now()
     }
 
     clients.insert_one(new_client)

@@ -24,6 +24,7 @@ import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
 import { IconContext } from 'react-icons/lib'
 import * as BsIcons from "react-icons/bs";
+
 function createData(_id, name, stock, price, is_electronic, n_sold, revenue) {
   return {
     _id,
@@ -93,7 +94,7 @@ const headCells = [
     disablePadding: false,
     label: 'Payment Due',
   },{
-    id: 'date',
+    id: 'date_of_sale',
     numeric: true,
     disablePadding: false,
     label: 'Record Date',
@@ -322,7 +323,7 @@ export default function RecordsTable({rows, fetchData}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%', mb: 2, borderRadius:"20px 20px 0px 0px"}}>
         <RecordsToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
         <TableContainer>
           <Table
@@ -374,9 +375,9 @@ export default function RecordsTable({rows, fetchData}) {
                     <TableCell align="left">{row.client_id}</TableCell>
                     <TableCell align="right">{row.staff}</TableCell>
                     <TableCell align="right">{row.deadline}</TableCell>
-                    <TableCell align="right">{row.date}</TableCell>
+                    <TableCell align="right">{row.date_of_sale}</TableCell>
                     <TableCell align="right">{row.payment_method}</TableCell>
-                    <TableCell align="right">${row.amount}</TableCell>
+                    <TableCell align="right">${row.revenue}</TableCell>
                     <TableCell align="right">
                       <Typography
                         style={{ 

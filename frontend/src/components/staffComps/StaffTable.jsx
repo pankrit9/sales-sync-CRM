@@ -110,24 +110,17 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all products',
-            }}
-          />
-        </TableCell>
+      <TableRow >
+
+        
         {headCells.map((headCell) => (
-          <TableCell
+          <TableCell 
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
+            padding={'normal'}
+            paddingLeft= "1rem"
             sortDirection={orderBy === headCell.id ? order : false}
+            
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -188,45 +181,17 @@ function EnhancedTableToolbarStaff(props) {
         color:"white",
         background : "#000000",
         borderRadius:   "20px 20px 0px 0px",
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        }),
+        
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="h5"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
+      <Typography
           sx={{ flex: '1 1 100%' }}
           variant="h5"
           id="tableTitle"
           component="div"
         >
           Staff
-        </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton onClick={handleDelete}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      </Typography>
     </Toolbar>
   );
 }
@@ -308,13 +273,14 @@ export default function EnhancedTable({rows, fetchData}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%', mb: 2 , borderRadius:"20px 20px 0px 0px"}}>
         <EnhancedTableToolbarStaff numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
+
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -324,11 +290,12 @@ export default function EnhancedTable({rows, fetchData}) {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
               style
+              borderRadius= "20px 20px 0px 0px"
+
             />
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row._id);
-                const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
@@ -341,22 +308,12 @@ export default function EnhancedTable({rows, fetchData}) {
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          'aria-labelledby': labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
+                    <TableCell sx ={{paddingLeft: "1rem"}}
                       component="th"
-                      id={labelId}
                       scope="row"
                       padding="none"
                     >
-                      {row._id}
+                      { row._id}
                     </TableCell>
                     <TableCell align="left">{row.first_name +" "+row.last_name}</TableCell>
                     <TableCell align="left">{row.role}</TableCell>
@@ -387,10 +344,6 @@ export default function EnhancedTable({rows, fetchData}) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </Box>
   );
 }

@@ -219,11 +219,11 @@ def update_sales(product_id, qty_sold, sold_by):
         "sold_by": sold_by,
         "date_of_sale": datetime.now(),
         "client_id": "To be Implemented",
-        "revenue": int(qty_sold) + product_price,
-        #"staff": staff,
-        #"payment_method":payment_method
-        #"payment_status":status,
-        #"deadline": deadline,
+        "revenue": int(qty_sold) * product_price,
+        "staff": "To be Implemented",
+        "payment_method":"To be Implemented",
+        "payment_status": "To be Implemented",
+        "deadline": "To be Implemented",
     })
 
 def update_clients(client):

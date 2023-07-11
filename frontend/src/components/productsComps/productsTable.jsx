@@ -196,6 +196,9 @@ function EnhancedTableToolbar(props) {
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
+        color:"white",
+        background : "#000000",
+        borderRadius:   "20px 20px 0px 0px",
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
             alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
@@ -316,7 +319,7 @@ export default function EnhancedTable({rows, fetchData}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%', mb: 2, borderRadius:"20px 20px 0px 0px"}}>
         <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
         <TableContainer>
           <Table
@@ -365,7 +368,7 @@ export default function EnhancedTable({rows, fetchData}) {
                     >
                       {row._id}
                     </TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
+                    <TableCell align="left">{row.name}</TableCell>
                     <TableCell align="right">{row.stock}</TableCell>
                     <TableCell align="right">{row.price}</TableCell>
                     <TableCell align="right">

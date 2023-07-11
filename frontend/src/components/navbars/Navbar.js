@@ -26,8 +26,8 @@ function Navbar() {
         <>
             <IconContext.Provider value={{color: '#5E17EB'}}>
                 <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-                    <ul className='nav-menu-items' onClick={showSidebar}>
-                        < li className='navbar-toggle' >
+                    <ul className='nav-menu-items' >
+                        < li className='navbar-toggle' onClick={showSidebar} >
                             <Link to='#' className='menu-bars'>
                                 {sidebar? <AiIcons.AiOutlineClose/>:<FaIcons.FaBars/>}
                             </Link>

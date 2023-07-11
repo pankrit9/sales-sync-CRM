@@ -64,7 +64,7 @@ export const SidebarData = [
         cName: 'nav-text mode'
     },
     {
-        title: 'SIGN OUT',
+        title: 'Sign Out',
         path: '/',
         icon: <VscIcons.VscSignOut/>,
         cName: 'nav-text out'
