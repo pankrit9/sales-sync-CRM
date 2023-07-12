@@ -8,17 +8,22 @@ import './Navbar.css'
 import { IconContext } from 'react-icons/lib'
 import { setMode, setLogout } from '../../state';
 import { useDispatch, useSelector } from "react-redux";
-import { useTheme, IconButton } from '@mui/material';
+import { useTheme, IconButton, Typography } from '@mui/material';
 import { DarkMode, LightMode } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 
 
-function Navbar() {
+function Navbar({}) {
     const [sidebar, setSidebar] = useState(false)
     const dispatch = useDispatch(); // to dispatch actions from the reducer
     const theme = useTheme();
     const dark = theme.palette.neutral.dark;
     const navigate = useNavigate();
+
+    const state = useSelector(state => state);
+    const company = useSelector((state) => state.company);
+    const role = useSelector((state) => state.role);
+    const name = useSelector((state) => state.name);
 
     const showSidebar = () => setSidebar(!sidebar)
 
@@ -29,9 +34,24 @@ function Navbar() {
                     <ul className='nav-menu-items' >
                         < li className='navbar-toggle' onClick={showSidebar} >
                             <Link to='#' className='menu-bars'>
-                                {sidebar? <AiIcons.AiOutlineClose/>:<FaIcons.FaBars/>}
+                                {sidebar? <AiIcons.AiOutlineClose/> :<FaIcons.FaBars/>}
                             </Link>
+                            {sidebar &&
+                            <div >
+                                <div className='company-name'
+                                    color={'white'} display={'flex'}
+                                >
+                                    {company} 
+                                </div>
+                                <div className='credentials' >
+                                    {name} |  
+                                </div>
+                                <div className='role-nav' >
+                                    {role}
+                                </div>
+                            </div>}
                         </li>
+                        
                         {SidebarData.map((item, index) => {
                             return (
                                 <li key={index} className={item.cName} onClick={() => {

@@ -25,6 +25,7 @@ def login():
             'user_id': str(matching_user['_id']),
             'email': request.json['email'],
             'first_name': matching_user['first_name'],
+            'company': matching_user['company'],
             'role': matching_user['role'],
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=180)
         }, 'Avengers')  # Secret key is 'Avengers'
