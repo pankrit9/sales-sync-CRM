@@ -5,40 +5,38 @@ import CardItem from './CardItem';
 function Cards() {
   return (
     <div className='cards'>
-      <div className='cards-h1'>Our CRM offers...</div>
+      <div className='cards-h1'>Our CRM packages are tailor made to suit your needs at an ideal price point</div>
       <div className='cards__container'>
         <div className='cards__wrapper'>
           <ul className='cards__items'>
             <CardItem
-              src='images/img-9.jpg'
-              text='Explore the hidden waterfall deep inside the Amazon Jungle'
-              label='Adventure'
-              path='/services'
+              src='images/img-3.jpg'
+              text='Up to 50 Clients, 1 Staff Member and 10 Different Products'
+              label='Free'
+              path='/sign-up'
             />
-            <CardItem
-              src='images/img-9.jpg'
-              text='Travel through the Islands of Bali in a Private Cruise'
-              label='Luxury'
-              path='/services'
-            />
-          </ul>
-          <ul className='cards__items'>
             <CardItem
               src='images/img-3.jpg'
-              text='Set Sail in the Atlantic Ocean visiting Uncharted Waters'
-              label='Mystery'
-              path='/services'
+              text='Up to 500 Clients and 10 Staff and 100 Different Products'
+              label='Small'
+              path='/sign-up'
             />
             <CardItem
-              src='images/img-4.jpg'
-              text='Experience Football on Top of the Himilayan Mountains'
-              label='Adventure'
-              path='/products'
+              src='images/img-3.jpg'
+              text='Up to 2500 Clients, 50 Staff and 500 Different Products'
+              label='Medium'
+              path='/sign-up'
             />
             <CardItem
-              src='images/img-8.jpg'
-              text='Ride through the Sahara Desert on a guided camel tour'
-              label='Adrenaline'
+              src='images/img-3.jpg'
+              text='Up to 1000 Clients, 200 Staff and 2000 Different Products'
+              label='Large'
+              path='/sign-up'
+            />
+            <CardItem
+              src='images/img-3.jpg'
+              text='Allows for an infinite amount of clients, staff and products'
+              label='Ultimate'
               path='/sign-up'
             />
           </ul>

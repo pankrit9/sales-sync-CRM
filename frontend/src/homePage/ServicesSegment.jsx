@@ -1,0 +1,73 @@
+import React from 'react';
+import './ServicesSegment.css';
+
+const ServicesSegment = ({imageUrl, text}) => {
+  return (
+    <div className ="fullcontainer">
+      <div className="container">
+        <div className="text-container">
+          <h1>Customer Resource Management does not have to be expensive</h1>
+          <h2>Get great value Customer Resource Management with Sale Sync</h2>
+        </div>
+        <div className="image-container1">
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="image-container2">
+        </div>
+        <div className="text-container">
+          <h3>Secure and Easy Sign Up</h3>
+          <h4>Sign Up and get managing your encrypted data within 5 minutes</h4>
+        </div>
+      </div>
+
+      <div className="container" style={{position: "absolute", height: "10px", border: "solid", bottom: 0, right: 0, left: 0}}>
+        <div className="text-container">
+          <h3>Simple to understand Dashboard</h3>
+          <h4>Have all the Information you need right at your fingertips</h4>
+        </div>
+        <div className="image-container3">
+        </div>
+      </div>
+
+      <div className="container">
+      <div className="image-container4">
+        </div>
+        <div className="text-container">
+          <h3>Clear Task Management</h3>
+          <h4>Know what tasks you need to complete and when, with our clear task management system</h4>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="text-container">
+          <h3>Manage your Clients and Staff</h3>
+          <h4>Know whos who with our clear tables highlighting important client and staff data</h4>
+        </div>
+        <div className="image-container5">
+        </div>
+      </div>
+
+      <div className="container">
+      <div className="image-container6">
+        </div>
+        <div className="text-container">
+          <h3>Gamify your Customer Resource Management</h3>
+          <h4>Don't get bored with pure data, enjoy our gamification to keep you and your staff motivated</h4>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="text-container">
+          <h3>Dark Mode</h3>
+          <h4>Dark Mode helps you work at any hour you need</h4>
+        </div>
+        <div className="image-container7">
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ServicesSegment;
