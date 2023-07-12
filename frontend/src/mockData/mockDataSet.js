@@ -168,19 +168,8 @@ export const mockDataStreamCloseChart = [
 
 export const mockDataBarChart = [
     {
-        "country": "AD",
+        "country": "",
         "hot dog": 95,
-        "hot dogColor": "hsl(20, 70%, 50%)",
-        "burger": 102,
-        "burgerColor": "hsl(49, 70%, 50%)",
-        "sandwich": 166,
-        "sandwichColor": "hsl(281, 70%, 50%)",
-        "kebab": 13,
-        "kebabColor": "hsl(120, 70%, 50%)",
-        "fries": 156,
-        "friesColor": "hsl(320, 70%, 50%)",
-        "donut": 164,
-        "donutColor": "hsl(181, 70%, 50%)"
     },
     {
         "country": "AE",

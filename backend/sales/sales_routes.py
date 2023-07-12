@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import jwt
 from config import db
 from flask import Blueprint, jsonify, request
@@ -59,8 +59,69 @@ def get_win_rate():
     win_rate = n_clients_with_sale / n_clients
 
     return jsonify(win_rate)
-"""""
+
 @sales.route("/leadsource", methods = ['GET'])
 def get_lead_source():
-    db.Clients.
-"""
+    lead_types = [
+        "Google", 
+        "LinkedIn", 
+        "Cold Call/Email", 
+        "Referral", 
+        "Paid Social Ads"
+    ]
+
+    data = []
+
+    for lead in lead_types:
+        count = db.Clients.count_documents({
+            "lead_source": lead
+        })
+        data.append({
+            "lead_source_name": lead,
+            lead : count
+        })
+    print(data)
+    return jsonify(data)
+
+
+@sales.route("/closedrev", methods = ['GET'])
+def get_closed_rev():
+    print("hello")
+    curr_date = datetime.now()    
+    data = []
+
+    sales = db.Sales.find({})
+    staff_list = list(set([staff['sold_by'] for staff in sales]))
+
+    i = 1
+    while (datetime(curr_date.year, i, 1) <= curr_date):
+        monthly_sales = {}
+        for staff in staff_list:
+            rev_closed = 0
+            staff_sales = db.Sales.find({"sold_by": staff})
+            
+            for sale in staff_sales:
+                month = (sale['date_of_sale']).month
+                year = (sale['date_of_sale']).year
+
+                if month == i and year == curr_date.year:
+                    rev_closed += sale['revenue']
+            
+            monthly_sales[staff] = rev_closed
+
+        data.append(monthly_sales)
+        i+=1
+    
+    return jsonify(data)
+
+@sales.route("/closedkeys", methods = ['GET'])
+def get_closed_keys():
+    sales = db.Sales.find({})
+    staff_list = list(set([staff['sold_by'] for staff in sales]))
+    return jsonify(staff_list)
+
+@sales.route("/closedrevsum", methods = ['GET'])
+def get_closed_rev_sum():
+    sales = db.Sales.find({})
+    staff_list = list(set([staff['sold_by'] for staff in sales]))
+    return jsonify(staff_list)

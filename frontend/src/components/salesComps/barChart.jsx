@@ -1,25 +1,19 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/bar
 import { ResponsiveBar } from '@nivo/bar'
-import { mockDataBarChart as data } from '../../mockData/mockDataSet'
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
-const BarChart = () => {
+
+const BarChart = ({data}) => {
     return (
         <ResponsiveBar
             data={data}
             keys={[
-                'hot dog',
-                'burger',
-                'sandwich',
-                'kebab',
-                'fries',
-                'donut'
+                'Google',
+                'LinkedIn',
+                'Cold Call/Email',
+                'Referral',
+                'Paid Social Ads'
             ]}
-            indexBy="country"
+            indexBy="lead_source_name"
             margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
             padding={0.3}
             valueScale={{ type: 'linear' }}
@@ -45,20 +39,6 @@ const BarChart = () => {
                     spacing: 10
                 }
             ]}
-            fill={[
-                {
-                    match: {
-                        id: 'fries'
-                    },
-                    id: 'dots'
-                },
-                {
-                    match: {
-                        id: 'sandwich'
-                    },
-                    id: 'lines'
-                }
-            ]}
             borderColor={{
                 from: 'color',
                 modifiers: [
@@ -70,19 +50,12 @@ const BarChart = () => {
             }}
             axisTop={null}
             axisRight={null}
-            axisBottom={{
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: 'country',
-                legendPosition: 'middle',
-                legendOffset: 32
-            }}
+            axisBottom={null}
             axisLeft={{
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'food',
+                legend: '',
                 legendPosition: 'middle',
                 legendOffset: -40
             }}
@@ -122,8 +95,8 @@ const BarChart = () => {
                 }
             ]}
             role="application"
-            ariaLabel="Nivo bar chart demo"
-            barAriaLabel={e=>e.id+": "+e.formattedValue+" in country: "+e.indexValue}
+            ariaLabel="Lead Source Chart"
+            barAriaLabel={e=>e.id+": "+e.formattedValue+" with lead source: "+e.indexValue}
         />
     )
 }

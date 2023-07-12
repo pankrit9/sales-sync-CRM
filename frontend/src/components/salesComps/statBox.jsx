@@ -4,7 +4,7 @@ const StatBox = ({ title, subtitle, icon, increase }) => {
   const theme = useTheme();
 
   return (
-    <Box width="100%" m="0 60px">
+    <Box width="100%" m="0 80px">
       <Box display="flex" justifyContent="space-between">
         <Box>
           {icon}

@@ -1,25 +1,18 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/stream
 import { ResponsiveStream } from '@nivo/stream'
-import { mockDataStreamCloseChart as data } from '../../mockData/mockDataSet'
+//import { mockDataStreamCloseChart as data } from '../../mockData/mockDataSet'
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const StreamCloseChart = () => {
+const StreamCloseChart = ({data, closedKeys}) => {
     return (
         <ResponsiveStream
         data={data}
-        keys={[
-            'Raoul',
-            'Josiane',
-            'Marcel',
-            'René',
-            'Paul',
-            'Jacques'
-        ]}
+        keys={closedKeys}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
         axisTop={null}
         axisRight={null}
