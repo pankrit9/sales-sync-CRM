@@ -24,6 +24,14 @@ function Sales() {
   const [leadSourceData, setLeadSourceData] = useState([]);
   const [revClosedData, setRevClosedData] = useState([]);
   const [closedKeys, setClosedKeysData] = useState([]);
+  const [revClosedSumData, setRevClosedSumData] = useState([]);
+  const [revProjectedData, setRevProjectedData] = useState([]);
+  const [projectedKeys, setProjectedKeysData] = useState([]);
+  const [revProjectedSumData, setRevProjectedSumData] = useState([]);
+  const [taskGrowthData, setTaskGrowthData] = useState([]);
+  const [ltvGrowthData, setltvGrowthData] = useState([]);
+  const [clientGrowthData, setClientGrowthData] = useState([]);
+  const [winRateGrowthData, setWinRateGrowthData] = useState([]);
 
   const fetchTaskData = async () => {
     const response = await fetch(`${BACKEND_API}/sales/tasks`, {method: "GET"});
@@ -78,6 +86,53 @@ function Sales() {
     const data = await response.json();
     setRevClosedData(data);
   } 
+  const fetchRevClosedSumData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/closedrevsum`, {method: "GET"});
+    const data = await response.json();
+    setRevClosedSumData(data);
+  } 
+
+  const fetchRevProjectedData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/projrev`, {method: "GET"});
+    const data = await response.json();
+    setRevProjectedData(data);
+  } 
+
+  const fetchProjectedKeysData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/projkeys`, {method: "GET"});
+    const data = await response.json();
+    setProjectedKeysData(data);
+  } 
+
+  const fetchRevProjectedSumData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/projrevsum`, {method: "GET"});
+    const data = await response.json();
+    setRevProjectedSumData(data);
+  } 
+
+  const fetchTaskGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/taskgrowth`, {method: "GET"});
+    const data = await response.json();
+    setTaskGrowthData(data);
+  } 
+
+  const fetchltvGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth`, {method: "GET"});
+    const data = await response.json();
+    setltvGrowthData(data);
+  } 
+
+  const fetchClientGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/clientgrowth`, {method: "GET"});
+    const data = await response.json();
+    setClientGrowthData(data);
+  } 
+
+  const fetchWinRateGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/winrategrowth`, {method: "GET"});
+    const data = await response.json();
+    setWinRateGrowthData(data);
+  } 
 
   useEffect(() => {
     fetchTaskData();
@@ -89,6 +144,14 @@ function Sales() {
     fetchLeadSourceData();
     fetchClosedKeysData();
     fetchRevClosedData();
+    fetchRevClosedSumData();
+    fetchRevProjectedData();
+    fetchProjectedKeysData();
+    fetchRevProjectedSumData();
+    fetchTaskGrowthData();
+    fetchltvGrowthData();
+    fetchClientGrowthData();
+    fetchWinRateGrowthData();
   }, []);
 
   return (
@@ -118,7 +181,9 @@ function Sales() {
           <StatBox
             title={taskData}
             subtitle="Tasks"
-            increase="+14%"
+            increase={`${taskGrowthData * 100 > 0 ? 
+              `+${(taskGrowthData * 100).toFixed(0)}` 
+              : (taskGrowthData * 100).toFixed(0)}%`}
             icon={
               <EmailIcon
                 sx={{ fontSize: "26px" }}
@@ -136,7 +201,9 @@ function Sales() {
           <StatBox
             title={`$${LTVData.toLocaleString()}`}
             subtitle="Client LTV"
-            increase="+21%"
+            increase={`${ltvGrowthData * 100 > 0 ? 
+              `+${(ltvGrowthData * 100).toFixed(0)}` 
+              : (ltvGrowthData * 100).toFixed(0)}%`}
             icon={
               <PointOfSaleIcon
                 sx={{ fontSize: "26px" }}
@@ -154,7 +221,9 @@ function Sales() {
           <StatBox
             title={clientData}
             subtitle="Clients"
-            increase="+5%"
+            increase={`${clientGrowthData * 100 > 0 ? 
+              `+${(clientGrowthData * 100).toFixed(0)}` 
+              : (clientGrowthData * 100).toFixed(0)}%`}
             icon={
               <PersonAddIcon
                 sx={{ fontSize: "26px" }}
@@ -170,9 +239,11 @@ function Sales() {
           
         >
           <StatBox
-            title={`${(winRateData * 100).toFixed(2)}%`}
+            title={`${(winRateData * 100).toFixed(0)}%`}
             subtitle="Win Rate"
-            increase="+10%"
+            increase={`${winRateGrowthData * 100 > 0 ? 
+              `+${(winRateGrowthData * 100).toFixed(0)}` 
+              : (winRateGrowthData * 100).toFixed(0)}%`}
             icon={
               <CheckIcon
                 sx={{ fontSize: "26px" }}
@@ -205,7 +276,7 @@ function Sales() {
                 variant="h3"
                 fontWeight="bold"
               >
-                $59,342.32
+                {`$${revClosedSumData.toLocaleString()}`}
               </Typography>
             </Box>
           </Box>
@@ -256,12 +327,12 @@ function Sales() {
                 variant="h3"
                 fontWeight="bold"
               >
-                $102,342.32
+                {`$${revProjectedSumData.toLocaleString()}`}
               </Typography>
             </Box>
           </Box>
           <Box height="400px" m="-20px 0 0 0">
-            <StreamProjChart />
+          <StreamProjChart data={revProjectedData} projectedKeys={projectedKeys}/>
           </Box>
         </Box>
         <Box

@@ -80,6 +80,9 @@ def manager_create_task(uId):
     if int(request.json.get('product_quantity')) > int(stock) and not is_electronic:
         return jsonify({"message" : "You don't have enough stock available."}), 404
     
+    date_string = request.json.get('due_date')
+    date_object = datetime.strptime(date_string, "%Y-%m-%d")
+    
     # note, need to have '_id' in order to avoid mongodb creating an
     # object id
     new_task = {
@@ -91,7 +94,7 @@ def manager_create_task(uId):
         "product": request.json.get('product'),
         "product_quantity": request.json.get('product_quantity'),
         "priority": request.json.get('priority'),
-        "due_date": request.json.get('due_date'),
+        "due_date": date_object,
         "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": request.json.get('complete'),
     }

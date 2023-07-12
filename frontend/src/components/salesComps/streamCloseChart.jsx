@@ -58,20 +58,6 @@ const StreamCloseChart = ({data, closedKeys}) => {
                 stagger: true
             }
         ]}
-        fill={[
-            {
-                match: {
-                    id: 'Paul'
-                },
-                id: 'dots'
-            },
-            {
-                match: {
-                    id: 'Marcel'
-                },
-                id: 'squares'
-            }
-        ]}
         dotSize={8}
         dotColor={{ from: 'color' }}
         dotBorderWidth={2}
