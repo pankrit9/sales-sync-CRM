@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./homePage/pages/Home";
 import LoginPage from "./pages/loginPage";
 import Products from "./pages/productsPage/products";
 import Sales from "./pages/salesPage/sales";
@@ -14,7 +15,9 @@ import Navbar  from "./components/navbars/Navbar";
 import Rankings from "./pages/gamificationPage/rankings";
 import Staff from "./pages/staffsPage/staff";
 import ResetPage from "./pages/loginPage/indexReset";
-import Home from "./homePage/pages/Home";
+import Blog from "./homePage/pages/Blog";
+import Services from "./homePage/pages/Services";
+import Pricing from "./homePage/pages/Pricing";
 
 function App() {
   const mode = useSelector((state) => state.mode); // grabs the value created at initial state in ./state/index.js
@@ -29,6 +32,9 @@ function App() {
           <Routes>
             {/* SETTING UP THE ROUTES */}
             <Route path="/" element={<Home />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/resetpassword" element={<ResetPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/products" element={<Products />} />

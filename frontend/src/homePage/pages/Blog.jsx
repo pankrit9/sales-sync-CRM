@@ -1,17 +1,16 @@
 import React from 'react';
 import '../../App.css';
-import Navbar2 from '../Navbar2';
 import HeroSection from '../HeroSection';
 import Footer from '../Footer';
+import Navbar2 from '../Navbar2';
 
-function Home() {
+function Blog() {
   return (
     <>
       <Navbar2/>
-      <HeroSection/>
       <Footer/>
     </>
   );
 }
 
-export default Home;
+export default Blog;

@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import * as BsIcons from "react-icons/bs";
 import { Typography } from "@mui/material";
+
 export default function DownloadBtn({ fetchData, userId }) {
     const [open, setOpen] = React.useState(false);
     const [manager_assigned, setManager] = React.useState("");
@@ -30,7 +31,7 @@ export default function DownloadBtn({ fetchData, userId }) {
         setOpen(false);
     };
 
-    const handleAdd = async () => {
+    const handeDwn = async () => {
         const task = {
             manager_assigned,
             task_description,
@@ -43,7 +44,7 @@ export default function DownloadBtn({ fetchData, userId }) {
         };
 
         console.log("task: add request.... ");
-        const response = await fetch(`${BACKEND_API}/tasks/${userId}/create`, {
+        const response = await fetch(`${BACKEND_API}/download`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -78,9 +79,6 @@ export default function DownloadBtn({ fetchData, userId }) {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Download PDF version</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        Please add in the details of a new task below.
-                    </DialogContentText>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -92,87 +90,10 @@ export default function DownloadBtn({ fetchData, userId }) {
                         value={manager_assigned}
                         onChange={(e) => setManager(e.target.value)}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="task_description"
-                        label="Task Description"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={task_description}
-                        onChange={(e) => setTaskDescription(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="client_assigned"
-                        label="Attach Client"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={client_assigned}
-                        onChange={(e) => setClient(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="product"
-                        label="Attach Product"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={product}
-                        onChange={(e) => setProduct(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="product_quantity"
-                        label="Qty"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={product_quantity}
-                        onChange={(e) => setProductQuantity(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="priority"
-                        label="Priority"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="due_date"
-                        label="Due Date"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={due_date}
-                        onChange={(e) => setDueDate(e.target.value)}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="staff_member_assigned"
-                        label="Assign Staff"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={staff_member_assigned}
-                        onChange={(e) => setStaffMember(e.target.value)}
-                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleAdd}>Add</Button>
+                    <Button onClick={handeDwn}>Add</Button>
                 </DialogActions>
             </Dialog>
         </div>

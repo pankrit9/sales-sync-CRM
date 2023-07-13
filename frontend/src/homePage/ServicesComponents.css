@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 20vw;
+  height: 60vh;
+  border-bottom: 2.5vh solid white;
+  background-color: white;
+}
+
+.text, .image {
+  flex: 1 0 50%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.first-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  color: #5E17EB;
+}
+
+.image {
+  background-size: cover;
+  background-position: center;
+}
+
+.container.reversed {
+  flex-direction: row-reverse;
+} 
+
+.text h1 {
+  font-size: 3em;
+}
+
+.text p {
+  font-size: 2em;
+}
+
+.image1 {
+  background-image: url('../images/buss.jpg');
+}
+
+.image2 {
+  background-image: url('../images/signup.jpg');
+}
+
+.image3 {
+  background-image: url('../images/dashboard.jpg');
+}
+
+.image4 {
+  background-image: url('../images/tasks.jpg');
+}
+
+.image5 {
+  background-image: url('../images/users.jpg');
+}
+
+.image6 {
+  background-image: url('../images/products.jpg');
+}
+
+.image7  {
+  background-image: url('../images/gamification.jpg');
+}
+
+.image8  {
+  background-image: url('../images/darkmode.jpg');
+}

@@ -1,17 +1,17 @@
 import React from 'react';
 import '../../App.css';
 import Navbar2 from '../Navbar2';
-import ServicesComponents from '../ServicesComponents';
+import PricingComponents from '../PricingComponents';
 import Footer from '../Footer';
 
-function Component() {
+function Pricing() {
   return (
     <>
       <Navbar2/>
-      <ServicesComponents/>
+      <PricingComponents/>
       <Footer/>
-  </>
+    </>
   );
 }
 
-export default Component;
+export default Pricing;
