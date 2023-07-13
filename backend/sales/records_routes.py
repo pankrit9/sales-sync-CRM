@@ -3,7 +3,6 @@ import jwt
 from config import db
 from flask import Blueprint, jsonify, request
 #from decorators import jwt_required, manager_required, token_required
-from decorators import jwt_required, manager_required, token_required
 import PyPDF2
 from config import db
 from reportlab.lib.pagesizes import letter
