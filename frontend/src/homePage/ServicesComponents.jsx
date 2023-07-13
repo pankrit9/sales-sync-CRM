@@ -19,7 +19,7 @@ function Components() {
         const isReversed = index % 2 !== 0;
         const isFirst = index === 0;
         return (
-          <div className={`container ${isReversed ? 'reversed' : ''}`} key={index}>
+          <div className={`service-container ${isReversed ? 'reversed' : ''}`} key={index}>
             <div className={`text ${isFirst ? 'first-text' : ''}`}>
               <h1>{item.title}</h1>
               <p>{item.text}</p>

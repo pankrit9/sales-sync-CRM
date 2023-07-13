@@ -1,4 +1,4 @@
-.container {
+.service-container {
   display: flex;
   flex-wrap: wrap;
   padding: 0 20vw;
@@ -39,7 +39,7 @@
   background-position: center;
 }
 
-.container.reversed {
+.service-container.reversed {
   flex-direction: row-reverse;
 } 
 
