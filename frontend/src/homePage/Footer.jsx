@@ -8,7 +8,7 @@ function Footer() {
     <div className='footer-container'>
       <section className='footer-subscription'>
         <p className='footer-subscription-heading'>
-          Join the Adventure newsletter to receive our best vacation deals
+          Sign up to the SaleSync Blog to receive our blogs directly emailed to you
         </p>
         <p className='footer-subscription-text'>
           You can unsubscribe at any time.
@@ -39,17 +39,13 @@ function Footer() {
             <h2>Contact Us</h2>
             <Link to='/'>Contact</Link>
             <Link to='/'>Support</Link>
-            <Link to='/'>Destinations</Link>
-            <Link to='/'>Sponsorships</Link>
           </div>
         </div>
         <div className='footer-link-wrapper'>
           <div class='footer-link-items'>
             <h2>Videos</h2>
-            <Link to='/'>Submit Video</Link>
-            <Link to='/'>Ambassadors</Link>
-            <Link to='/'>Agency</Link>
-            <Link to='/'>Influencer</Link>
+            <Link to='/'>Learn more about SaleSync</Link>
+            <Link to='/'>Learn more about Customer Resource Management</Link>
           </div>
           <div class='footer-link-items'>
             <h2>Social Media</h2>
