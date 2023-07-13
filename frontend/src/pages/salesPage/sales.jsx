@@ -21,6 +21,17 @@ function Sales() {
   const [productData, setProductData] = useState([]);
   const [LTVData, setLTVData] = useState([]);
   const [winRateData, setWinRateData] = useState([]);
+  const [leadSourceData, setLeadSourceData] = useState([]);
+  const [revClosedData, setRevClosedData] = useState([]);
+  const [closedKeys, setClosedKeysData] = useState([]);
+  const [revClosedSumData, setRevClosedSumData] = useState([]);
+  const [revProjectedData, setRevProjectedData] = useState([]);
+  const [projectedKeys, setProjectedKeysData] = useState([]);
+  const [revProjectedSumData, setRevProjectedSumData] = useState([]);
+  const [taskGrowthData, setTaskGrowthData] = useState([]);
+  const [ltvGrowthData, setltvGrowthData] = useState([]);
+  const [clientGrowthData, setClientGrowthData] = useState([]);
+  const [winRateGrowthData, setWinRateGrowthData] = useState([]);
 
   const fetchTaskData = async () => {
     const response = await fetch(`${BACKEND_API}/sales/tasks`, {method: "GET"});
@@ -58,6 +69,71 @@ function Sales() {
     setWinRateData(data);
   }
 
+  const fetchLeadSourceData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/leadsource`, {method: "GET"});
+    const data = await response.json();
+    setLeadSourceData(data);
+  }
+
+  const fetchClosedKeysData = async () => {
+      const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET"});
+      const data = await response.json();
+      setClosedKeysData(data);
+  }
+
+  const fetchRevClosedData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/closedrev`, {method: "GET"});
+    const data = await response.json();
+    setRevClosedData(data);
+  } 
+  const fetchRevClosedSumData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/closedrevsum`, {method: "GET"});
+    const data = await response.json();
+    setRevClosedSumData(data);
+  } 
+
+  const fetchRevProjectedData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/projrev`, {method: "GET"});
+    const data = await response.json();
+    setRevProjectedData(data);
+  } 
+
+  const fetchProjectedKeysData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/projkeys`, {method: "GET"});
+    const data = await response.json();
+    setProjectedKeysData(data);
+  } 
+
+  const fetchRevProjectedSumData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/projrevsum`, {method: "GET"});
+    const data = await response.json();
+    setRevProjectedSumData(data);
+  } 
+
+  const fetchTaskGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/taskgrowth`, {method: "GET"});
+    const data = await response.json();
+    setTaskGrowthData(data);
+  } 
+
+  const fetchltvGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth`, {method: "GET"});
+    const data = await response.json();
+    setltvGrowthData(data);
+  } 
+
+  const fetchClientGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/clientgrowth`, {method: "GET"});
+    const data = await response.json();
+    setClientGrowthData(data);
+  } 
+
+  const fetchWinRateGrowthData = async () => {
+    const response = await fetch(`${BACKEND_API}/sales/winrategrowth`, {method: "GET"});
+    const data = await response.json();
+    setWinRateGrowthData(data);
+  } 
+
   useEffect(() => {
     fetchTaskData();
     fetchRevenueData();
@@ -65,12 +141,23 @@ function Sales() {
     fetchProductData();
     fetchLTVData();
     fetchWinRateData();
+    fetchLeadSourceData();
+    fetchClosedKeysData();
+    fetchRevClosedData();
+    fetchRevClosedSumData();
+    fetchRevProjectedData();
+    fetchProjectedKeysData();
+    fetchRevProjectedSumData();
+    fetchTaskGrowthData();
+    fetchltvGrowthData();
+    fetchClientGrowthData();
+    fetchWinRateGrowthData();
   }, []);
 
   return (
     <>
     <Navbar/>
-    <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Dashboard</h1>
+    <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>Dashboard</h1>
     <Box m="10px" style={{ marginLeft: '140px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -81,7 +168,7 @@ function Sales() {
         display="grid"
         gridTemplateColumns="repeat(12, 1fr)"
         gridAutoRows="140px"
-        gap="20px"
+        gap="30px"
       >
         {/* ROW 1 */}
         <Box
@@ -89,12 +176,14 @@ function Sales() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bgcolor="rgba(105, 105, 105, 0.5)"
+          
         >
           <StatBox
             title={taskData}
             subtitle="Tasks"
-            increase="+14%"
+            increase={`${taskGrowthData * 100 > 0 ? 
+              `+${(taskGrowthData * 100).toFixed(0)}` 
+              : (taskGrowthData * 100).toFixed(0)}%`}
             icon={
               <EmailIcon
                 sx={{ fontSize: "26px" }}
@@ -107,12 +196,14 @@ function Sales() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bgcolor="rgba(105, 105, 105, 0.5)"
+          
         >
           <StatBox
             title={`$${LTVData.toLocaleString()}`}
             subtitle="Client LTV"
-            increase="+21%"
+            increase={`${ltvGrowthData * 100 > 0 ? 
+              `+${(ltvGrowthData * 100).toFixed(0)}` 
+              : (ltvGrowthData * 100).toFixed(0)}%`}
             icon={
               <PointOfSaleIcon
                 sx={{ fontSize: "26px" }}
@@ -125,12 +216,14 @@ function Sales() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bgcolor="rgba(105, 105, 105, 0.5)"
+          
         >
           <StatBox
             title={clientData}
             subtitle="Clients"
-            increase="+5%"
+            increase={`${clientGrowthData * 100 > 0 ? 
+              `+${(clientGrowthData * 100).toFixed(0)}` 
+              : (clientGrowthData * 100).toFixed(0)}%`}
             icon={
               <PersonAddIcon
                 sx={{ fontSize: "26px" }}
@@ -143,12 +236,14 @@ function Sales() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          bgcolor="rgba(105, 105, 105, 0.5)"
+          
         >
           <StatBox
-            title={`${(winRateData * 100).toFixed(2)}%`}
+            title={`${(winRateData * 100).toFixed(0)}%`}
             subtitle="Win Rate"
-            increase="+10%"
+            increase={`${winRateGrowthData * 100 > 0 ? 
+              `+${(winRateGrowthData * 100).toFixed(0)}` 
+              : (winRateGrowthData * 100).toFixed(0)}%`}
             icon={
               <CheckIcon
                 sx={{ fontSize: "26px" }}
@@ -159,15 +254,16 @@ function Sales() {
 
         {/* ROW 2 */}
         <Box
-          gridColumn="span 8"
-          gridRow="span 2"
+          gridColumn="span 7"
+          gridRow="span 3"
         >
           <Box
             mt="15px"
             p="0 30px"
-            display="flex "
-            justifyContent="space-between"
+            display="flex"
+            justifyContent="center"
             alignItems="center"
+            
           >
             <Box>
               <Typography
@@ -180,22 +276,22 @@ function Sales() {
                 variant="h3"
                 fontWeight="bold"
               >
-                $59,342.32
+                {`$${revClosedSumData.toLocaleString()}`}
               </Typography>
             </Box>
           </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <StreamCloseChart />
+          <Box height="400px" m="-20px 0 0 0">
+            <StreamCloseChart data={revClosedData} closedKeys={closedKeys} />
           </Box>
         </Box>
         <Box
-          gridColumn="span 4"
-          gridRow="span 2"
+          gridColumn="span 5"
+          gridRow="span 3"
           overflow="auto"
         >
           <Box
             display="flex"
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems="center"
             p="15px"
           >
@@ -203,21 +299,21 @@ function Sales() {
               Product Breakdown
             </Typography>
           </Box>
-          <Box height="250px" mt="-20px">
+          <Box height="400px" mt="-20px">
             <PieChart data={productData}/>
           </Box>
         </Box>
 
         {/* ROW 3 */}
         <Box
-          gridColumn="span 8"
-          gridRow="span 2"
+          gridColumn="span 7"
+          gridRow="span 3"
         >
           <Box
-            mt="15px"
+            mt="-30px"
             p="0 30px"
             display="flex "
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems="center"
           >
             <Box>
@@ -231,22 +327,23 @@ function Sales() {
                 variant="h3"
                 fontWeight="bold"
               >
-                $102,342.32
+                {`$${revProjectedSumData.toLocaleString()}`}
               </Typography>
             </Box>
           </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <StreamProjChart />
+          <Box height="400px" m="-20px 0 0 0">
+          <StreamProjChart data={revProjectedData} projectedKeys={projectedKeys}/>
           </Box>
         </Box>
         <Box
-          gridColumn="span 4"
-          gridRow="span 2"
+          gridColumn="span 5"
+          gridRow="span 3"
           overflow="auto"
+          mt="-50px"
         >
           <Box
             display="flex"
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems="center"
             p="15px"
           >
@@ -254,8 +351,8 @@ function Sales() {
               Lead source
             </Typography>
           </Box>
-          <Box height="250px" mt="-20px">
-            <BarChart />
+          <Box height="400px">
+            <BarChart data={leadSourceData} />
           </Box>
         </Box>
       </Box>

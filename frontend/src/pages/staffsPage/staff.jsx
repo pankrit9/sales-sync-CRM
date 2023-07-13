@@ -10,7 +10,7 @@ import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
 import "../../components/Searchbar.css"
 
 const Staff = () => {
-  const [staffs, setStaff] = useState([]);
+  const [staff, setStaff] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   
 
@@ -20,11 +20,11 @@ const Staff = () => {
       setStaff(data);
   }, []);
 
-  const filterData = (query, staffs) => {
+  const filterData = (query, staff) => {
       if (!query) {
-        return staffs;
+        return staff;
       } else {
-        return staffs.filter((d) => d['first_name'].toLowerCase().includes(query.toLowerCase()));
+        return staff.filter((d) => d['first_name'].toLowerCase().includes(query.toLowerCase()));
       }
   };
 
@@ -32,7 +32,7 @@ const Staff = () => {
       fetchData();
   }, []);
 
-  const dataFiltered = filterData(searchQuery, staffs);
+  const dataFiltered = filterData(searchQuery, staff);
   return (
       <>
           <Navbar/>

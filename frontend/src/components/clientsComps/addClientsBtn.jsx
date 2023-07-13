@@ -93,17 +93,25 @@ export default function AddBtn({fetchData}) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="lead_source"
-            label="Lead Source"
-            type="text"
-            fullWidth
-            variant="standard"
-            value={lead_source}
-            onChange={(e) => setLeadSource(e.target.value)}
-          />
+          <div style={{marginTop: '30px'}}></div>
+          <FormControl fullWidth>
+            <InputLabel id="complete">Lead Source</InputLabel>
+            <Select
+              labelId="Lead Source"
+              id="lead_source"
+              value={lead_source}
+              onChange={(e) => setLeadSource(e.target.value)}
+              name="lead_source"
+              autoWidth
+            >
+              <MenuItem value="Google">Google</MenuItem>
+              <MenuItem value="LinkedIn">LinkedIn</MenuItem>
+              <MenuItem value="Cold Call/Email">Cold Call/Email</MenuItem>
+              <MenuItem value="Referral">Referral</MenuItem>
+              <MenuItem value="Paid Social Ads">Paid Social Ads</MenuItem>
+              <MenuItem value=""></MenuItem>
+            </Select>
+          </FormControl>
           <TextField
             autoFocus
             margin="dense"
