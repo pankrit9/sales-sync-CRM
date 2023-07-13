@@ -41,10 +41,10 @@ function Navbar({}) {
                                 <div className='company-name'
                                     color={'white'} display={'flex'}
                                 >
-                                    {company} 
+                                    {company ? company : "Logged Out"}
                                 </div>
                                 <div className='credentials' >
-                                    {name} |  
+                                    {name ? name +" |" : ""}
                                 </div>
                                 <div className='role-nav' >
                                     {role}

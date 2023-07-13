@@ -12,6 +12,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import { fontWeight } from '@mui/system';
 
 export default function AddBtn({fetchData}) {
   const [open, setOpen] = React.useState(false);
@@ -21,7 +22,6 @@ export default function AddBtn({fetchData}) {
   const [client_position, setClientPosition] = React.useState("");
   const [mobile_number, setMobileNumber] = React.useState("");
   const [address, setAddress] = React.useState("");
-  const [is_electronic, setIsElectronic] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -62,7 +62,7 @@ export default function AddBtn({fetchData}) {
   
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="contained" onClick={handleClickOpen}>
         Add Client
       </Button>
       <Dialog open={open} onClose={handleClose}>

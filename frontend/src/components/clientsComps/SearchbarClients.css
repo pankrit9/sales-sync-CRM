@@ -8,38 +8,50 @@
 }
 .container-search {
     left: 80px;
+    right: 120px;
     display: flex;
-    width: 100%;
+    width: 86%;
+    height: 2.5rem;
     position: fixed;
+    margin-left:'140px';
+    margin-right: '120px';
 }
 .tools {
-    right: 500px;
+    right: 302px;
     display: flex;
     justify-content: center;
     position: fixed;
-    padding-right: 10px;
-
+    padding-right: 20px;
 }
 .edit-btn-clients {
-    right: 230px;
+    right: 120px;
     display: flex;
+    float: right;
     justify-content: center;
-    position: fixed;
-    padding-right: 10px;
+    position:fixed;
 
 }
 .search-icon {
     display: flex;
     justify-content: center;
     position: fixed;
+    right: 2rem;
 
 }
 .add-btn-clients {
-    right: 362px;
-    float: right;
+    right: 230px;
     display: flex;
+    float: right;
     justify-content: center;
     position: fixed;
     padding-right: 10px;
+
+}
+
+.download-btn {
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    position:fixed;
 
 }

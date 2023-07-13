@@ -100,12 +100,6 @@ const headCells = [
     label: 'Record Date',
   },
   {
-    id: 'payment_method',
-    numeric: true,
-    disablePadding: false,
-    label: 'Payment Method',
-  },
-  {
     id: 'amount',
     numeric: true,
     disablePadding: false,
@@ -373,10 +367,9 @@ export default function RecordsTable({rows, fetchData}) {
                       {row._id}
                     </TableCell>
                     <TableCell align="left">{row.client_id}</TableCell>
-                    <TableCell align="right">{row.staff}</TableCell>
+                    <TableCell align="right">{row.sold_by}</TableCell>
                     <TableCell align="right">{row.deadline}</TableCell>
                     <TableCell align="right">{row.date_of_sale}</TableCell>
-                    <TableCell align="right">{row.payment_method}</TableCell>
                     <TableCell align="right">${row.revenue}</TableCell>
                     <TableCell align="right">
                       <Typography

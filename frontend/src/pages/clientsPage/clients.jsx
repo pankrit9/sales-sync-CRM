@@ -5,7 +5,7 @@ import EnhancedTable from "../../components/clientsComps/clientsTable";
 import AddBtn from "../../components/clientsComps/addClientsBtn";
 import EditBtn from "../../components/clientsComps/editClientsBtn";
 import { BACKEND_API } from "../../api";
-import { SearchBar } from '../../components/SearchBarClients';
+import { SearchbarClients } from '../../components/clientsComps/SearchBarClients';
 import '../../components/Searchbar.css';
 import { useSelector } from 'react-redux';
 
@@ -42,7 +42,7 @@ function Clients() {
             
             <div className="container-search">
                 <div className="tools">
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    <SearchbarClients searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 </div>
                 <div className='edit-btn-clients'>
                     <EditBtn fetchData={fetchData}/>

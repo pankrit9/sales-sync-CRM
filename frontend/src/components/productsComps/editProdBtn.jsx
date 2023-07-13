@@ -77,7 +77,7 @@ export default function EditBtn({fetchData}) {
   
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="contained" onClick={handleClickOpen}>
         Edit Product
       </Button>
       <Dialog open={open} onClose={handleClose}>

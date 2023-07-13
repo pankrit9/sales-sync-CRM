@@ -43,17 +43,17 @@ function Products() {
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Products</h1>
             
             <div className="container-search">
-                <div className="tools">
+                <div className="tools-2">
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 </div>
                 <div className='edit-btn-product'>
                     <EditBtn fetchData={fetchData}/>
                 </div>
-                <div className='add-btn-product'>
-                    <AddBtn fetchData={fetchData}/>
+                <div className='add-btn-product' >
+                    <AddBtn fetchData={fetchData} />
                 </div>
             </div>
-                <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
+            <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
                 {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData}/> : <p>The inventory is empty</p>}
             </div>
         </>
