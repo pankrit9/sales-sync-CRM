@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 
-export default function AddBtn({fetchData}) {
+export default function AddBtn({fetchData, setProducts}) {
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
@@ -47,6 +47,7 @@ export default function AddBtn({fetchData}) {
     if (response.ok) {
       // Call fetchData after a successful product creation
       fetchData();
+      setProducts([])
       setOpen(false);
     } else {
       const errorData = await response.json();
