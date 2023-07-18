@@ -165,7 +165,7 @@ def manager_task_edit(uId, taskId):
         update_products(product_id, qty_sold)
         update_accounts(product_id, qty_sold, sold_by)
         update_sales(product_id, qty_sold, sold_by)
-        update_clients(client)
+        update_clients(client, product_name, qty_sold, sold_by)
 
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})
@@ -256,5 +256,11 @@ def update_sales(product_id, qty_sold, sold_by):
         "deadline": "To be Implemented",
     })
 
-def update_clients(client):
-    db.Clients.update_one({"client" : client}, {"$set": {'last_sale': datetime.now()}})
+def update_clients(client, product_name, qty_sold, sold_by):
+    new_interaction =  {"product_name": product_name,
+                        "completed_date": datetime.now(),
+                        "qty": qty_sold,
+                        "staff": sold_by}
+
+    db.Clients.update_one({"client" : client},
+                           {"$push": {'tasks_records': new_interaction}})

@@ -9,15 +9,16 @@ import { SearchbarClients } from '../../components/clientsComps/SearchBarClients
 import '../../components/Searchbar.css';
 import { useSelector } from 'react-redux';
 import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
-
+import * as FaIcons6 from "react-icons/fa6";
 import { Card, CardContent, stringAvatar, CardMedia,Avatar,  Tooltip, Typography, Grid, CardActions, Button} from '@mui/material';
+import History from '../../components/clientsComps/historyDialog';
 
 function Clients() {
     
     const [clients, setClients] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const state = useSelector(state => state);
-    
+    const [id, setId] = useState(0);
 
     const fetchData = useCallback(async () => {
         const response = await fetch(`${BACKEND_API}/clients/`, {method: "GET"});
@@ -67,14 +68,14 @@ function Clients() {
                 </div>
             </div>
 
-            <div style={{ marginLeft:'160px', marginRight: '100px', marginTop: '100px'}}>
+            <div style={{ marginLeft:'160px', marginRight: '100px', marginTop: '80px'}}>
                 <Grid container justify="space-around" gap={3} >
                     {clients.map((dataFiltered) => (
                         <Card sx={{ width: "15rem" }}>
                         <CardContent marginLeft="5rem">
 
                             <Tooltip title={dataFiltered.client} >
-                                <Avatar  {...stringAvatar(dataFiltered.client)} sx={{ bgcolor: getRandomColor(), width:"3.5rem", height:"3.5rem"}}>
+                                <Avatar alt="" {...stringAvatar(dataFiltered.client)} sx={{ bgcolor: getRandomColor(), width:"3.2rem", height:"3.2rem"}}>
                           
                                 </Avatar>
                             </Tooltip>
@@ -89,7 +90,10 @@ function Clients() {
                             </Typography> 
                         </CardContent>
                         <CardActions>
-                            <Button size="small">See Details</Button>
+                            
+                            <History id={dataFiltered._id} name={dataFiltered.client} 
+                            email={dataFiltered.email} c_date={dataFiltered.completed_date} 
+                            joined_date={dataFiltered.creation_date}/>
                         </CardActions>
                         </Card>
                     ))}
