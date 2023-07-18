@@ -6,14 +6,38 @@ from flask import Blueprint, jsonify, request
 
 sales = Blueprint('sales', __name__)
 
-@sales.route("/tasks", methods = ['GET'])
-def get_task_count():
-    task_count = db.Tasks.count_documents({})
-    return jsonify(task_count)
+@sales.route("/tasks/<id>", methods = ['GET'])
+def get_task_count(id):
+    curr_user = db.Accounts.find_one({"_id": id})
 
-@sales.route("/revenue", methods = ['GET'])
-def get_revenue_sum():
-    sales = db.Sales.find({})
+    if curr_user["role"] == "manager":
+        task_count = db.Tasks.count_documents({
+            "manager_assigned": curr_user["first_name"],
+            "complete": {"$ne": "Completed"}
+        })
+        return jsonify(task_count)
+    
+    elif curr_user["role"] == "staff":
+        task_count = db.Tasks.count_documents({
+            "staff_member_assigned": curr_user["first_name"],
+            "complete": {"$ne": "Completed"}
+        })
+        return jsonify(task_count)
+    
+    else:
+        return jsonify({"message": "Invalid role"}), 400
+
+@sales.route("/revenue/<id>", methods = ['GET'])
+def get_revenue_sum(id):
+    
+    curr_user = db.Accounts.find_one({"_id": id})
+    
+    if curr_user["role"] == "manager":
+        sales = db.Sales.find({"manager_assigned": curr_user["first_name"]})
+    elif curr_user["role"] == "staff":
+        sales = db.Sales.find({"sold_by": curr_user["first_name"]})
+    else:
+        return jsonify({"message": "Invalid role"}), 400
     
     revenue_sum = 0
 
@@ -22,10 +46,27 @@ def get_revenue_sum():
 
     return jsonify(revenue_sum)
 
-@sales.route("/ltv", methods = ['GET'])
-def get_ltv():
+@sales.route("/ltv/<id>", methods = ['GET'])
+def get_ltv(id):
 
-    sales = db.Sales.find({})
+    curr_user = db.Accounts.find_one({"_id": id})
+    
+    if curr_user["role"] == "manager":
+        sales = db.Sales.find({"manager_assigned": curr_user["first_name"]})
+        curr_user_tasks = db.Tasks.find({
+            "manager_assigned": curr_user["first_name"],
+            "complete": "Completed"
+        })
+        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+    elif curr_user["role"] == "staff":
+        sales = db.Sales.find({"sold_by": curr_user["first_name"]})
+        curr_user_tasks = db.Tasks.find({
+            "staff_member_assigned": curr_user["first_name"],
+            "complete": "Completed"
+        })
+        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+    else:
+        return jsonify({"message": "Invalid role"}), 400
     
     revenue_sum = 0
     n_purchases = 0
@@ -34,12 +75,10 @@ def get_ltv():
         revenue_sum += sale['revenue']
         n_purchases += 1
 
-    n_client = db.Clients.count_documents({})
-
     # Average Purchase Value
     apv = revenue_sum / n_purchases
     # Purchase frequency
-    pf = n_purchases / n_client
+    pf = n_purchases / n_clients
     # Average customer lifespan - Note, this is hardcoded for now
     acl = 1 / 0.3 
     
@@ -47,16 +86,60 @@ def get_ltv():
 
     return jsonify(ltv)
 
-@sales.route("/clients", methods = ['GET'])
-def get_client_count():
-    client_count = db.Clients.count_documents({})
-    return jsonify(client_count)
+@sales.route("/clients/<id>", methods = ['GET'])
+def get_client_count(id):
+    curr_user = db.Accounts.find_one({"_id": id})
+    
+    if curr_user["role"] == "manager":
+        curr_user_tasks = db.Tasks.find({
+            "manager_assigned": curr_user["first_name"],
+            "complete": "Completed"    
+        })
+        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+    elif curr_user["role"] == "staff":
+        curr_user_tasks = db.Tasks.find({
+            "staff_member_assigned": curr_user["first_name"],
+            "complete": "Completed"    
+        })
+        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+    else:
+        return jsonify({"message": "Invalid role"}), 400
 
-@sales.route("/winrate", methods = ['GET'])
-def get_win_rate():
-    n_clients_with_sale = db.Clients.count_documents({'last_sale': {'$exists': True, '$ne': ''}})
-    n_clients = db.Clients.count_documents({})
-    win_rate = n_clients_with_sale / n_clients
+    return jsonify(n_clients)
+
+@sales.route("/winrate/<id>", methods = ['GET'])
+def get_win_rate(id):
+    curr_user = db.Accounts.find_one({"_id": id})
+    
+    if curr_user["role"] == "manager":
+        curr_user_tasks_complete = db.Tasks.find({
+            "manager_assigned": curr_user["first_name"],
+            "client_assigned": {"$ne": ''},
+            "complete": "Completed"
+        })
+        n_clients_complete = len({task["client_assigned"] for task in curr_user_tasks_complete})
+        curr_user_tasks_all = db.Tasks.find({
+            "manager_assigned": curr_user["first_name"],
+            "client_assigned": {"$ne": ''},
+        })
+        n_clients_all = len({task["client_assigned"] for task in curr_user_tasks_all})
+
+    elif curr_user["role"] == "staff":
+        curr_user_tasks_complete = db.Tasks.find({
+            "staff_member_assigned": curr_user["first_name"],
+            "client_assigned": {"$ne": ''},
+            "complete": "Completed" 
+        })
+        n_clients_complete = len({task["client_assigned"] for task in curr_user_tasks_complete})
+        curr_user_tasks_all = db.Tasks.find({
+            "staff_member_assigned": curr_user["first_name"],
+            "client_assigned": {"$ne": ''},
+        })
+        n_clients_all = len({task["client_assigned"] for task in curr_user_tasks_all})
+    else:
+        return jsonify({"message": "Invalid role"}), 400
+    
+    win_rate = n_clients_complete / n_clients_all
 
     return jsonify(win_rate)
 
@@ -80,7 +163,6 @@ def get_lead_source():
             "lead_source_name": lead,
             lead : count
         })
-    print(data)
     return jsonify(data)
 
 
@@ -100,9 +182,9 @@ def get_closed_rev():
             staff_sales = db.Sales.find({"sold_by": staff})
             
             for sale in staff_sales:
-                month = (sale['date_of_sale']).month
-                year = (sale['date_of_sale']).year
-
+                month = (datetime.strptime(sale['date_of_sale'], "%Y-%m-%d")).month
+                year = (datetime.strptime(sale['date_of_sale'], "%Y-%m-%d")).year
+                
                 if month == i and year == curr_date.year:
                     rev_closed += sale['revenue']
             
@@ -126,7 +208,7 @@ def get_closed_rev_sum():
     rev_closed = 0
 
     for sale in sales:
-        if sale['date_of_sale'] >= datetime(curr_date.year, 1, 1) and sale['date_of_sale'] <= curr_date:
+        if datetime.strptime(sale['date_of_sale'], "%Y-%m-%d") >= datetime(curr_date.year, 1, 1) and datetime.strptime(sale['date_of_sale'], "%Y-%m-%d") <= curr_date:
             rev_closed += sale['revenue']
             
     return jsonify(rev_closed)
@@ -134,7 +216,7 @@ def get_closed_rev_sum():
 
 @sales.route("/projrev", methods = ['GET'])
 def get_proj_rev():
-    curr_date = datetime.now()    
+    curr_date = datetime.now()
     data = []
 
     sales = db.Tasks.find({})
@@ -151,8 +233,8 @@ def get_proj_rev():
                 })
             
             for task in staff_tasks:
-                month = (task['due_date']).month
-                year = (task['due_date']).year
+                month = (datetime.strptime(task['due_date'], "%Y-%m-%d")).month
+                year = (datetime.strptime(task['due_date'], "%Y-%m-%d")).year
 
                 if month == i and year == curr_date.year:
                     price = (db.Products.find_one({'name': task['product']}))['price']
@@ -178,7 +260,7 @@ def get_proj_rev_sum():
     rev_closed = 0
 
     for task in tasks:
-        if task['due_date'] >= curr_date:
+        if datetime.strptime(task['due_date'], "%Y-%m-%d") >= curr_date:
             price = (db.Products.find_one({'name': task['product']}))['price']
             rev_closed += int(task['product_quantity']) * int(price)
             

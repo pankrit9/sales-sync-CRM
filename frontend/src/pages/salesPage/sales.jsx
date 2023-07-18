@@ -12,9 +12,14 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CheckIcon from "@mui/icons-material/Check";
 import StatBox from "../../components/salesComps/statBox"
 import { BACKEND_API } from "../../api";
+import { useSelector } from 'react-redux';
 
 function Sales() {
   //should taskData be linked to a get data call?
+
+  const state = useSelector(state => state);
+  const role = useSelector(state => state.role);
+  const _id = useSelector((state) => state.user);
   const [taskData, setTaskData] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
   const [clientData, setClientData] = useState([]);
@@ -34,7 +39,7 @@ function Sales() {
   const [winRateGrowthData, setWinRateGrowthData] = useState([]);
 
   const fetchTaskData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/tasks`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/tasks/${_id}`, {method: "GET"});
     const data = await response.json();
     setTaskData(data);
   }
@@ -46,7 +51,7 @@ function Sales() {
   }
 
   const fetchClientData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/clients`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/clients/${_id}`, {method: "GET"});
     const data = await response.json();
     setClientData(data);
   }
@@ -58,13 +63,13 @@ function Sales() {
   }
 
   const fetchLTVData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/ltv`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/ltv/${_id}`, {method: "GET"});
     const data = await response.json();
     setLTVData(data);
   }
 
   const fetchWinRateData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/winrate`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/winrate/${_id}`, {method: "GET"});
     const data = await response.json();
     setWinRateData(data);
   }
@@ -158,6 +163,7 @@ function Sales() {
     <>
     <Navbar/>
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>Dashboard</h1>
+    <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '30px'}}>My Metrics</h1>
     <Box m="10px" style={{ marginLeft: '140px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -251,7 +257,14 @@ function Sales() {
             }
           />
         </Box>
-
+        </Box> {/* This closing tag for grid box */}
+        <h1 classname="header" style={{paddingLeft: '20px', marginTop: '10px', marginBottom: '20px', fontSize: '30px'}}>Team Metrics</h1>
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(12, 1fr)"
+          gridAutoRows="140px"
+          gap="30px"
+        >
         {/* ROW 2 */}
         <Box
           gridColumn="span 7"

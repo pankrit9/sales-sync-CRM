@@ -10,7 +10,7 @@ clients = Blueprint('clients', __name__)
 
 # We have POST, PUT, DELETE and GET 
 @clients.route("/add", methods = ['POST'])
-def add_client():
+def add_client(id):
     clients = db.Clients
     
     # Fetch all ids and convert them to integers
@@ -36,7 +36,7 @@ def add_client():
         "mobile_number" :  request.json['mobile_number'],
         "address" : request.json['address'],
         "last_sale": "",
-        "creation_date": datetime.now()
+        "creation_date": datetime.now().strftime("%Y-%m-%d")
     }
 
     clients.insert_one(new_client)

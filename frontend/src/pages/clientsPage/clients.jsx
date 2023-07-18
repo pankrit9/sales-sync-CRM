@@ -10,7 +10,7 @@ import '../../components/Searchbar.css';
 import { useSelector } from 'react-redux';
 import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
 
-import { Card, CardContent, stringAvatar, CardMedia,Avatar,  Tooltip, Typography, Grid, CardActions, Button} from '@mui/material';
+import { Card, CardContent, stringAvatar, CardMedia, Avatar,  Tooltip, Typography, Grid, CardActions, Button} from '@mui/material';
 
 function Clients() {
     
