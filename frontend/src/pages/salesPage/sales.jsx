@@ -163,7 +163,10 @@ function Sales() {
     <>
     <Navbar/>
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>Dashboard</h1>
-    <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '30px'}}>My Metrics</h1>
+    { role === "staff"
+      ? <h1 className="header" style={{paddingLeft: '170px', marginTop: '50px', fontSize: '30px'}}>My Metrics</h1>
+      : <h1 className="header" style={{paddingLeft: '170px', marginTop: '50px', fontSize: '30px'}}>My Team Metrics</h1>
+    }
     <Box m="10px" style={{ marginLeft: '140px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -258,7 +261,9 @@ function Sales() {
           />
         </Box>
         </Box> {/* This closing tag for grid box */}
-        <h1 classname="header" style={{paddingLeft: '20px', marginTop: '10px', marginBottom: '20px', fontSize: '30px'}}>Team Metrics</h1>
+        { role === "staff" &&
+          <h1 classname="header" style={{paddingLeft: '33px', marginTop: '10px', marginBottom: '20px', fontSize: '30px'}}>Team Metrics</h1>
+        }
         <Box
           display="grid"
           gridTemplateColumns="repeat(12, 1fr)"
