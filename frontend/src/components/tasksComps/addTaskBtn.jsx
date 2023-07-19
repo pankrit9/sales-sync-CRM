@@ -50,9 +50,9 @@ export default function AddBtn({ fetchData, userId }) {
         fetchStaffMembers();
     }, []);
 
-    // useEffect(() => {
-    //     fetchClients();
-    // }, []);
+    useEffect(() => {
+        fetchClients();
+    }, []);
 
     // const fetchClients = async () => {
     //     try {
@@ -82,6 +82,15 @@ export default function AddBtn({ fetchData, userId }) {
             setProducts(data);
         } catch (error) {
             console.error("Error fetching products: ", error);
+        }
+    };
+    const fetchClients = async () => {
+        try {
+            const response = await fetch(`${BACKEND_API}/clients`, {method: "GET"});
+            const data = await response.json();;
+            setClients(data);
+        } catch (error) {
+            console.error("Error fetching clients: ", error);
         }
     };
 
@@ -148,18 +157,7 @@ export default function AddBtn({ fetchData, userId }) {
                         value={task_description}
                         onChange={(e) => setTaskDescription(e.target.value)}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="client_assigned"
-                        label="Attach Client"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={client_assigned}
-                        onChange={(e) => setClient(e.target.value)}
-                    />
-                    {/* <FormControl fullWidth style={{ margin: '10px 0' }}>
+                    <FormControl fullWidth style={{ margin: '10px 0' }}>
                         <InputLabel id="client_assigned">Choose Client</InputLabel>
                         <Select
                             labelId="client_assigned"
@@ -170,12 +168,12 @@ export default function AddBtn({ fetchData, userId }) {
                             autoWidth
                         >
                             {clients.map((client) => (
-                                <MenuItem key={client._id} value={client.name}>
-                                    {client.name}
+                                <MenuItem key={client._id} value={client.client}>
+                                    {client.client}
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl> */}
+                    </FormControl>
                     <FormControl fullWidth style={{ margin: '10px 0' }}>
                         <InputLabel id="complete">Priority</InputLabel>
                         <Select
