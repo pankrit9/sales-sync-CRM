@@ -140,7 +140,7 @@ const Form = () => {
                         token: loggedIn.token,
                     })
                 );   // dispatch the user info to the store
-                navigate("/Products");  // navigate to the home page as the user is logged in
+                navigate("/sales");  // navigate to the home page as the user is logged in
             }
         } catch (error) {
             console.log(error);

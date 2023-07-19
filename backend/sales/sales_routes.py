@@ -11,62 +11,41 @@ def get_task_count(id):
     curr_user = db.Accounts.find_one({"_id": id})
 
     if curr_user["role"] == "manager":
-        task_count = db.Tasks.count_documents({
-            "manager_assigned": curr_user["first_name"],
-            "complete": {"$ne": "Completed"}
-        })
-        return jsonify(task_count)
-    
+        query = "manager_assigned"
     elif curr_user["role"] == "staff":
-        task_count = db.Tasks.count_documents({
-            "staff_member_assigned": curr_user["first_name"],
-            "complete": {"$ne": "Completed"}
-        })
-        return jsonify(task_count)
-    
-    else:
-        return jsonify({"message": "Invalid role"}), 400
-
-@sales.route("/revenue/<id>", methods = ['GET'])
-def get_revenue_sum(id):
-    
-    curr_user = db.Accounts.find_one({"_id": id})
-    
-    if curr_user["role"] == "manager":
-        sales = db.Sales.find({"manager_assigned": curr_user["first_name"]})
-    elif curr_user["role"] == "staff":
-        sales = db.Sales.find({"sold_by": curr_user["first_name"]})
+        query = "staff_member_assigned"
     else:
         return jsonify({"message": "Invalid role"}), 400
     
-    revenue_sum = 0
+    task_count = db.Tasks.count_documents({
+        query : curr_user["first_name"],
+        "complete": {"$ne": "Completed"}
+    })
 
-    for sale in sales:
-        revenue_sum += sale['revenue']
-
-    return jsonify(revenue_sum)
+    return jsonify(task_count)
 
 @sales.route("/ltv/<id>", methods = ['GET'])
 def get_ltv(id):
 
     curr_user = db.Accounts.find_one({"_id": id})
-    
+
     if curr_user["role"] == "manager":
-        sales = db.Sales.find({"manager_assigned": curr_user["first_name"]})
-        curr_user_tasks = db.Tasks.find({
-            "manager_assigned": curr_user["first_name"],
-            "complete": "Completed"
-        })
-        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+        query = "manager_assigned"
+        query_2 = "manager_assigned"
     elif curr_user["role"] == "staff":
-        sales = db.Sales.find({"sold_by": curr_user["first_name"]})
-        curr_user_tasks = db.Tasks.find({
-            "staff_member_assigned": curr_user["first_name"],
-            "complete": "Completed"
-        })
-        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+        query = "sold_by"
+        query_2 = "staff_member_assigned"
     else:
         return jsonify({"message": "Invalid role"}), 400
+    
+    sales = db.Sales.find({query : curr_user["first_name"]})
+
+    curr_user_tasks = db.Tasks.find({
+        query_2 : curr_user["first_name"],
+        "complete": "Completed"
+    })
+
+    n_clients = len({task["client_assigned"] for task in curr_user_tasks})
     
     revenue_sum = 0
     n_purchases = 0
@@ -97,55 +76,45 @@ def get_ltv(id):
 @sales.route("/clients/<id>", methods = ['GET'])
 def get_client_count(id):
     curr_user = db.Accounts.find_one({"_id": id})
-    
+
     if curr_user["role"] == "manager":
-        curr_user_tasks = db.Tasks.find({
-            "manager_assigned": curr_user["first_name"],
-            "complete": "Completed"    
-        })
-        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+        query = "manager_assigned"
     elif curr_user["role"] == "staff":
-        curr_user_tasks = db.Tasks.find({
-            "staff_member_assigned": curr_user["first_name"],
-            "complete": "Completed"    
-        })
-        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
+        query = "staff_member_assigned"
     else:
         return jsonify({"message": "Invalid role"}), 400
+
+    curr_user_tasks = db.Tasks.find({
+        query : curr_user["first_name"],
+        "complete": "Completed"    
+    })
+    n_clients = len({task["client_assigned"] for task in curr_user_tasks})
 
     return jsonify(n_clients)
 
 @sales.route("/winrate/<id>", methods = ['GET'])
 def get_win_rate(id):
     curr_user = db.Accounts.find_one({"_id": id})
-    
-    if curr_user["role"] == "manager":
-        curr_user_tasks_complete = db.Tasks.find({
-            "manager_assigned": curr_user["first_name"],
-            "client_assigned": {"$ne": ''},
-            "complete": "Completed"
-        })
-        n_clients_complete = len({task["client_assigned"] for task in curr_user_tasks_complete})
-        curr_user_tasks_all = db.Tasks.find({
-            "manager_assigned": curr_user["first_name"],
-            "client_assigned": {"$ne": ''},
-        })
-        n_clients_all = len({task["client_assigned"] for task in curr_user_tasks_all})
 
+    if curr_user["role"] == "manager":
+        query = "manager_assigned"
     elif curr_user["role"] == "staff":
-        curr_user_tasks_complete = db.Tasks.find({
-            "staff_member_assigned": curr_user["first_name"],
-            "client_assigned": {"$ne": ''},
-            "complete": "Completed" 
-        })
-        n_clients_complete = len({task["client_assigned"] for task in curr_user_tasks_complete})
-        curr_user_tasks_all = db.Tasks.find({
-            "staff_member_assigned": curr_user["first_name"],
-            "client_assigned": {"$ne": ''},
-        })
-        n_clients_all = len({task["client_assigned"] for task in curr_user_tasks_all})
+        query = "staff_member_assigned"
     else:
         return jsonify({"message": "Invalid role"}), 400
+    
+    curr_user_tasks_complete = db.Tasks.find({
+        query : curr_user["first_name"],
+        "client_assigned": {"$ne": ''},
+        "complete": "Completed"
+    })
+    n_clients_complete = len({task["client_assigned"] for task in curr_user_tasks_complete})
+    curr_user_tasks_all = db.Tasks.find({
+        query : curr_user["first_name"],
+        "client_assigned": {"$ne": ''},
+    })
+    n_clients_all = len({task["client_assigned"] for task in curr_user_tasks_all})
+
     
     if n_clients_all == 0:
         win_rate = 0

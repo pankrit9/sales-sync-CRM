@@ -80,12 +80,12 @@ const headCells = [
     //     disablePadding: true,
     //     label: "Task",
     // },
-    {
-        id: "manager_assigned",
-        numeric: false,
-        disablePadding: false,
-        label: "Manager"
-    },
+    //{
+    //    id: "manager_assigned",
+    //    numeric: false,
+    //    disablePadding: false,
+    //    label: "Manager"
+    //},
     {
         id: "task_description",
         numeric: false,
@@ -104,12 +104,12 @@ const headCells = [
         disablePadding: false,
         label: "Product",
     },
-    // {
-    //     id: "product_quantity",
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: "Product Quantity",
-    // },
+     {
+        id: "product_quantity",
+        numeric: false,
+        disablePadding: false,
+        label: "Quantity",
+    },
     {
         id: "priority",
         numeric: false,
@@ -334,11 +334,10 @@ export default function EnhancedTable({ rows, fetchData }) {
                                                 }}
                                             /> */}
                                         {/* </TableCell> */}
-                                        <TableCell align="center">{row.manager_assigned}</TableCell>
                                         <TableCell align="centre">{row.task_description}</TableCell>
                                         <TableCell align="centre">{row.client_assigned}</TableCell>
                                         <TableCell align="centre">{row.product}</TableCell>
-                                        {/* <TableCell align="centre">{row.product_quantity}</TableCell> */}
+                                        <TableCell align="centre">{row.product_quantity}</TableCell>
                                         <TableCell align="centre">{row.priority}</TableCell>
                                         <TableCell align="centre">{new Date(row.due_date).toDateString()}</TableCell>
                                         <TableCell align="centre">
