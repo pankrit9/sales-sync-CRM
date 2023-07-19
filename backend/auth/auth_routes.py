@@ -167,7 +167,7 @@ def check_company(name, email, role, company_name, code):
     else:
         company =  db.Companies.find({"name": company_name, "code": code})
         print(company)
-        if company["code"] == codeW:
+        if company["code"] == code:
             return "Registered in the company"
         else:
             return "Invalid company code"
