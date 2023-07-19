@@ -23,7 +23,8 @@ const registerSchema = yup.object().shape({
     email: yup.string().email("Invalid email").required("required"),
     password: yup.string().required("required"),
     company: yup.string().required("required"),
-    role: yup.string().required("required")
+    role: yup.string().required("required"),
+    code: yup.string().required("required"),
 });
 
 const loginSchema = yup.object().shape({
@@ -46,6 +47,7 @@ const initialValuesRegister = {
     password: "",
     company: "",
     role: "",   // to determine if the user is a manager or staff
+    code: ""
 }
 
 const initialValuesLogin = {
@@ -222,7 +224,7 @@ const Form = () => {
                                         gridColumn: "span 2"
                                     }} />
                                 <TextField
-                                    label="company"
+                                    label="Company"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     value={values.location}
@@ -230,7 +232,18 @@ const Form = () => {
                                     error={Boolean(touched.location) && Boolean(errors.location)}
                                     helperText={touched.location && errors.location}
                                     sx={{
-                                        gridColumn: "span 4"
+                                        gridColumn: "span 2"
+                                    }} />
+                                <TextField
+                                    label="Company Code"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.code}
+                                    name="code"
+                                    error={Boolean(touched.code) && Boolean(errors.code)}
+                                    helperText={touched.code && errors.code}
+                                    sx={{
+                                        gridColumn: "span 2"
                                     }} />
                             </>
                         )}

@@ -22,6 +22,10 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent, { timelineContentClasses } from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ShoppingCartTwoToneIcon from '@mui/icons-material/ShoppingCartTwoTone';
+import AddReactionOutlinedIcon from '@mui/icons-material/AddReactionOutlined';
+import { Typography } from '@mui/material';
 
 export default function History({id, name, _email, c_date, joined_date}) {
   const [open, setOpen] = React.useState(false);
@@ -78,7 +82,11 @@ export default function History({id, name, _email, c_date, joined_date}) {
         <FaIcons6.FaAddressBook/><div className='span2'>See History</div >
         </Button>
       <Dialog open={open} onClose={handleClose} >
-        <DialogTitle>Interaction History</DialogTitle>
+        <DialogTitle>
+          <Typography fontWeight={400}>
+            Interaction History
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>
           </DialogContentText>
@@ -89,7 +97,10 @@ export default function History({id, name, _email, c_date, joined_date}) {
                 {joined_date}
               </TimelineOppositeContent>
               <TimelineSeparator >
-                <TimelineDot color='secondary'/>
+                <TimelineDot color='primary' >
+                  <AddReactionOutlinedIcon/>
+
+                </TimelineDot>
                 <TimelineConnector color='secondary' position="center"/>
               </TimelineSeparator>
               <TimelineContent>{name} was registered.</TimelineContent>
@@ -100,8 +111,11 @@ export default function History({id, name, _email, c_date, joined_date}) {
               <TimelineOppositeContent color="textSecondary">
                 {records.completed_date}
               </TimelineOppositeContent>
-              <TimelineSeparator >
-                <TimelineDot color='secondary'/>
+              <TimelineSeparator>
+                <TimelineDot color='primary' >
+                  <ShoppingCartTwoToneIcon/>
+
+                </TimelineDot>
                 <TimelineConnector color='secondary' position='right'/>
               </TimelineSeparator>
               <TimelineContent>{name} Purchased x{records.qty} {records.product_name}</TimelineContent>
