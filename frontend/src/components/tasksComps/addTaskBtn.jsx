@@ -249,7 +249,7 @@ export default function AddBtn({ fetchData, userId }) {
                             autoWidth
                         >
                             {staff_members.map((staffMember) => (
-                                <MenuItem key={staffMember._id} value={staffMember.first_name}>
+                                <MenuItem key={staffMember._id} value={staffMember.full_name}>
                                     {staffMember.first_name} {staffMember.last_name}
                                 </MenuItem>
                             ))}
