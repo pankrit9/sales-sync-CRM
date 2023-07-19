@@ -27,11 +27,11 @@ def get_tasks(id):
 
     try:
         if curr_user["role"] == "manager":
-            task_query = {"manager_assigned": curr_user["first_name"]}
+            task_query = {"manager_assigned": curr_user["full_name"]}
             # task_query = {"manager_assigned": "test"}
 
         elif curr_user["role"] == "staff":
-            task_query = {"staff_member_assigned": curr_user["first_name"]}
+            task_query = {"staff_member_assigned": curr_user["full_name"]}
         else:
             return jsonify({"message": "Invalid role"}), 400
         
@@ -87,7 +87,7 @@ def manager_create_task(uId):
     new_task = {
         "_id": str(taskId),
         "entry_date": datetime.now(),
-        "manager_assigned": curr_user["first_name"],
+        "manager_assigned": curr_user["full_name"],
         "task_description": request.json.get('task_description'),
         "client_assigned": request.json.get('client_assigned'),
         "product": request.json.get('product'),
@@ -106,9 +106,9 @@ def manager_create_task(uId):
         db.Products.update_one(
             {"name": request.json.get('product')},
             {"$set": {"stock" : int(stock) - int(quantity_staged)}})
-        tasks_n = (db.Accounts.find_one({"first_name" : request.json.get('staff_member_assigned')}))['tasks_n']
+        tasks_n = (db.Accounts.find_one({"full_name" : request.json.get('staff_member_assigned')}))['tasks_n']
         db.Accounts.update_one(
-            {"first_name" : request.json.get('staff_member_assigned')},
+            {"full_name" : request.json.get('staff_member_assigned')},
             {"$set": {"tasks_n": int(tasks_n) + 1}}
         )
         return jsonify({"message": "Successful"})
@@ -131,9 +131,9 @@ def manager_task_delete(taskId):
 
     if result.deleted_count > 0:
         if deduct:
-            tasks_n = (db.Accounts.find_one({"first_name": staff_name}))['tasks_n']
+            tasks_n = (db.Accounts.find_one({"full_name": staff_name}))['tasks_n']
             db.Accounts.update_one(
-                {"first_name" : staff_name},
+                {"full_name" : staff_name},
                 {"$set": {"tasks_n": int(tasks_n) - 1}}
             )
         return jsonify({"message": "Successful"})
@@ -224,19 +224,19 @@ def update_products(id, qty_sold):
 def update_accounts(id, qty_sold, sold_by):
     products = db.Products
 
-    staff = db.Accounts.find_one({"first_name":sold_by})
+    staff = db.Accounts.find_one({"full_name":sold_by})
     quantity_sold = int(qty_sold)
     sold_product = products.find_one({"_id":id})
     price = float(sold_product['price'])
 
     db.Accounts.update_one(
-        {"first_name": sold_by},
+        {"full_name": sold_by},
         { "$set": {"revenue": str(float(staff['revenue']) + price * quantity_sold)}}
     )
 
-    tasks_n = (db.Accounts.find_one({"first_name" : sold_by}))['tasks_n']
+    tasks_n = (db.Accounts.find_one({"full_name" : sold_by}))['tasks_n']
     db.Accounts.update_one(
-            {"first_name" : sold_by},
+            {"full_name" : sold_by},
             {"$set": {"tasks_n": int(tasks_n) - 1}}
     )
 

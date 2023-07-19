@@ -18,7 +18,7 @@ def get_task_count(id):
         return jsonify({"message": "Invalid role"}), 400
     
     task_count = db.Tasks.count_documents({
-        query : curr_user["first_name"],
+        query : curr_user["full_name"],
         "complete": {"$ne": "Completed"}
     })
 
@@ -38,10 +38,10 @@ def get_ltv(id):
     else:
         return jsonify({"message": "Invalid role"}), 400
     
-    sales = db.Sales.find({query : curr_user["first_name"]})
+    sales = db.Sales.find({query : curr_user["full_name"]})
 
     curr_user_tasks = db.Tasks.find({
-        query_2 : curr_user["first_name"],
+        query_2 : curr_user["full_name"],
         "complete": "Completed"
     })
 
@@ -85,7 +85,7 @@ def get_client_count(id):
         return jsonify({"message": "Invalid role"}), 400
 
     curr_user_tasks = db.Tasks.find({
-        query : curr_user["first_name"],
+        query : curr_user["full_name"],
         "complete": "Completed"    
     })
     n_clients = len({task["client_assigned"] for task in curr_user_tasks})
@@ -104,13 +104,13 @@ def get_win_rate(id):
         return jsonify({"message": "Invalid role"}), 400
     
     curr_user_tasks_complete = db.Tasks.find({
-        query : curr_user["first_name"],
+        query : curr_user["full_name"],
         "client_assigned": {"$ne": ''},
         "complete": "Completed"
     })
     n_clients_complete = len({task["client_assigned"] for task in curr_user_tasks_complete})
     curr_user_tasks_all = db.Tasks.find({
-        query : curr_user["first_name"],
+        query : curr_user["full_name"],
         "client_assigned": {"$ne": ''},
     })
     n_clients_all = len({task["client_assigned"] for task in curr_user_tasks_all})

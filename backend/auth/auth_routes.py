@@ -59,6 +59,7 @@ def register():
         "email": request.form['email'],
         "first_name": request.form['firstName'],
         "last_name": request.form['lastName'],
+        "full_name": request.form['firstName'] + " " + request.form['lastName'],
         "password": encoded_password,
         "role": request.form['role'],
         "company": request.form['company'],
