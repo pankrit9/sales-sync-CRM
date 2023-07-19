@@ -340,7 +340,7 @@ export default function EnhancedTable({ rows, fetchData }) {
                                         <TableCell align="centre">{row.product}</TableCell>
                                         {/* <TableCell align="centre">{row.product_quantity}</TableCell> */}
                                         <TableCell align="centre">{row.priority}</TableCell>
-                                        <TableCell align="centre">{row.due_date}</TableCell>
+                                        <TableCell align="centre">{new Date(row.due_date).toDateString()}</TableCell>
                                         <TableCell align="centre">
                                             <Tooltip title={row.staff_member_assigned}>
                                                 <Avatar sx={{ bgcolor: getRandomColor() }}>

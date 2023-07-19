@@ -76,10 +76,18 @@ def get_ltv(id):
         n_purchases += 1
 
     # Average Purchase Value
-    apv = revenue_sum / n_purchases
+    if n_purchases == 0:
+        apv = 0
+    else:
+        apv = revenue_sum / n_purchases
     # Purchase frequency
-    pf = n_purchases / n_clients
+    if n_clients == 0:
+        pf = 0
+    else:
+        pf = n_purchases / n_clients
+    
     # Average customer lifespan - Note, this is hardcoded for now
+    
     acl = 1 / 0.3 
     
     ltv = apv * pf * acl
@@ -139,7 +147,10 @@ def get_win_rate(id):
     else:
         return jsonify({"message": "Invalid role"}), 400
     
-    win_rate = n_clients_complete / n_clients_all
+    if n_clients_all == 0:
+        win_rate = 0
+    else: 
+        win_rate = n_clients_complete / n_clients_all
 
     return jsonify(win_rate)
 
@@ -182,8 +193,8 @@ def get_closed_rev():
             staff_sales = db.Sales.find({"sold_by": staff})
             
             for sale in staff_sales:
-                month = (datetime.strptime(sale['date_of_sale'], "%Y-%m-%d")).month
-                year = (datetime.strptime(sale['date_of_sale'], "%Y-%m-%d")).year
+                month = (sale['date_of_sale']).month
+                year = (sale['date_of_sale']).year
                 
                 if month == i and year == curr_date.year:
                     rev_closed += sale['revenue']
@@ -208,7 +219,7 @@ def get_closed_rev_sum():
     rev_closed = 0
 
     for sale in sales:
-        if datetime.strptime(sale['date_of_sale'], "%Y-%m-%d") >= datetime(curr_date.year, 1, 1) and datetime.strptime(sale['date_of_sale'], "%Y-%m-%d") <= curr_date:
+        if sale['date_of_sale'] >= datetime(curr_date.year, 1, 1) and sale['date_of_sale'] <= curr_date:
             rev_closed += sale['revenue']
             
     return jsonify(rev_closed)
@@ -229,12 +240,13 @@ def get_proj_rev():
             rev_closed = 0
             staff_tasks = db.Tasks.find({
                 "staff_member_assigned": staff,
-                "due_date": { '$gt': curr_date }
+                "due_date": { '$gt': curr_date },
+                "complete": { '$ne': "Complete"}
                 })
             
             for task in staff_tasks:
-                month = (datetime.strptime(task['due_date'], "%Y-%m-%d")).month
-                year = (datetime.strptime(task['due_date'], "%Y-%m-%d")).year
+                month = task['due_date'].month
+                year = task['due_date'].year
 
                 if month == i and year == curr_date.year:
                     price = (db.Products.find_one({'name': task['product']}))['price']
@@ -260,7 +272,7 @@ def get_proj_rev_sum():
     rev_closed = 0
 
     for task in tasks:
-        if datetime.strptime(task['due_date'], "%Y-%m-%d") >= curr_date:
+        if task['due_date'] >= curr_date and task['complete'] != "Completed":
             price = (db.Products.find_one({'name': task['product']}))['price']
             rev_closed += int(task['product_quantity']) * int(price)
             
@@ -269,10 +281,9 @@ def get_proj_rev_sum():
 @sales.route("/taskgrowth", methods = ['GET'])
 def get_task_growth():
     last_update = db.Growth.find_one({"metric": "n_tasks"})
-    date_string = last_update['entry_date']
     task_count = db.Tasks.count_documents({})
 
-    if datetime.now() > (datetime.strptime(date_string, "%Y-%m-%d") + timedelta(days=1)):
+    if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
         db.Growth.update_one({"metric": "n_tasks"}, {"$set": {"value": task_count}})
         new_rate = (task_count / last_update['value']) - 1
         db.Growth.update_one({"metric": "n_tasks"}, {"$set": {"rate": new_rate}})
@@ -284,7 +295,6 @@ def get_task_growth():
 @sales.route("/ltvgrowth", methods = ['GET'])
 def get_ltv_growth():
     last_update = db.Growth.find_one({"metric": "ltv"})
-    date_string = last_update['entry_date']
 
     sales = db.Sales.find({})
     
@@ -295,18 +305,26 @@ def get_ltv_growth():
         revenue_sum += sale['revenue']
         n_purchases += 1
 
-    n_client = db.Clients.count_documents({})
+    n_clients = db.Clients.count_documents({})
 
     # Average Purchase Value
-    apv = revenue_sum / n_purchases
+    if n_purchases == 0:
+        apv = 0
+    else:
+        apv = revenue_sum / n_purchases
     # Purchase frequency
-    pf = n_purchases / n_client
+    if n_clients == 0:
+        pf = 0
+    else:
+        pf = n_purchases / n_clients
+    
     # Average customer lifespan - Note, this is hardcoded for now
+    
     acl = 1 / 0.3 
     
     ltv = apv * pf * acl
 
-    if datetime.now() > (datetime.strptime(date_string, "%Y-%m-%d") + timedelta(days=1)):
+    if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
         db.Growth.update_one({"metric": "ltv"}, {"$set": {"value": ltv}})
         new_rate = (ltv / last_update['value']) - 1
         db.Growth.update_one({"metric": "ltv"}, {"$set": {"rate": new_rate}})
@@ -318,11 +336,10 @@ def get_ltv_growth():
 @sales.route("/clientgrowth", methods = ['GET'])
 def get_client_growth():
     last_update = db.Growth.find_one({"metric": "n_clients"})
-    date_string = last_update['entry_date']
 
     client_count = db.Clients.count_documents({})
 
-    if datetime.now() > (datetime.strptime(date_string, "%Y-%m-%d") + timedelta(days=1)):
+    if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
         db.Growth.update_one({"metric": "n_clients"}, {"$set": {"value": client_count}})
         new_rate = (client_count / last_update['value']) - 1
         db.Growth.update_one({"metric": "n_clients"}, {"$set": {"rate": new_rate}})
@@ -333,13 +350,16 @@ def get_client_growth():
 @sales.route("/winrategrowth", methods = ['GET'])
 def get_winrate_growth():
     last_update = db.Growth.find_one({"metric": "win_rate"})
-    date_string = last_update['entry_date']
 
     n_clients_with_sale = db.Clients.count_documents({'last_sale': {'$exists': True, '$ne': ''}})
     n_clients = db.Clients.count_documents({})
-    win_rate = n_clients_with_sale / n_clients
 
-    if datetime.now() > (datetime.strptime(date_string, "%Y-%m-%d") + timedelta(days=1)):
+    if n_clients == 0:
+        win_rate = 0
+    else:
+        win_rate = n_clients_with_sale / n_clients
+
+    if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
         db.Growth.update_one({"metric": "win_rate"}, {"$set": {"value": win_rate}})
         new_rate = (win_rate / last_update['value']) - 1
         db.Growth.update_one({"metric": "win_rate"}, {"$set": {"rate": new_rate}})

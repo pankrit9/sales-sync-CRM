@@ -199,6 +199,7 @@ function Sales() {
               />
             }
           />
+        
         </Box>
         <Box
           gridColumn="span 3"

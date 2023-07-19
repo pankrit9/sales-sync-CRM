@@ -86,14 +86,14 @@ def manager_create_task(uId):
     # object id
     new_task = {
         "_id": str(taskId),
-        "entry_date": datetime.now().strftime("%Y-%m-%d"),
+        "entry_date": datetime.now(),
         "manager_assigned": curr_user["first_name"],
         "task_description": request.json.get('task_description'),
         "client_assigned": request.json.get('client_assigned'),
         "product": request.json.get('product'),
         "product_quantity": request.json.get('product_quantity'),
         "priority": request.json.get('priority'),
-        "due_date": date_string,
+        "due_date": datetime.strptime(date_string, "%Y-%m-%d"),
         "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": request.json.get('complete'),
     }
@@ -144,16 +144,29 @@ def manager_task_delete(taskId):
 # if manager tries to edit task, allow to edit everything except task id
 @tasks.route("/edit/<uId>/<taskId>", methods=['POST'])
 def manager_task_edit(uId, taskId):
-    
+    taskId = str(taskId)
+
     # parse json object for data to update i.e. due date
-    edit = request.get_json()
+    data = request.get_json()
+
+    edit = {
+        "task_description": request.json.get('task_description'),
+        "client_assigned": request.json.get('client_assigned'),
+        "product": request.json.get('product'),
+        "product_quantity": request.json.get('product_quantity'),
+        "priority": request.json.get('priority'),
+        "due_date": datetime.strptime(data['due_date'], '%a, %d %b %Y %H:%M:%S %Z'),
+        "staff_member_assigned": request.json.get('staff_member_assigned'),
+        "complete": request.json.get('complete'),
+    }
+
     print("edit: ", edit)
 
     # updates fields according to provided JSON
     result = db.Tasks.update_one({"_id": taskId}, {"$set": edit})
 
     if edit['complete'] == "Completed":
-        db.Tasks.update_one({"_id": taskId}, {"$set": {'completion_date': datetime.now().strftime("%Y-%m-%d")}})
+        db.Tasks.update_one({"_id": taskId}, {"$set": {'completion_date': datetime.now()}})
     
     if edit['complete'] == "Completed" and (db.Tasks.find_one({"_id": taskId}))['product']: 
         product_name = (db.Tasks.find_one({"_id": taskId}))['product']
@@ -247,7 +260,7 @@ def update_sales(product_id, qty_sold, sold_by, manager_assigned):
         "product_price": product_price,
         "sold_by": sold_by,
         "manager_assigned": manager_assigned, 
-        "date_of_sale": datetime.now().strftime("%Y-%m-%d"),
+        "date_of_sale": datetime.now(),
         "client_id": "To be Implemented",
         "revenue": int(qty_sold) * product_price,
         "staff": "To be Implemented",

@@ -38,7 +38,7 @@ def add_client(id):
         "mobile_number" :  request.json['mobile_number'],
         "address" : request.json['address'],
         "last_sale": "",
-        "creation_date": datetime.now().strftime("%Y-%m-%d")
+        "creation_date": datetime.now()
     }
 
     clients.insert_one(new_client)
