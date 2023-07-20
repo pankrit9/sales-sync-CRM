@@ -32,6 +32,7 @@ def add_client(id):
         "pending_value" : 0,
         "tasks_records": [],
         "staff" : "",
+        #"nationality": request.json['country'],
         "email" : request.json['email'],
         "lead_source" : request.json['lead_source'],
         "client_position":  request.json['client_position'],
@@ -91,7 +92,6 @@ def see_clients():
 
 @clients.route("/history/<id>", methods=['GET'])
 def see_client_history(id):
-    print(id)
     found_client = db.Clients.find_one({"_id":int(id)})
     # convert Cursor type to list
     records_list = found_client["tasks_records"]
