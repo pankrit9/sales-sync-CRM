@@ -10,7 +10,7 @@ from tasks.tasks_routes import tasks
 from products.products_routes import products
 from sales.records_routes import records
 from clients.clients_routes import clients
-from sales.sales_routes import sales
+from sales.sales_routes import sales    
 import certifi
 
 
