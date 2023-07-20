@@ -30,7 +30,7 @@ function Clients() {
         if (!query) {
           return clients;
         } else {
-          return clients.filter((d) => d['name'].toLowerCase().includes(query.toLowerCase()));
+          return clients.filter((d) => d['client'].toLowerCase().includes(query.toLowerCase()));
         }
     };
     const colors = [deepOrange[500], deepOrange[300], deepPurple[500], deepPurple[300], green[500], green[300], red[500], red[300], blue[500], blue[300]];
@@ -48,7 +48,7 @@ function Clients() {
     
     useEffect(() => {
         fetchData();
-    }, [searchQuery]);
+    }, []);
 
     const dataFiltered = filterData(searchQuery, clients);
     return (
@@ -70,7 +70,7 @@ function Clients() {
 
             <div style={{ marginLeft:'160px', marginRight: '100px', marginTop: '80px'}}>
                 <Grid container justify="space-around" gap={3} >
-                    {clients.map((dataFiltered) => (
+                    {dataFiltered.map((dataFiltered) => (
                         <Card sx={{ width: "15rem" }}>
                         <CardContent marginLeft="5rem">
 
