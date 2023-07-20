@@ -191,7 +191,7 @@ function EnhancedTableToolbar(props) {
     const { numSelected, selectedIds, fetchData } = props;   
 }
 
-export default function EnhancedTable({ rows, fetchData }) {
+export default function EnhancedTable({ rows, fetchData, setTask}) {
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("task_id");
     const [selected, setSelected] = React.useState([]);
@@ -221,7 +221,8 @@ export default function EnhancedTable({ rows, fetchData }) {
             console.log("calling ffetchstaffmembers edit")
             fetchStaffMembers();
         }
-    }, []);
+    }, [staff_members.length]);
+
     const fetchStaffMembers = async () => {
         try {
             console.log("fetchStaffMembers edit: fetching staff members.... ")
@@ -355,7 +356,7 @@ export default function EnhancedTable({ rows, fetchData }) {
                                                 </Grid>
                                                 <Grid item xs={6}>
                                                     {
-                                                        role === 'manager' && <DeleteTaskBtn task_id={row._id} />
+                                                        role === 'manager' && <DeleteTaskBtn task_id={row._id} setTask={setTask}/>
                                                     }
                                                 </Grid>
                                             </Grid>

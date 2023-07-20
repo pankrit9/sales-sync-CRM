@@ -5,13 +5,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import "../Searchbar.css"
 
-export const SearchBarStaff = ({setSearchQuery}) => (
+export const SearchBarRecords = ({setSearchQuery, setRecords}) => (
     <form>
       <TextField id="search-bar" className="search-bar"
         onInput={(e) => {
           setSearchQuery(e.target.value);
+          setRecords([]);
         }}
-        label="Enter Client's name, email or phone number"
+        label="Enter client name"
         variant="outlined"
         placeholder="Search..."
         size="small"

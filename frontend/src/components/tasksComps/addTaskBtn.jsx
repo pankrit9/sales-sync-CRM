@@ -17,7 +17,7 @@ import Grid from "@mui/material/Grid";
 import { useSelector } from 'react-redux';
 
 
-export default function AddBtn({ fetchData, userId }) {
+export default function AddBtn({ fetchData, userId, setTask}) {
     const [open, setOpen] = React.useState(false);
     const [task_description, setTaskDescription] = React.useState("");
     const [client_assigned, setClient] = React.useState("");
@@ -53,16 +53,6 @@ export default function AddBtn({ fetchData, userId }) {
     useEffect(() => {
         fetchClients();
     }, []);
-
-    // const fetchClients = async () => {
-    //     try {
-    //         const response = await fetch(`${BACKEND_API}/clients`, {method: "GET"});
-    //         const data = await response.json();
-    //         setClients(data);
-    //     } catch (error) {
-    //         console.error("Error fetching clients: ", error);
-    //     }
-    // };
 
     const fetchStaffMembers = async () => {
         try {
@@ -120,6 +110,7 @@ export default function AddBtn({ fetchData, userId }) {
             // Call fetchData after a successful task creation
             fetchData();
             setOpen(false);
+            setTask([]);
         } else {
             console.log("task: did not add the task");
             const errorData = await response.json();

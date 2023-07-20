@@ -118,7 +118,7 @@ export default function History({id, name, _email, c_date, joined_date}) {
                 </TimelineDot>
                 <TimelineConnector color='secondary' position='right'/>
               </TimelineSeparator>
-              <TimelineContent>{name} Purchased x{records.qty} {records.product_name}</TimelineContent>
+              <TimelineContent>{name} Purchased x{records.qty} {records.product_name}.</TimelineContent>
             </TimelineItem>))}
           </Timeline>
 

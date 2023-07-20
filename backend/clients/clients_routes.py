@@ -12,7 +12,7 @@ clients = Blueprint('clients', __name__)
 
 # We have POST, PUT, DELETE and GET 
 @clients.route("/add", methods = ['POST'])
-def add_client(id):
+def add_client():
     clients = db.Clients
     
     # Fetch all ids and convert them to integers
@@ -97,6 +97,6 @@ def see_client_history(id):
     records_list = found_client["tasks_records"]
 
     if not records_list:
-        return jsonify({"message": "There was no interaction with the client."})
+        return jsonify([])
 
     return jsonify(records_list)

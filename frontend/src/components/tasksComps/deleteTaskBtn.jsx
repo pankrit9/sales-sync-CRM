@@ -25,7 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // if staff is Deleteting
     // can only Delete the following fields:
         // task status
-export default function DeleteBtn({ task_id }) {
+export default function DeleteBtn({ task_id, setTask}) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpenDeleteBtn = () => {
@@ -41,6 +41,7 @@ export default function DeleteBtn({ task_id }) {
 
         if (response.ok) {
             setOpen(false);
+            setTask([]);
         } else {
             const errorData = await response.json();
             console.error("Error Deleteing task: ", errorData);

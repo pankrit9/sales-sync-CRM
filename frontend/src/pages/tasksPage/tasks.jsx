@@ -47,7 +47,7 @@ const Tasks = () => {
     
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [tasks.length]);
 
     const dataFiltered = filterData(searchQuery, tasks);
 
@@ -60,7 +60,7 @@ const Tasks = () => {
                     {
                         // only manager can add tasks
                         // role === 'manager' && <AddTaskBtn fetchData={fetchData} />
-                        role === 'manager' && <AddTaskBtn fetchData={fetchData} userId = {_id}/>
+                        role === 'manager' && <AddTaskBtn fetchData={fetchData} userId = {_id} setTask={setTask}/>
                     }
                 </div>
             </h1>
@@ -71,7 +71,7 @@ const Tasks = () => {
                 </div> */}
             </div>
             <div style={{ marginLeft: '140px', marginRight: '120px', marginTop: '80px' }}>
-                {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData} /> : <p>Currently no tasks for you</p>}
+                {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData} setTask={setTask}/> : <p>Currently no tasks for you</p>}
             </div>
         </>
     )

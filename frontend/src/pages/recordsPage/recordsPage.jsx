@@ -8,7 +8,7 @@ import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
 import "../../components/Searchbar.css"
 import { useSelector } from "react-redux";
 import DownloadBtn from "../../components/recordsTable/DownloadBtn";
-
+import { SearchBarRecords } from "../../components/recordsTable/SearchBarRecords";
 const Records = () => {
 
   const [records, setRecords] = useState([]);
@@ -38,13 +38,13 @@ const Records = () => {
       if (!query) {
         return records;
       } else {
-        return records.filter((d) => d['_id'].toLowerCase().includes(query));
+        return records.filter((d) => d['client_id'].toLowerCase().includes(query.toLowerCase()));
       }
   };
   
   useEffect(() => {
       fetchData();
-  }, [fetchData]);
+  }, [records.length]);
 
   const dataFiltered = filterData(searchQuery, records);
 
@@ -62,7 +62,7 @@ const Records = () => {
               </div>
           <div className="task_container" style={{display: 'grid'}} >
                <div className="tools" style={{ paddingRight: '0px' }}>
-                  <SearchBarStaff searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                  <SearchBarRecords searchQuery={searchQuery} setSearchQuery={setSearchQuery} setRecords={setRecords}/>
               </div> 
           </div>
           <div style={{ marginLeft: '140px', marginRight: '120px', marginTop: '80px' }}>

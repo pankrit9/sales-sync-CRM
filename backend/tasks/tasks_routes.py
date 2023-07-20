@@ -177,7 +177,7 @@ def manager_task_edit(uId, taskId):
         client = (db.Tasks.find_one({"_id": taskId}))['client_assigned']
         update_products(product_id, qty_sold)
         update_accounts(product_id, qty_sold, sold_by)
-        update_sales(product_id, qty_sold, sold_by, manager_assigned)
+        update_sales(product_id, qty_sold, sold_by, manager_assigned, client)
         update_clients(client, product_name, qty_sold, sold_by)
 
     if result.modified_count > 0:
@@ -240,7 +240,7 @@ def update_accounts(id, qty_sold, sold_by):
             {"$set": {"tasks_n": int(tasks_n) - 1}}
     )
 
-def update_sales(product_id, qty_sold, sold_by, manager_assigned):
+def update_sales(product_id, qty_sold, sold_by, manager_assigned, client):
     product_price = float((db.Products.find_one({"_id":product_id}))['price'])
     
     # Fetch all ids and convert them to integers
@@ -261,7 +261,7 @@ def update_sales(product_id, qty_sold, sold_by, manager_assigned):
         "sold_by": sold_by,
         "manager_assigned": manager_assigned, 
         "date_of_sale": datetime.now(),
-        "client_id": "To be Implemented",
+        "client_id": client,
         "revenue": float(qty_sold) * product_price,
         "staff": "To be Implemented",
         "payment_method":"To be Implemented",
