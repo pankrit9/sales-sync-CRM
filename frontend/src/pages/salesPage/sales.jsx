@@ -21,7 +21,6 @@ function Sales() {
   const role = useSelector(state => state.role);
   const _id = useSelector((state) => state.user);
   const [taskData, setTaskData] = useState([]);
-  const [revenueData, setRevenueData] = useState([]);
   const [clientData, setClientData] = useState([]);
   const [productData, setProductData] = useState([]);
   const [LTVData, setLTVData] = useState([]);
@@ -42,12 +41,6 @@ function Sales() {
     const response = await fetch(`${BACKEND_API}/sales/tasks/${_id}`, {method: "GET"});
     const data = await response.json();
     setTaskData(data);
-  }
-
-  const fetchRevenueData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/revenue`, {method: "GET"});
-    const data = await response.json();
-    setRevenueData(data);
   }
 
   const fetchClientData = async () => {
@@ -141,7 +134,6 @@ function Sales() {
 
   useEffect(() => {
     fetchTaskData();
-    fetchRevenueData();
     fetchClientData();
     fetchProductData();
     fetchLTVData();
