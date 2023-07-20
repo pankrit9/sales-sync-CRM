@@ -94,9 +94,10 @@ const Form = () => {
 
             if (!savedUserResponse.ok) {
                 // Handle the case when the server responds with an error status
-                console.error("Unable to register");
-                alert("Unable to register");
-                throw new Error("Registration failed");
+                const errorData = await savedUserResponse.json();
+                console.error("Unable to register: ", errorData.message);
+                alert("Unable to register: " + errorData.message);
+                throw new Error("Registration failed" + errorData.message);
             };
 
             // to save whatver is returned from the backend, in a parsable form like json
@@ -131,9 +132,10 @@ const Form = () => {
 
             if (!loggedInResponse.ok) {
                 //const errorData = await response.json();
-                console.error("Unable to log in");
-                alert("Unable to login");
-                throw new Error("Login failed");
+                const errorData = await loggedInResponse.json();
+                console.error("Unable to log in: ", errorData);
+                alert("Unable to log in: " + errorData.message);
+                throw new Error("Registration failed" + errorData.message);
             };
 
             const loggedIn = await loggedInResponse.json();
