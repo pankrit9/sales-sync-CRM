@@ -34,7 +34,7 @@ def login():
         # return token for the session
         return jsonify({"message": "Login successful", "token": token})
     else:
-        return jsonify({"message": "Incorrect details.", "token": token})
+        return jsonify({"message": "Incorrect details."}), 500
         
 
 

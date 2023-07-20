@@ -94,6 +94,8 @@ const Form = () => {
 
             if (!savedUserResponse.ok) {
                 // Handle the case when the server responds with an error status
+                console.error("Unable to register");
+                alert("Unable to register");
                 throw new Error("Registration failed");
             };
 
@@ -128,7 +130,9 @@ const Form = () => {
             );
 
             if (!loggedInResponse.ok) {
-                // Handle the case when the server responds with an error status
+                //const errorData = await response.json();
+                console.error("Unable to log in");
+                alert("Unable to login");
                 throw new Error("Login failed");
             };
 
