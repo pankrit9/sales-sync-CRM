@@ -70,9 +70,9 @@ function Sales() {
   }
 
   const fetchClosedKeysData = async () => {
-      const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET"});
-      const data = await response.json();
-      setClosedKeysData(data);
+    const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET"});
+    const data = await response.json();
+    setClosedKeysData(data);
   }
 
   const fetchRevClosedData = async () => {

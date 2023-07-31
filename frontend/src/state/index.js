@@ -6,7 +6,8 @@ const initialState = {
     mode: "light",  // represents dark and light mode
     // auth information
     user: null,
-    name:null,
+    name: null,
+    lastName: null,
     token: null,
     role: null,
     company: null
@@ -25,6 +26,7 @@ export const authSlice = createSlice({
                 state.user = decodedToken.user_id;
                 state.role = decodedToken.role;
                 state.name = decodedToken.first_name;
+                state.lastName = decodedToken.last_name;
                 state.company = decodedToken.company;
                 state.token = action.payload.token;
             } else {
@@ -38,6 +40,7 @@ export const authSlice = createSlice({
             // reset the state
             state.user = null;
             state.name = null;
+            state.lastName = null;
             state.token = null;
             state.role = null;
             state.company = null;
