@@ -50,7 +50,7 @@ function Sales() {
   }
 
   const fetchProductData = async () => {
-    const response = await fetch(`${BACKEND_API}/products/piechart`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/piechart`, {method: "GET"});
     const data = await response.json();
     setProductData(data);
   }
