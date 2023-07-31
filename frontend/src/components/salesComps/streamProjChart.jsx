@@ -1,13 +1,5 @@
-// install (please try to align the version of installed @nivo packages)
-// yarn add @nivo/stream
 import { ResponsiveStream } from '@nivo/stream'
-//import { mockDataStreamProjChart as data } from '../../mockData/mockDataSet'
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
 const StreamProjChart = ({data, projectedKeys}) => {
     return (
         <ResponsiveStream

@@ -14,6 +14,7 @@ import { BACKEND_API } from "../../api";
 import { useState, useEffect } from "react";
 
 export default function EditBtn({fetchData}) {
+  // The following useStates are used to manage the local state of this component.
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
@@ -27,35 +28,31 @@ export default function EditBtn({fetchData}) {
       const products = await response.json();
       setProductIds(products.map(product => product._id));
     };
-    
     getProductIds();
   }, []);
 
+  // Handles the open and close for the dialog for editing
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
 
+  // Handles editing button
   const handleEdit = async () => {
     const product = {
       _id,
     };
-    
     if (name !== "") {
       product.name = name;
     }
-    
     if (stock !== "") {
       product.stock = stock;
     }
-    
     if (price !== "") {
       product.price = price;
     }
-  
     const response = await fetch(`${BACKEND_API}/products/edit/${_id}`, {
       method: "POST",
       headers: {
@@ -63,7 +60,6 @@ export default function EditBtn({fetchData}) {
       },
       body: JSON.stringify(product),
     });
-  
     if (response.ok) {
       // Call fetchData after a successful product creation
       fetchData();
@@ -75,6 +71,7 @@ export default function EditBtn({fetchData}) {
     }
   };
   
+  // The return statement renders the component
   return (
     <div>
       <Button variant="contained" onClick={handleClickOpen}>

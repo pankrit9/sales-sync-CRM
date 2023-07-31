@@ -24,18 +24,6 @@ import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
 import { useState, useEffect } from 'react';
 
-function createData(_id, name, stock, price, is_electronic, n_sold, revenue) {
-  return {
-    _id,
-    name,
-    stock,
-    price,
-    is_electronic,
-    n_sold,
-    revenue
-  };
-}
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -52,10 +40,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -316,7 +300,8 @@ export default function EnhancedTable({rows, fetchData}) {
       ),
     [order, orderBy, page, rowsPerPage],
   );
-
+  
+  // The return statement renders the component
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, borderRadius:"20px 20px 0px 0px"}}>

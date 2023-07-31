@@ -16,10 +16,7 @@ const LoginPage = () => {
     return (
         <div className="container">
             <div className="left-side"
-                // width="100%"
-                // backgroundColor={theme.palette.background.alt}
                 p="1rem 6%"
-                // textAlign="left"
             >
                 <Typography
                     fontWeight="bold"
@@ -42,10 +39,7 @@ const LoginPage = () => {
                 </Typography>
             </div>
             <div className="right-side"
-                // width="100%"
-                // backgroundColor={theme.palette.background.alt}
                 p="1rem 6%"
-                // textAlign="left"
             >
                 {/* FORM BOX */}
                     <Box

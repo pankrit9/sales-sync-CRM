@@ -7,27 +7,28 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from "react";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 
 export default function AddBtn({fetchData, setProducts}) {
+  // The following useStates are used to manage the local state of this component.
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
   const [price, setPrice] = React.useState("");
   const [is_electronic, setIsElectronic] = React.useState(false);
 
+  // Handles opening and closing the dialog box
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
 
+  // Handles adding new product
   const handleAdd = async () => {
     const product = {
       name,
@@ -35,7 +36,8 @@ export default function AddBtn({fetchData, setProducts}) {
       price,
       is_electronic,
     };
-  
+    
+    // POST request to backend to add new product
     const response = await fetch(`${BACKEND_API}/products/add`, {
       method: "POST",
       headers: {
@@ -56,17 +58,23 @@ export default function AddBtn({fetchData, setProducts}) {
     }
   };
   
+  // Render the Add Product button and the dialog box for adding product
   return (
     <div>
+      {/* Button to open dialog box */}
       <Button variant="contained" onClick={handleClickOpen}>
         Add Product
       </Button>
+
+      {/* Dialog box with form for adding product */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Product</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please add in the details of a new product below.
           </DialogContentText>
+
+          {/* Form fields for client details */}
           <TextField
             autoFocus
             margin="dense"

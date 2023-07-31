@@ -13,28 +13,8 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from 'react';
-
-function createData( _id, email, first_name, last_name, password, role, company) {
-  return {
-    _id,
-    email,
-    first_name,
-    last_name,
-    password,
-    role,
-    company
-  };
-}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -52,10 +32,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -166,12 +142,6 @@ async function deleteSelectedTasks(selectedIds, fetchData) {
 }
 
 function EnhancedTableToolbarStaff(props) {
-  const { numSelected, selectedIds, fetchData } = props;
-
-  const handleDelete = async () => {
-    await deleteSelectedTasks(selectedIds, fetchData);
-    props.fetchData()
-  }
 
   return (
     <Toolbar
@@ -205,7 +175,6 @@ export default function EnhancedTable({rows, fetchData}) {
   const [orderBy, setOrderBy] = React.useState('_id');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -239,7 +208,6 @@ export default function EnhancedTable({rows, fetchData}) {
         selected.slice(selectedIndex + 1),
       );
     }
-
     setSelected(newSelected);
   };
 
@@ -250,10 +218,6 @@ export default function EnhancedTable({rows, fetchData}) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
   };
 
   const isSelected = (_id) => selected.indexOf(_id) !== -1;
@@ -279,8 +243,7 @@ export default function EnhancedTable({rows, fetchData}) {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-
+            size={'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -291,7 +254,6 @@ export default function EnhancedTable({rows, fetchData}) {
               rowCount={rows.length}
               style
               borderRadius= "20px 20px 0px 0px"
-
             />
             <TableBody>
               {visibleRows.map((row, index) => {
@@ -325,7 +287,7 @@ export default function EnhancedTable({rows, fetchData}) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

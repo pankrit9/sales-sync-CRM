@@ -7,23 +7,24 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from "react";
 
 export default function EditBtn({fetchData}) {
+  // The following useStates are used to manage the local state of this component.
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
   const [price, setPrice] = React.useState("");
   const [_id, setId] = React.useState("");
 
+  // Handles the open and close for the dialog for editing
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
 
+  // Handles editing client
   const handleEdit = async () => {
     const product = {
       _id,
@@ -31,7 +32,8 @@ export default function EditBtn({fetchData}) {
       stock,
       price
     };
-  
+    
+    // Send POST request to backend with product object in body
     const response = await fetch(`${BACKEND_API}/products/clients/${_id}`, {
       method: "POST",
       headers: {
@@ -41,16 +43,18 @@ export default function EditBtn({fetchData}) {
     });
   
     if (response.ok) {
-      // Call fetchData after a successful product creation
+      // Call fetchData after a successful client creation
       fetchData();
       setOpen(false);
     } else {
       const errorData = await response.json();
-      console.error("Error updating product: ", errorData);
-      alert("Error updating product: " + (errorData.message || "Unknown Error"));
+      console.error("Error updating client: ", errorData);
+      alert("Error updating client: " + (errorData.message || "Unknown Error"));
     }
   };
   
+  // The return statement redners the component and contains a button to open the dialog
+  // and the dialog itself with the form fields for editing a client
   return (
     <div>
       <Button variant="contained" onClick={handleClickOpen}>
@@ -60,7 +64,7 @@ export default function EditBtn({fetchData}) {
         <DialogTitle>Edit Client</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please add in the new details for the product you want to update.
+            Please add in the new details for the client you want to update.
           </DialogContentText>
           <TextField
             autoFocus

@@ -1,32 +1,29 @@
 import React, { useState } from 'react'
 import * as FaIcons from "react-icons/fa"
 import * as AiIcons from "react-icons/ai"
-import * as VscIcons from "react-icons/vsc";
 import {Link} from 'react-router-dom'
 import { SidebarData } from './SidebarData'
 import './Navbar.css'
 import { IconContext } from 'react-icons/lib'
 import { setMode, setLogout } from '../../state';
 import { useDispatch, useSelector } from "react-redux";
-import { useTheme, IconButton, Typography } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { DarkMode, LightMode } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 
 
 function Navbar({}) {
     const [sidebar, setSidebar] = useState(false)
-    const dispatch = useDispatch(); // to dispatch actions from the reducer
+    const dispatch = useDispatch();
     const theme = useTheme();
     const dark = theme.palette.neutral.dark;
     const navigate = useNavigate();
-
-    const state = useSelector(state => state);
     const company = useSelector((state) => state.company);
     const role = useSelector((state) => state.role);
     const name = useSelector((state) => state.name);
-
     const showSidebar = () => setSidebar(!sidebar)
 
+    //Return function for rendering the Navbar
     return (
         <>
             <IconContext.Provider value={{color: '#5E17EB'}}>
@@ -77,7 +74,7 @@ function Navbar({}) {
                         })}
                     </ul>
                 </nav>
-                </IconContext.Provider>
+            </IconContext.Provider>
         </>
     );
 }

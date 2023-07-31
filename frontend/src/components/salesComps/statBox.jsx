@@ -1,7 +1,6 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const StatBox = ({ title, subtitle, icon, increase }) => {
-  const theme = useTheme();
 
   return (
     <Box width="100%" m="0 80px">
