@@ -14,14 +14,16 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { fontWeight } from '@mui/system';
 
-export default function AddBtn({fetchData}) {
+export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError}) {
   const [open, setOpen] = React.useState(false);
+
   const [client, setClient] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [lead_source, setLeadSource] = React.useState("");
   const [client_position, setClientPosition] = React.useState("");
   const [mobile_number, setMobileNumber] = React.useState("");
   const [address, setAddress] = React.useState("");
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,7 +32,7 @@ export default function AddBtn({fetchData}) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  
   const handleAdd = async () => {
     const new_client = {
       client,
@@ -53,10 +55,12 @@ export default function AddBtn({fetchData}) {
       // Call fetchData after a successful product creation
       fetchData();
       setOpen(false);
+      handleClickSnack();
     } else {
       const errorData = await response.json();
       console.error("Error adding client: ", errorData);
-      alert("Error adding client: " + (errorData.message || "Unknown Error"));
+      //alert("Error adding client: " + (errorData.message || "Unknown Error"));
+      setOpenSnackError(true);
     }
   };
   

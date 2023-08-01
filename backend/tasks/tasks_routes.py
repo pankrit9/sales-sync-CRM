@@ -265,7 +265,7 @@ def update_sales(product_id, qty_sold, sold_by, manager_assigned, client):
         "revenue": float(qty_sold) * product_price,
         "staff": "To be Implemented",
         "payment_method":"To be Implemented",
-        "payment_status": "To be Implemented",
+        "payment_status": "Paid",
         "deadline": "To be Implemented",
     })
 

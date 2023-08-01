@@ -12,6 +12,13 @@ import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
 import * as FaIcons6 from "react-icons/fa6";
 import { Card, CardContent, stringAvatar, CardMedia,Avatar,  Tooltip, Typography, Grid, CardActions, Button} from '@mui/material';
 import History from '../../components/clientsComps/historyDialog';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
 function Clients() {
     
@@ -19,7 +26,21 @@ function Clients() {
     const [searchQuery, setSearchQuery] = useState("");
     const state = useSelector(state => state);
     const [id, setId] = useState(0);
+    const [openSnack, setOpenSnack] = React.useState(false);
+    const [openSnackError, setOpenSnackError] = React.useState(false);
 
+    const handleClickSnack = () => {
+        setOpenSnack(true);
+    };
+  
+    const handleCloseSnack = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpenSnack(false);
+    };
+  
     const fetchData = useCallback(async () => {
         const response = await fetch(`${BACKEND_API}/clients/`, {method: "GET"});
         const data = await response.json();
@@ -54,6 +75,33 @@ function Clients() {
     return (
         <>
             <Navbar/>
+            <Stack spacing={2} sx={{ width: '100%' }}>
+                <Snackbar 
+                    anchorOrigin={{     
+                        vertical: 'bottom',
+                        horizontal: 'right'}}
+                    open={openSnack} 
+                    autoHideDuration={6000} 
+                    onClose={handleCloseSnack}>
+                    <Alert onClose={handleCloseSnack} severity="success" sx={{ width: '100%' }}>
+                        Client successfully created.
+                    </Alert>
+                    
+                </Snackbar>
+                <Snackbar 
+                    anchorOrigin={{     
+                        vertical: 'bottom',
+                        horizontal: 'right'}}
+                    open={openSnackError} 
+                    autoHideDuration={6000} 
+                    onClose={handleCloseSnack}>
+                    <Alert onClose={handleCloseSnack} severity="error" sx={{ width: '100%' }}>
+                        Client creation attempt was unsuccessfull.
+                    </Alert>
+                </Snackbar>
+                    
+            </Stack>
+
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Clients</h1>
             
             <div className="container-search">
@@ -64,7 +112,7 @@ function Clients() {
                     <EditBtn fetchData={fetchData}/>
                 </div>
                 <div className='add-btn-clients'>
-                    <AddBtn fetchData={fetchData}/>
+                    <AddBtn fetchData={fetchData} handleClickSnack={handleClickSnack} setOpenSnackError={setOpenSnackError}/>
                 </div>
             </div>
 
