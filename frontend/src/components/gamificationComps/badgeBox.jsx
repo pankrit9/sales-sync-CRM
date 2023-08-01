@@ -1,12 +1,13 @@
 import { Box, Typography } from "@mui/material";
+import React from 'react';
 
-const StatBox = ({ title, subtitle, icon, increase }) => {
+const BadgeBox = ({ title, subtitle, icon, increase }) => {
 
   return (
-    <Box width="100%" m="0 80px">
+    <Box width="100%" m="0 60px">
       <Box display="flex" justifyContent="space-between">
-        <Box>
-          {icon}
+        <Box display="flex" alignItems="center" gap="15px">
+          {React.cloneElement(icon, { fontSize: "large" })}
           <Typography
             variant="h4"
             fontWeight="bold"
@@ -15,8 +16,8 @@ const StatBox = ({ title, subtitle, icon, increase }) => {
           </Typography>
         </Box>
       </Box>
-      <Box display="flex" justifyContent="space-between" mt="2px">
-        <Typography variant="h5">
+      <Box display="flex" justifyContent="space-between" mt="-40px">
+        <Typography variant="h5" pl={14.5}>
           {subtitle}
         </Typography>
         <Typography
@@ -30,4 +31,4 @@ const StatBox = ({ title, subtitle, icon, increase }) => {
   );
 };
 
-export default StatBox;
+export default BadgeBox;

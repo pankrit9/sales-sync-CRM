@@ -7,12 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from "react";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-
 
 export default function SellBtn({fetchData}) {
   const [open, setOpen] = React.useState(false);
@@ -57,6 +55,7 @@ export default function SellBtn({fetchData}) {
     }
   };
   
+  // The return statement renders the component
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -132,7 +131,6 @@ export default function SellBtn({fetchData}) {
               <MenuItem value={"Body"}>Body</MenuItem>
             </Select>
           </FormControl>
-          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

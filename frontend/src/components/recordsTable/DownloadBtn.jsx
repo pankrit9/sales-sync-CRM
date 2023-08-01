@@ -4,11 +4,8 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from "react";
-import AddIcon from "@mui/icons-material/Add";
 import * as BsIcons from "react-icons/bs";
 import { Typography } from "@mui/material";
 
@@ -42,7 +39,6 @@ export default function DownloadBtn({ fetchData, userId }) {
             due_date,
             staff_member_assigned,
         };
-
         console.log("task: add request.... ");
         const response = await fetch(`${BACKEND_API}/records/download`, {
             method: "GET",
@@ -50,7 +46,6 @@ export default function DownloadBtn({ fetchData, userId }) {
                 "Content-Type": "application/json",
             },
         });
-
         if (response.ok) {
             console.log("task: adding new task");
             // Call fetchData after a successful task creation
@@ -63,7 +58,8 @@ export default function DownloadBtn({ fetchData, userId }) {
             alert("Error adding task: " + (errorData.message || "Unknown Error"));
         }
     };
-
+    
+    // The return statement renders the component
     return (
         <div>
             <Button 

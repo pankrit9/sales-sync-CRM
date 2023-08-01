@@ -16,26 +16,12 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from 'react';
 
-function createData(_id, client_name, email, lifetime_value, pending_value, next_task_due_date, current_assignee) {
-  return {
-    _id,
-    client_name,
-    email,
-    lifetime_value,
-    pending_value,
-    next_task_due_date,
-    current_assignee
-  };
-}
-
+// Sorts table rows in descending order
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -46,16 +32,14 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
+// Get the sorting order comparator
 function getComparator(order, orderBy) {
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
+// Stable sorting for table rows
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -68,6 +52,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+// Array to define the head cells of the table
 const headCells = [
   {
     id: '_id',
@@ -113,6 +98,7 @@ const headCells = [
   },
 ];
 
+// Create the table header and sort handlers
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
@@ -160,6 +146,7 @@ function EnhancedTableHead(props) {
   );
 }
 
+// Prop types for enhanced table head component
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -169,6 +156,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
+// Delete selected rows from the table
 async function deleteSelected(selectedIds, fetchData) {
   // create a new array for the promises
   const deletePromises = selectedIds.map(id =>
@@ -183,9 +171,10 @@ async function deleteSelected(selectedIds, fetchData) {
     console.error(err);
   }
 }
+
+// Create a toolbar with delete and filter actions
 function EnhancedTableToolbar(props) {
   const { numSelected, selectedIds, fetchData } = props;
-
   const handleDelete = async () => {
     await deleteSelected(selectedIds, fetchData);
     props.fetchData()
@@ -242,16 +231,17 @@ function EnhancedTableToolbar(props) {
   );
 }
 
+// Prop types for the enhanced table toolbar component
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
+// Main enhanced table component
 export default function EnhancedTable({rows, fetchData}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('_id');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -298,10 +288,6 @@ export default function EnhancedTable({rows, fetchData}) {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const isSelected = (_id) => selected.indexOf(_id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -325,7 +311,7 @@ export default function EnhancedTable({rows, fetchData}) {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -382,7 +368,7 @@ export default function EnhancedTable({rows, fetchData}) {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

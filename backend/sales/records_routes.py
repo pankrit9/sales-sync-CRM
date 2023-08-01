@@ -17,16 +17,14 @@ records = Blueprint('records', __name__)
 
 @records.route("/", methods=['GET'])
 def see_records():
-    
+    # Get all sales from the Sales collection and turn into list
     all_records = db.Sales.find({})
-
-    # convert Cursor type to list
     records_list = list(all_records)
 
-    if not records_list:
-        return jsonify({"message": "You don't have any records"})
-
-    return jsonify(records_list)
+    # Return error if no sales, else return list of records
+    if not records_list:    
+        return jsonify({"message": "You don't have any records"}), 404
+    return jsonify(records_list), 200
 
 @records.route("/download", methods=['GET'])
 def records_download():

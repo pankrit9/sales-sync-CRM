@@ -7,12 +7,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../../api";
-import { useState, useEffect } from "react";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import { fontWeight } from '@mui/system';
 
 export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError}) {
   const [open, setOpen] = React.useState(false);
@@ -24,15 +22,15 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
   const [mobile_number, setMobileNumber] = React.useState("");
   const [address, setAddress] = React.useState("");
 
-
+  // Handles opening and closing the dialog box
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
-  
+
+  // Handles adding new client
   const handleAdd = async () => {
     const new_client = {
       client,
@@ -42,7 +40,8 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
       mobile_number,
       address,
     };
-  
+    
+    // POST request to backend to add new client
     const response = await fetch(`${BACKEND_API}/clients/add`, {
       method: "POST",
       headers: {
@@ -50,9 +49,9 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
       },
       body: JSON.stringify(new_client),
     });
-  
+    
+    // If successful, fetch updated data, else throw error
     if (response.ok) {
-      // Call fetchData after a successful product creation
       fetchData();
       setOpen(false);
       handleClickSnack();
@@ -64,17 +63,23 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
     }
   };
   
+  // Render the Add Client button and the dialog box for adding client
   return (
     <div>
+      {/* Button to open dialog box */}
       <Button variant="contained" onClick={handleClickOpen}>
         Add Client
       </Button>
+
+      {/* Dialog box with form for adding client */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Client</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please add in the details of a new client below.
           </DialogContentText>
+
+          {/* Form fields for client details */}
           <TextField
             autoFocus
             margin="dense"
@@ -150,6 +155,8 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
           onChange={(e) => setAddress(e.target.value)}
           />
         </DialogContent>
+        
+        {/* Action buttons for form */}
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleAdd}>Add</Button>

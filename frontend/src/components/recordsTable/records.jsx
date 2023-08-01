@@ -1,6 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,24 +17,11 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
 import { IconContext } from 'react-icons/lib'
 import * as BsIcons from "react-icons/bs";
-
-function createData(_id, name, stock, price, is_electronic, n_sold, revenue) {
-  return {
-    _id,
-    name,
-    stock,
-    price,
-    is_electronic,
-    n_sold,
-    revenue
-  };
-}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -53,10 +39,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
-// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
-// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
-// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -180,7 +162,6 @@ async function deleteSelected(selectedIds, fetchData) {
 
 function RecordsToolbar(props) {
   const { numSelected, selectedIds, fetchData } = props;
-
   const handleDownload = async () => {
     await deleteSelected(selectedIds, fetchData);
     props.fetchData()

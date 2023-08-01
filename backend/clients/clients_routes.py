@@ -1,5 +1,4 @@
 from datetime import datetime
-import jwt
 from config import db
 from flask import Blueprint, jsonify, request
 
@@ -8,23 +7,17 @@ from flask import Blueprint, jsonify, request
 # search for the route /login
 clients = Blueprint('clients', __name__)
 
-
-
-# We have POST, PUT, DELETE and GET 
 @clients.route("/add", methods = ['POST'])
-def add_client():
-    clients = db.Clients
-    
-    # Fetch all ids and convert them to integers
+def add_client():  
+    # Fetch all ids and generate a taskId based on largest ID in collection
     all_client_ids = [int(client['_id']) for client in db.Clients.find({}, {"_id": 1})]
-    
-    # Generate a taskId based on largest ID in collection
     if not all_client_ids:
         client_id = 1
     else:
         max_id = max(all_client_ids)
         client_id = max_id + 1
 
+    # Create and insert new client
     new_client = {
         "_id": client_id,
         "client": request.json['client'],
@@ -41,62 +34,51 @@ def add_client():
         "last_sale": "",
         "creation_date": datetime.now()
     }
+    db.Clients.insert_one(new_client)
 
-    clients.insert_one(new_client)
+    return jsonify({"message": "success"}), 200
 
-    return jsonify({"message": "success"})
-
-# We have POST, PUT, DELETE and GET 
 @clients.route("/delete", methods = ['DELETE'])
 def delete_client():
-    
+    # Get all clients in collection
     all_clients = db.Clients.find({})
-
-    # convert Cursor type to list
     client_list = list(all_clients)
 
+    # Return error if no clients, else return list
     if not client_list:
-        return jsonify({"message": "You don't have any clients"})
-
-    return jsonify(client_list)
-
+        return jsonify({"message": "You don't have any clients"}), 404
+    return jsonify(client_list), 200
 
 @clients.route("/edit/<id>", methods=['POST'])
 def client_edit(id):
-
-    # parse json object for data to update i.e. due date
+    # Get request data, and updates fields according to request
     edit = request.get_json()
-
-    result = db.Clients.find_one({"_id":id})
-
- # updates fields according to provided JSON
     result = db.Clients.update_one({"_id": id}, {"$set": edit})
 
     if result.modified_count > 0:
-        return jsonify({"message": "Successful"})
+        return jsonify({"message": "Successful"}), 200
     else:
-        return jsonify({"message": "Unsuccessful"}), 400 
+        return jsonify({"message": "Error editing product"}), 400 
 
 @clients.route("/", methods=['GET'])
 def see_clients():
-    
+    # Get all clients in collection
     all_clients = db.Clients.find({})
-
-    # convert Cursor type to list
     client_list = list(all_clients)
 
+    # Return error if no clients, else return list
     if not client_list:
-        return jsonify({"message": "You don't have any clients"})
-
-    return jsonify(client_list)
+        return jsonify({"message": "You don't have any clients"}), 404
+    return jsonify(client_list), 200
 
 @clients.route("/history/<id>", methods=['GET'])
 def see_client_history(id):
+    # Get client based on provided id
     found_client = db.Clients.find_one({"_id":int(id)})
-    # convert Cursor type to list
     records_list = found_client["tasks_records"]
 
+    # if client doesn't exist, return empt
+    # else return all task recordds associated with that client
     if not records_list:
-        return jsonify([])
-
-    return jsonify(records_list)
+        return jsonify([]), 200
+    return jsonify(records_list), 200

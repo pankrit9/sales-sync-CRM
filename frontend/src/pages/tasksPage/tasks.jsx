@@ -1,30 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {Link} from 'react-router-dom'
 import Navbar  from "../../components/navbars/Navbar";
-import { SearchBar } from '../../components/SearchBar';
 import AddTaskBtn from "../../components/tasksComps/addTaskBtn";
 import EnhancedTable from "../../components/tasksComps/tasksTable";
 import { BACKEND_API } from "../../api";
 import { useSelector } from 'react-redux';
 
-// import { SearchBar } from '../components/SearchBar'; // search tasks
-
- 
 const Tasks = () => {
-
     const [tasks, setTask] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    
-    const state = useSelector(state => state);
-    console.log(state);  // Print the entire state to the console
-
     const role = useSelector(state => state.role);     // fetch the curr role of user
     if (role) {
         console.log("Current role is: " + role);
     } else {
         console.log("Current role is: " + "undefined");
     }
-
     const _id = useSelector((state) => state.user);
     console.log("Current user id is: " + _id);
 
@@ -59,16 +48,11 @@ const Tasks = () => {
                 <div className="add-btn-task" style={{ justifySelf: 'end', paddingRight: '140px' }}>
                     {
                         // only manager can add tasks
-                        // role === 'manager' && <AddTaskBtn fetchData={fetchData} />
                         role === 'manager' && <AddTaskBtn fetchData={fetchData} userId = {_id} setTask={setTask}/>
                     }
                 </div>
             </h1>
-
             <div className="task_container" style={{display: 'grid'}} >
-                {/* <div className="tools">
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-                </div> */}
             </div>
             <div style={{ marginLeft: '140px', marginRight: '120px', marginTop: '80px' }}>
                 {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData} setTask={setTask}/> : <p>Currently no tasks for you</p>}

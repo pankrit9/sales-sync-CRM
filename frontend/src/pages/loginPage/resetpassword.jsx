@@ -36,7 +36,6 @@ const initialValuesChangePassword = {
     new_password: ""
 }
 
-
 const Resetpassword = () => {
     const [pageType, setPageType] = useState("forgot password");
     const { palette } = useTheme();
@@ -47,11 +46,6 @@ const Resetpassword = () => {
     const isChangePassword = pageType === "change password";
 
     /**
-     * 
-    // allows us to send form info with the image
-
-    /**
-     * 
      * @param values 
      * @param onSubmitProps 
     */
@@ -69,11 +63,9 @@ const Resetpassword = () => {
         const loggedIn = await loggedInResponse.json();
         onSubmitProps.resetForm();  // reset the form
         setPageType("change password");
-
     }
 
     /**
-     * 
      * @param values 
      * @param onSubmitProps 
     */
@@ -88,13 +80,11 @@ const Resetpassword = () => {
                 credentials: "omit",
             }
         );
-        const loggedIn = await loggedInResponse.json();
         onSubmitProps.resetForm();  // reset the form
         navigate("/")
     }
 
-
-/** logic behind when the user submits the form */
+    /** logic behind when the user submits the form */
     const handleFormSubmit = async (values, onSubmitProps) => {
         if (isForgotPassword) await forgotPassword(values, onSubmitProps);
         if (isChangePassword) await changePassword(values, onSubmitProps);
@@ -113,7 +103,6 @@ const Resetpassword = () => {
                 handleChange, 
                 handleSubmit, 
                 handleBlur,
-                setFieldValue,
                 resetForm,
             }) => (
                 <form onSubmit={handleSubmit}>
@@ -127,8 +116,7 @@ const Resetpassword = () => {
                             }
                         }}
                     >
-
-{/*FORGOT PASSWORD */}
+                {/*FORGOT PASSWORD */}
                 {isForgotPassword && (                                   
                     <>
                     <TextField
@@ -174,13 +162,11 @@ const Resetpassword = () => {
                         >
                             {"I've remembered my password, click here to login!"}
                         </Typography>
-
-                        
                     </Box>
                     </>
                 )}
 
-{/*CHECK EMAIL INBOX MESSAGE */}
+                {/*CHECK EMAIL INBOX MESSAGE */}
                 {isChangePassword && (
                     <>
                     <TextField
@@ -220,8 +206,6 @@ const Resetpassword = () => {
                             gridColumn: "span 4"
                         }} 
                     />
-                    
-                    
                     <Box>
                         <Button
                             fullWidth
@@ -246,5 +230,4 @@ const Resetpassword = () => {
         </Formik>
     )
 }
-
 export default Resetpassword;

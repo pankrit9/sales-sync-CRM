@@ -1,5 +1,3 @@
-// install (please try to align the version of installed @nivo packages)
-// yarn add @nivo/bar
 import { ResponsiveBar } from '@nivo/bar'
 import { useTheme } from '@mui/material';
 

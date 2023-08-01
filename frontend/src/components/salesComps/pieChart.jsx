@@ -1,13 +1,6 @@
-// install (please try to align the version of installed @nivo packages)
-// yarn add @nivo/pie
 import { ResponsivePieCanvas } from '@nivo/pie'
 import { useTheme } from '@mui/material';
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
 const PieChart = ({data}) => {
     const theme = useTheme();
     return (

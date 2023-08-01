@@ -1,6 +1,3 @@
-import datetime
-import jwt
-from datetime import datetime
 from config import db
 from flask import Blueprint, jsonify, request
 
@@ -9,7 +6,6 @@ from flask import Blueprint, jsonify, request
 # search for the route /login
 products = Blueprint('products', __name__)
 
-# We have POST, PUT, DELETE and GET 
 @products.route("/add", methods = ['POST'])
 def add_products():
     products = db.Products
@@ -24,6 +20,7 @@ def add_products():
         max_id = max(all_prod_ids)
         prodId = max_id + 1
 
+    # Create new product
     new_product = {
         "_id": str(prodId),
         "name" : request.json['name'],
@@ -34,82 +31,59 @@ def add_products():
         "revenue" : 0
     }
 
+    # Check field conditions
     if request.json['name'] == '':
-        return jsonify({"message": "Must enter product name"}), 500
+        return jsonify({"message": "Must enter product name"}), 400
     elif request.json['price'] == '':
-        return jsonify({"message": "Must enter price"}), 500
+        return jsonify({"message": "Must enter price"}), 400
     elif request.json['stock'] == '':
-        return jsonify({"message": "Stock must be 0 or greater"}), 500
+        return jsonify({"message": "Stock must be 0 or greater"}), 400
 
+    # Insert new product into collection, throw error if not successful
     result = products.insert_one(new_product)
-
     if result.inserted_id:
-        return jsonify({"message": "Successful"})
+        return jsonify({"message": "Successful"}), 200
     else:
-        return jsonify({"message": "error adding product"}), 500
+        return jsonify({"message": "Error adding product"}), 500
 
-# We have POST, PUT, DELETE and GET 
 @products.route("/delete/<id>", methods = ['DELETE'])
 def delete_product(id):
-    print("id: ", id, "\n")
-    products = db.Products
-    products.delete_one({"_id":id})
-    return jsonify({"message": "success product deleted"})
+    # Get product based on id and delete from collection
+    result = db.Products.delete_one({"_id":id})
+    if result.modified_count > 0:
+        return jsonify({"message": "Successful"}), 200
+    else:
+        return jsonify({"message": "Error deleting product"}), 400
 
 @products.route("/", methods=['GET'])
 def see_products():
-    
+    # Get all products from collection and turn into list
     all_products = db.Products.find({})
-
-    # convert Cursor type to list
     product_list = list(all_products)
 
+    # If no products, throw error, else return list of products
     if not product_list:
-        return jsonify({"message": "You don't have any products"})
-
-    return jsonify(product_list)
+        return jsonify({"message": "You don't have any products"}), 404
+    return jsonify(product_list), 200
 
 @products.route("/edit/<id>", methods=['POST'])
 def product_edit(id):
-
+    # If id not provided, throw error, else get product with that id
     if not id:
         return jsonify({"message": "Must enter ID of product to edit"}), 400
-
-    # parse json object for data to update i.e. due date
-    edit = request.get_json()
-
-    stock = int(edit['stock'])
-
     result = db.Products.find_one({"_id":id})
 
+    # Parse json object for data to update
+    edit = request.get_json()
+    stock = int(edit['stock'])
+
+    # If product is electronic (i.e. has no stock), cannot update its stock field
     if bool(result['is_electronic']) == True and stock > 0:
         return jsonify({"message": "Electronic products cannot have any stock"}), 400 
 
-    # updates fields according to provided JSON
+    # Update fields according to provided JSON
     result = db.Products.update_one({"_id": id}, {"$set": edit})
-
     if result.modified_count > 0:
-        return jsonify({"message": "Successful"})
+        return jsonify({"message": "Successful"}), 200
     else:
         return jsonify({"message": "Unsuccessful"}), 400 
-
-@products.route("/piechart", methods=['GET'])
-def piechart_data():
-    all_products = db.Products.find({})
-
-    # convert Cursor type to list
-    product_list = list(all_products)
-
-    if not product_list:
-        return jsonify({"message": "You don't have any products"})
-    
-    data = []
-
-    for product in product_list:
-        data.append({
-            "id": product['name'],
-            "label": product['name'],
-            "value": product['n_sold'],
-        })
-
-    return jsonify(data)

@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {Link} from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
 import Navbar  from "../../components/navbars/Navbar";
 import PieChart from "../../components/salesComps/pieChart";
 import BarChart from "../../components/salesComps/barChart";
 import StreamCloseChart from "../../components/salesComps/streamCloseChart";
 import StreamProjChart from "../../components/salesComps/streamProjChart";
-import { Box, Button, IconButton, Typography} from "@mui/material";
+import { Box, Typography} from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -15,9 +14,6 @@ import { BACKEND_API } from "../../api";
 import { useSelector } from 'react-redux';
 
 function Sales() {
-  //should taskData be linked to a get data call?
-
-  const state = useSelector(state => state);
   const role = useSelector(state => state.role);
   const _id = useSelector((state) => state.user);
   const [taskData, setTaskData] = useState([]);
@@ -50,7 +46,7 @@ function Sales() {
   }
 
   const fetchProductData = async () => {
-    const response = await fetch(`${BACKEND_API}/products/piechart`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/piechart`, {method: "GET"});
     const data = await response.json();
     setProductData(data);
   }
@@ -74,9 +70,9 @@ function Sales() {
   }
 
   const fetchClosedKeysData = async () => {
-      const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET"});
-      const data = await response.json();
-      setClosedKeysData(data);
+    const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET"});
+    const data = await response.json();
+    setClosedKeysData(data);
   }
 
   const fetchRevClosedData = async () => {
@@ -177,7 +173,6 @@ function Sales() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          
         >
           <StatBox
             title={taskData}
@@ -191,14 +186,12 @@ function Sales() {
               />
             }
           />
-        
         </Box>
         <Box
           gridColumn="span 3"
           display="flex"
           alignItems="center"
           justifyContent="center"
-          
         >
           <StatBox
             title={`$${LTVData.toLocaleString()}`}
@@ -218,7 +211,6 @@ function Sales() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          
         >
           <StatBox
             title={clientData}
@@ -238,7 +230,6 @@ function Sales() {
           display="flex"
           alignItems="center"
           justifyContent="center"
-          
         >
           <StatBox
             title={`${(winRateData * 100).toFixed(0)}%`}
@@ -253,7 +244,7 @@ function Sales() {
             }
           />
         </Box>
-        </Box> {/* This closing tag for grid box */}
+        </Box>
         { role === "staff" &&
           <h1 classname="header" style={{paddingLeft: '33px', marginTop: '10px', marginBottom: '20px', fontSize: '30px'}}>Team Metrics</h1>
         }
@@ -274,7 +265,6 @@ function Sales() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            
           >
             <Box>
               <Typography
@@ -314,7 +304,6 @@ function Sales() {
             <PieChart data={productData}/>
           </Box>
         </Box>
-
         {/* ROW 3 */}
         <Box
           gridColumn="span 7"

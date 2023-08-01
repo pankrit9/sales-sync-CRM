@@ -139,9 +139,7 @@ function Clients() {
                         </CardContent>
                         <CardActions>
                             
-                            <History id={dataFiltered._id} name={dataFiltered.client} 
-                            email={dataFiltered.email} c_date={dataFiltered.completed_date} 
-                            joined_date={dataFiltered.creation_date}/>
+                            <History id={dataFiltered._id} name={dataFiltered.client} joined_date={dataFiltered.creation_date}/>
                         </CardActions>
                         </Card>
                     ))}

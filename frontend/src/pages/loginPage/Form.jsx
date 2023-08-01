@@ -49,7 +49,6 @@ const initialValuesRegister = {
     role: "",   // to determine if the user is a manager or staff
     code: ""
 }
-
 const initialValuesLogin = {
     email: "",
     password: "",
@@ -69,8 +68,7 @@ const Form = () => {
     const isForgotPassword = pageType === "forgot password";
 
     /**
-     * 
-    // allows us to send form info with the image
+     * allows us to send form info with the image
      * @param values `value` used in the formik textFields is in this object
      * @param onSubmitProps -> essentially the formik props provides several formik methods 
      */
@@ -82,7 +80,6 @@ const Form = () => {
                 // loop through each key-value in the values object and append to the form data
                 formData.append(value, values[value]);
             }
-
             const savedUserResponse = await fetch(
                 // send the form data to the below api call
                 `${BACKEND_API}/auth/register`,
@@ -91,13 +88,15 @@ const Form = () => {
                     body: formData,
                 }
             );
-
             if (!savedUserResponse.ok) {
                 // Handle the case when the server responds with an error status
-                throw new Error("Registration failed");
+                const errorData = await savedUserResponse.json();
+                console.error("Unable to register: ", errorData.message);
+                alert("Unable to register: " + errorData.message);
+                throw new Error("Registration failed" + errorData.message);
             };
 
-            // to save whatver is returned from the backend, in a parsable form like json
+            // to save whatever is returned from the backend, in a parsable form like json
             const savedUser = await savedUserResponse.json();
             onSubmitProps.resetForm();  // reset the form
 
@@ -110,7 +109,6 @@ const Form = () => {
     }
 
     /**
-     * 
      * @param values 
      * @param onSubmitProps 
     */
@@ -128,8 +126,10 @@ const Form = () => {
             );
 
             if (!loggedInResponse.ok) {
-                // Handle the case when the server responds with an error status
-                throw new Error("Login failed");
+                const errorData = await loggedInResponse.json();
+                console.error("Unable to log in: ", errorData);
+                alert("Unable to log in: " + errorData.message);
+                throw new Error("Registration failed" + errorData.message);
             };
 
             const loggedIn = await loggedInResponse.json();
@@ -159,10 +159,8 @@ const Form = () => {
                 credentials: "omit",
             }
         );
-        const loggedIn = await loggedInResponse.json();
         onSubmitProps.resetForm();  // reset the form
     }
-
 
     /** logic behind when the user submits the form */
     const handleFormSubmit = async (values, onSubmitProps) => {
@@ -247,7 +245,6 @@ const Form = () => {
                                     }} />
                             </>
                         )}
-
                         {/* LOGIN AND REGISTER */}
                         <TextField
                             label="Email"
@@ -293,9 +290,6 @@ const Form = () => {
                                         value="staff"
                                         checked={values.role === "staff"}
                                         onChange={handleChange}
-                                        // sx={{
-                                        //     position: 'absolute'
-                                        // }}
                                     />
                                     Staff
                                 </label>
