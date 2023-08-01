@@ -114,9 +114,15 @@ def change_password():
     return jsonify({'message': "Incorrect details."}), 401
 
 @auth.route("/<id>", methods=['GET'])
-def get_staff(id):
-    staff = db.Accounts.find({'role': 'staff', 'manager': id})
-    staff_list = list(staff)
+def get_team(id):
+    staff_list = []
+    account = db.Accounts.find_one({'_id': id})
+    if account["role"] == "manager":
+        staff = db.Accounts.find({ 'manager': id})
+        staff_list = list(staff)
+    else:
+        staff = db.Accounts.find({ 'manager': account['manager']})
+        staff_list = list(staff)
 
     if not staff_list:
         return jsonify({"message": "There is no staff registered"}), 404

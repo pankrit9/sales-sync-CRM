@@ -21,6 +21,7 @@ function Navbar({}) {
     const company = useSelector((state) => state.company);
     const role = useSelector((state) => state.role);
     const name = useSelector((state) => state.name);
+    const _id = useSelector((state) => state.user);
     const showSidebar = () => setSidebar(!sidebar)
 
     //Return function for rendering the Navbar
@@ -44,7 +45,7 @@ function Navbar({}) {
                                     {name ? name +" |" : ""}
                                 </div>
                                 <div className='role-nav' >
-                                    {role}
+                                    {role} ID {_id}
                                 </div>
                             </div>}
                         </li>

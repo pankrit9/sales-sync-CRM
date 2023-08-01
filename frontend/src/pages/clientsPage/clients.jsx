@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
 import Navbar  from "../../components/navbars/Navbar";
-import EnhancedTable from "../../components/clientsComps/clientsTable";
 import AddBtn from "../../components/clientsComps/addClientsBtn";
 import EditBtn from "../../components/clientsComps/editClientsBtn";
 import { BACKEND_API } from "../../api";
