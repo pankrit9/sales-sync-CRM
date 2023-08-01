@@ -54,13 +54,14 @@ def manager_create_task(uId):
 
     # Parsing for easy calculations
     stock = (db.Products.find_one({"name": request.json.get('product')}))['stock']
+    product_price = float((db.Products.find_one({"name":request.json.get('product')}))['price'])
     is_electronic = (db.Products.find_one({"name": request.json.get('product')}))['is_electronic']
     date_string = request.json.get('due_date')
     
     # Throw error if not enough stock available for sale
     if int(request.json.get('product_quantity')) > int(stock) and not is_electronic:
         return jsonify({"message" : "You don't have enough stock available."}), 404
-            
+    
     # Create new task and insert into collection
     new_task = {
         "_id": str(taskId),
@@ -70,6 +71,7 @@ def manager_create_task(uId):
         "client_assigned": request.json.get('client_assigned'),
         "product": request.json.get('product'),
         "product_quantity": request.json.get('product_quantity'),
+        "product_price": product_price,
         "priority": request.json.get('priority'),
         "due_date": datetime.strptime(date_string, "%Y-%m-%d"),
         "staff_member_assigned": request.json.get('staff_member_assigned'),
@@ -147,13 +149,14 @@ def manager_task_edit(uId, taskId):
     if edit['complete'] == "Completed" and (db.Tasks.find_one({"_id": taskId}))['product']: 
         product_name = (db.Tasks.find_one({"_id": taskId}))['product']
         product_id = (db.Products.find_one({"name": product_name}))['_id']
+        product_price = (db.Tasks.find_one({"_id": taskId}))['product_price']
         qty_sold = (db.Tasks.find_one({"_id": taskId}))['product_quantity']
         sold_by = (db.Tasks.find_one({"_id": taskId}))['staff_member_assigned']
         manager_assigned = (db.Tasks.find_one({"_id": taskId}))['manager_assigned']
         client = (db.Tasks.find_one({"_id": taskId}))['client_assigned']
-        update_products(product_id, qty_sold)
-        update_accounts(product_id, qty_sold, sold_by)
-        update_sales(product_id, qty_sold, sold_by, manager_assigned, client)
+        update_products(product_id, qty_sold, product_price)
+        update_accounts(product_id, qty_sold, sold_by, product_price)
+        update_sales(product_id, qty_sold, sold_by, manager_assigned, client, product_price)
         update_clients(client, product_name, qty_sold, sold_by)
     if result.modified_count > 0:
         return jsonify({"message": "Successful"}), 200
@@ -162,7 +165,7 @@ def manager_task_edit(uId, taskId):
     
 # HELPER FUNCTIONS #
 
-def update_products(id, qty_sold):
+def update_products(id, qty_sold, product_price):
     products = db.Products
     
     # Get sold product from collection based on provided id and
@@ -170,18 +173,18 @@ def update_products(id, qty_sold):
     quantity_sold = int(qty_sold)
     sold_product = products.find_one({"_id":id})
     if not sold_product:
-        return jsonify({"message": "Product with given id not found"}), 404
+        # Set to 200 return code as it isn't necessarily an error
+        # Can just mean the product was deleted by user
+        return jsonify({"message": "Product with given id not found"}), 200
     
-    # Parse sold product into its fields   
-    price = float(sold_product['price'])
+    # Parse sold product into its fields
+    price = float(product_price)
     n_sold = int(sold_product['n_sold'])
     is_electronic = bool(sold_product['is_electronic'])
     prev_revenue = float(sold_product['revenue'])
-    #status = request.json['payment_status']
-    #method = request.json['payment_method']
 
     # Update number sold and revenue
-    if not is_electronic:   
+    if not is_electronic:
         result = products.update_one(
             {"_id":id},
             { "$set": { "n_sold" : n_sold + quantity_sold,
@@ -198,7 +201,7 @@ def update_products(id, qty_sold):
     else:
         return jsonify({"message": "Unsuccessful"}), 404 
 
-def update_accounts(id, qty_sold, sold_by):
+def update_accounts(id, qty_sold, sold_by, product_price):
     products = db.Products
 
     # Get account of staff member, convert qty to int, get sold product and 
@@ -206,7 +209,7 @@ def update_accounts(id, qty_sold, sold_by):
     staff = db.Accounts.find_one({"full_name":sold_by})
     quantity_sold = int(qty_sold)
     sold_product = products.find_one({"_id":id})
-    price = float(sold_product['price'])
+    price = float(product_price)
 
     # Update account with sale information
     db.Accounts.update_one(
@@ -219,8 +222,8 @@ def update_accounts(id, qty_sold, sold_by):
             {"$set": {"tasks_n": int(tasks_n) - 1}}
     )
 
-def update_sales(product_id, qty_sold, sold_by, manager_assigned, client):
-    product_price = float((db.Products.find_one({"_id":product_id}))['price'])
+def update_sales(product_id, qty_sold, sold_by, manager_assigned, client, product_price):
+    price = float(product_price)
     
     # Fetch all ids and convert them to integers
     all_sale_ids = [int(sale['_id']) for sale in db.Sales.find({}, {"_id": 1})]
@@ -237,12 +240,12 @@ def update_sales(product_id, qty_sold, sold_by, manager_assigned, client):
         "_id": sale_id,
         "product_id": int(product_id),
         "quantity_sold": int(qty_sold),
-        "product_price": product_price,
+        "product_price": price,
         "sold_by": sold_by,
         "manager_assigned": manager_assigned, 
         "date_of_sale": datetime.now(),
         "client_id": client,
-        "revenue": float(qty_sold) * product_price,
+        "revenue": float(qty_sold) * price,
         "staff": "To be Implemented",
         "payment_method":"To be Implemented",
         "payment_status": "To be Implemented",

@@ -222,7 +222,8 @@ def get_proj_rev():
             staff_tasks = db.Tasks.find({
                 "staff_member_assigned": staff,
                 "due_date": { '$gt': curr_date },
-                "complete": { '$ne': "Complete"}
+                "complete": { '$ne': "Complete"},
+                "client_assigned": {"$ne": ''}
                 })
             for task in staff_tasks:
                 month = task['due_date'].month
@@ -262,7 +263,7 @@ def get_task_growth():
     last_update = db.Growth.find_one({"metric": "n_tasks"})
 
     # Count all tasks
-    task_count = db.Tasks.count_documents({})
+    task_count = db.Tasks.count_documents({"complete": { '$ne': "Complete"}})
 
     # If last entry was longer than 3 days ago, update the values and return the new rate
     # else just return the existing rate
