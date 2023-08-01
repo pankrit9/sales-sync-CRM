@@ -126,20 +126,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-async function deleteSelectedTasks(selectedIds, fetchData) {
-  // create a new array for the promises
-  const deletePromises = selectedIds.map(id =>
-    fetch(`${BACKEND_API}/products/delete/${id}`, {method: 'DELETE'})
-  );
-  try {
-    // use Promise.all to wait for all delete requests to finish
-    await Promise.all(deletePromises);
-    // only after all delete requests are done, fetch data
-    fetchData();
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 function EnhancedTableToolbarStaff(props) {
 

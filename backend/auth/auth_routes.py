@@ -50,7 +50,10 @@ def register():
 
     # Concat first and last name
     full_name = request.form['firstName'] + " " + request.form['lastName']
-
+    if request.form['role'] == "manager":
+        manager = ""
+    else: 
+        manager = request.form['managerId']
     # Create a temporary user that will be added to the mongodb
     new_user = {
         "_id": str(userId),
@@ -60,6 +63,7 @@ def register():
         "full_name":full_name,
         "password": encoded_password,
         "role": request.form['role'],
+        "manager": manager,
         "company": request.form['company'],
         "code": request.form["code"],
         "revenue": 0,
@@ -75,13 +79,14 @@ def register():
 
     # Check if company exists
     response = check_company(full_name, request.form['role'], request.form['company'], request.form["code"])
-    if response == "New company created" or response == "Registered in the company":
+    if response == "New company created" or response == "Added to the company":
         # Adds user to the database
         db.Accounts.insert_one(new_user)
+        print(new_user)
         return jsonify({"message": response}), 200
     
     # Returns the success message, Should return token
-    return jsonify({"message": response}), 200
+    return jsonify({"message": response}), 401
 
 @auth.route("/recover-password", methods=['POST'])
 def recover_password():
@@ -108,9 +113,9 @@ def change_password():
         return jsonify({'message': "success"}), 200
     return jsonify({'message': "Incorrect details."}), 401
 
-@auth.route("/", methods=['GET'])
-def get_staff():
-    staff = db.Accounts.find({'role': 'staff'})
+@auth.route("/<id>", methods=['GET'])
+def get_staff(id):
+    staff = db.Accounts.find({'role': 'staff', 'manager': id})
     staff_list = list(staff)
 
     if not staff_list:

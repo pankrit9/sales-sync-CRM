@@ -47,7 +47,8 @@ const initialValuesRegister = {
     password: "",
     company: "",
     role: "",   // to determine if the user is a manager or staff
-    code: ""
+    code: "",
+    managerId: ""
 }
 const initialValuesLogin = {
     email: "",
@@ -66,6 +67,7 @@ const Form = () => {
     const isLogin = pageType === "login"; // to determine if the user is on the login page or the register page
     const isRegister = pageType === "register";
     const isForgotPassword = pageType === "forgot password";
+
 
     /**
      * allows us to send form info with the image
@@ -243,6 +245,18 @@ const Form = () => {
                                     sx={{
                                         gridColumn: "span 2"
                                     }} />
+                                {values.role === "staff" && 
+                                    <TextField
+                                    label="Manager id"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.managerId}
+                                    name="managerId"
+                                    error={Boolean(touched.managerId) && Boolean(errors.managerId)}
+                                    helperText={touched.managerId && errors.managerId}
+                                    sx={{
+                                        gridColumn: "span 4"
+                                    }} />}
                             </>
                         )}
                         {/* LOGIN AND REGISTER */}

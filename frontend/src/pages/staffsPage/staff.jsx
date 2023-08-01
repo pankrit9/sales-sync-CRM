@@ -4,12 +4,16 @@ import EnhancedTable from "../../components/staffComps/StaffTable";
 import { BACKEND_API } from "../../api";
 import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
 import "../../components/Searchbar.css"
+import { useSelector } from 'react-redux';
+
 
 const Staff = () => {
   const [staff, setStaff] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const _id = useSelector((state) => state.user);
+
   const fetchData = useCallback(async () => {
-      const response = await fetch(`${BACKEND_API}/auth/`, {method: "GET"});
+      const response = await fetch(`${BACKEND_API}/auth/${_id}`, {method: "GET"});
       const data = await response.json();
       setStaff(data);
   }, []);
@@ -30,7 +34,7 @@ const Staff = () => {
   return (
       <>
           <Navbar/>
-          <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Staff Members</h1>
+          <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Your team</h1>
           <div className="container-search">
               <div className="tools">
                   <SearchBarStaff searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

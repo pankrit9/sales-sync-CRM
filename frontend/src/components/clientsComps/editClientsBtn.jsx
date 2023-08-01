@@ -34,7 +34,7 @@ export default function EditBtn({fetchData}) {
     };
     
     // Send POST request to backend with product object in body
-    const response = await fetch(`${BACKEND_API}/products/clients/${_id}`, {
+    const response = await fetch(`${BACKEND_API}/clients/edit/${_id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
