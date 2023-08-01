@@ -21,7 +21,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   });
 
 function Clients() {
-    
+    const _id = useSelector((state) => state.user);
     const [clients, setClients] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const state = useSelector(state => state);
@@ -42,7 +42,7 @@ function Clients() {
     };
   
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/clients/`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/clients/${_id}`, {method: "GET"});
         const data = await response.json();
         setClients(data);
     }, []);

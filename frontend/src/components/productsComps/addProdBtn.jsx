@@ -11,9 +11,11 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import { useSelector } from 'react-redux';
 
 export default function AddBtn({fetchData, setProducts}) {
   // The following useStates are used to manage the local state of this component.
+  const _id = useSelector((state) => state.user);
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [stock, setStock] = React.useState("");
@@ -38,7 +40,7 @@ export default function AddBtn({fetchData, setProducts}) {
     };
     
     // POST request to backend to add new product
-    const response = await fetch(`${BACKEND_API}/products/add`, {
+    const response = await fetch(`${BACKEND_API}/products/add/${_id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

@@ -12,6 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../../api";
 import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 
 export default function EditBtn({fetchData}) {
   // The following useStates are used to manage the local state of this component.
@@ -21,10 +22,12 @@ export default function EditBtn({fetchData}) {
   const [price, setPrice] = React.useState("");
   const [_id, setId] = React.useState("");
   const [productIds, setProductIds] = useState([]);
+  const id = useSelector((state) => state.user);
+
 
   useEffect(() => {
     const getProductIds = async () => {
-      const response = await fetch(`${BACKEND_API}/products`); 
+      const response = await fetch(`${BACKEND_API}/products/${id}`); 
       const products = await response.json();
       setProductIds(products.map(product => product._id));
     };

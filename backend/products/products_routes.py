@@ -6,8 +6,17 @@ from flask import Blueprint, jsonify, request
 # search for the route /login
 products = Blueprint('products', __name__)
 
-@products.route("/add", methods = ['POST'])
-def add_products():
+@products.route("/add/<id>", methods = ['POST'])
+def add_products(id):
+    # Get manager name
+    if (db.Accounts.find_one({"_id": id}))['role'] == "manager":
+        name = (db.Accounts.find_one({"_id": id}))['full_name']
+        company = db.Accounts.find_one({"_id": id})['code']
+    else:
+        manager_id = (db.Accounts.find_one({"_id": id}))['manager']
+        name = db.Accounts.find_one({"_id": manager_id})['full_name']
+        company = db.Accounts.find_one({"_id": manager_id})['code']
+
     products = db.Products
 
     # Fetch all ids and convert them to integers
@@ -26,9 +35,11 @@ def add_products():
         "name" : request.json['name'],
         "stock" : request.json['stock'],
         "price" : request.json['price'],
+        "manager_assigned": name,
+        "company": company,
         "is_electronic": request.json['is_electronic'],
         "n_sold": 0,
-        "revenue" : 0
+        "revenue": 0
     }
 
     # Check field conditions
@@ -55,10 +66,16 @@ def delete_product(id):
     else:
         return jsonify({"message": "Error deleting product"}), 400
 
-@products.route("/", methods=['GET'])
-def see_products():
+@products.route("/<id>", methods=['GET'])
+def see_products(id):
+    if (db.Accounts.find_one({"_id": id}))['role'] == "manager":
+        company = db.Accounts.find_one({"_id": id})['code']
+    else:
+        manager_id = (db.Accounts.find_one({"_id": id}))['manager']
+        company = db.Accounts.find_one({"_id": manager_id})['code']
+    
     # Get all products from collection and turn into list
-    all_products = db.Products.find({})
+    all_products = db.Products.find({"company": company})
     product_list = list(all_products)
 
     # If no products, throw error, else return list of products

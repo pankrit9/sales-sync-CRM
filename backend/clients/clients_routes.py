@@ -7,8 +7,14 @@ from flask import Blueprint, jsonify, request
 # search for the route /login
 clients = Blueprint('clients', __name__)
 
-@clients.route("/add", methods = ['POST'])
-def add_client():  
+@clients.route("/add/<id>", methods = ['POST'])
+def add_client(id):  
+    if (db.Accounts.find_one({"_id": id}))['role'] == "manager":
+        name = (db.Accounts.find_one({"_id": id}))['full_name']
+    else:
+        manager_id = (db.Accounts.find_one({"_id": id}))['manager']
+        name = db.Accounts.find_one({"_id": manager_id})['full_name']
+
     # Fetch all ids and generate a taskId based on largest ID in collection
     all_client_ids = [int(client['_id']) for client in db.Clients.find({}, {"_id": 1})]
     if not all_client_ids:
@@ -25,7 +31,7 @@ def add_client():
         "pending_value" : 0,
         "tasks_records": [],
         "staff" : "",
-        #"nationality": request.json['country'],
+        "manager_assigned": name,
         "email" : request.json['email'],
         "lead_source" : request.json['lead_source'],
         "client_position":  request.json['client_position'],
@@ -35,7 +41,6 @@ def add_client():
         "creation_date": datetime.now()
     }
     db.Clients.insert_one(new_client)
-
     return jsonify({"message": "success"}), 200
 
 @clients.route("/delete", methods = ['DELETE'])
@@ -60,10 +65,16 @@ def client_edit(id):
     else:
         return jsonify({"message": "Error editing product"}), 400 
 
-@clients.route("/", methods=['GET'])
-def see_clients():
+@clients.route("/<id>", methods=['GET'])
+def see_clients(id):
+    if (db.Accounts.find_one({"_id": id}))['role'] == "manager":
+        name = (db.Accounts.find_one({"_id": id}))['full_name']
+    else:
+        manager_id = (db.Accounts.find_one({"_id": id}))['manager']
+        name = db.Accounts.find_one({"_id": manager_id})['full_name']
+
     # Get all clients in collection
-    all_clients = db.Clients.find({})
+    all_clients = db.Clients.find({"manager_assigned": name})
     client_list = list(all_clients)
 
     # Return error if no clients, else return list

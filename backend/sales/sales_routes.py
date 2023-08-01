@@ -128,8 +128,10 @@ def get_win_rate(id):
 
     return jsonify(win_rate), 200
 
-@sales.route("/leadsource", methods = ['GET'])
-def get_lead_source():
+@sales.route("/leadsource/<id>", methods = ['GET'])
+def get_lead_source(id):
+    name = get_manager_name(id)
+
     # Lead source types
     lead_types = [
         "Google", 
@@ -144,7 +146,8 @@ def get_lead_source():
     data = []
     for lead in lead_types:
         count = db.Clients.count_documents({
-            "lead_source": lead
+            "lead_source": lead,
+            "manager_assigned": name,
         })
         data.append({
             "lead_source_name": lead,
@@ -152,14 +155,17 @@ def get_lead_source():
         })
     return jsonify(data), 200
 
-@sales.route("/closedrev", methods = ['GET'])
-def get_closed_rev():
+@sales.route("/closedrev/<id>", methods = ['GET'])
+def get_closed_rev(id):
 
     curr_date = datetime.now()    
     data = []
 
-    # Get list of staff who have made sales
-    sales = db.Sales.find({})
+    # Get the name of the manager
+    name = get_manager_name(id)
+
+    # Get list of staff in the manager's team who have made sales
+    sales = db.Sales.find({"manager_assigned": name})
     staff_list = list(set([staff['sold_by'] for staff in sales]))
 
     # From start of the year to current date, for each month
@@ -182,33 +188,42 @@ def get_closed_rev():
     
     return jsonify(data), 200
 
-@sales.route("/closedkeys", methods = ['GET'])
-def get_closed_keys():
+@sales.route("/closedkeys/<id>", methods = ['GET'])
+def get_closed_keys(id):
+    # Get the name of the manager
+    name = get_manager_name(id)
+
     # Get list of all staff to be the key for the closed revenue graph
-    sales = db.Sales.find({})
+    sales = db.Sales.find({"manager_assigned": name})
     staff_list = list(set([staff['sold_by'] for staff in sales]))
     return jsonify(staff_list), 200
 
-@sales.route("/closedrevsum", methods = ['GET'])
-def get_closed_rev_sum():
+@sales.route("/closedrevsum/<id>", methods = ['GET'])
+def get_closed_rev_sum(id):
+    # Get the name of the manager
+    name = get_manager_name(id)
+
     curr_date = datetime.now()
     
     # Get all sales, loop through and count the combined revenue of those
     # from the start of the year til the current date
-    sales = db.Sales.find({})
+    sales = db.Sales.find({"manager_assigned": name})
     rev_closed = 0
     for sale in sales:
         if sale['date_of_sale'] >= datetime(curr_date.year, 1, 1) and sale['date_of_sale'] <= curr_date:
             rev_closed += sale['revenue']
     return jsonify(rev_closed), 200
 
-@sales.route("/projrev", methods = ['GET'])
-def get_proj_rev():
+@sales.route("/projrev/<id>", methods = ['GET'])
+def get_proj_rev(id):
+
+    name = get_manager_name(id)
+
     curr_date = datetime.now()
     data = []
 
     # Get list of all staff assigned to tasks
-    sales = db.Tasks.find({})
+    sales = db.Tasks.find({"manager_assigned": name})
     staff_list = list(set([staff['staff_member_assigned'] for staff in sales]))
     
     # From current date to end of the year, for each month
@@ -237,19 +252,21 @@ def get_proj_rev():
     
     return jsonify(data), 200
 
-@sales.route("/projkeys", methods = ['GET'])
-def get_proj_keys():
-    # Get list of all staff to be the key for the projected revenue graph
-    tasks = db.Tasks.find({})
+@sales.route("/projkeys/<id>", methods = ['GET'])
+def get_proj_keys(id):
+    name = get_manager_name(id)
+    # Get list of all in staff in manager's team to be the key for the projected revenue graph
+    tasks = db.Tasks.find({"manager_assigned": name})
     staff_list = list(set([staff['staff_member_assigned'] for staff in tasks]))
     return jsonify(staff_list)
 
-@sales.route("/projrevsum", methods = ['GET'])
-def get_proj_rev_sum():
+@sales.route("/projrevsum/<id>", methods = ['GET'])
+def get_proj_rev_sum(id):
+    name = get_manager_name(id)
     # Get all tasks, loop through and count the combined projected revenue for each by month
     # from the current date til the end of the year
     curr_date = datetime.now()
-    tasks = db.Tasks.find({})
+    tasks = db.Tasks.find({"manager_assigned": name})
     rev_closed = 0
     for task in tasks:
         if task['due_date'] >= curr_date and task['complete'] != "Completed":
@@ -257,37 +274,61 @@ def get_proj_rev_sum():
             rev_closed += float(task['product_quantity']) * float(price)
     return jsonify(rev_closed)
 
-@sales.route("/taskgrowth", methods = ['GET'])
-def get_task_growth():
+@sales.route("/taskgrowth/<id>", methods = ['GET'])
+def get_task_growth(id):
     # Get the last updated object
     last_update = db.Growth.find_one({"metric": "n_tasks"})
+    name = db.Accounts.find_one({"_id": id})['full_name']
 
     # Count all tasks
-    task_count = db.Tasks.count_documents({"complete": { '$ne': "Complete"}})
+    if db.Accounts.find_one({"_id": id})['role'] == "manager":
+        task_count = db.Tasks.count_documents({"manager_assigned": name , "complete": { '$ne': "Complete"}})
+    else:
+        task_count = db.Tasks.count_documents({"staff_member_assigned": name , "complete": { '$ne': "Complete"}})
 
     # If last entry was longer than 3 days ago, update the values and return the new rate
     # else just return the existing rate
     if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
-        db.Growth.update_one({"metric": "n_tasks"}, {"$set": {"value": task_count}})
-        new_rate = (task_count / last_update['value']) - 1
-        db.Growth.update_one({"metric": "n_tasks"}, {"$set": {"rate": new_rate}})
+        if not db.Growth.find_one({"uid": id, "metric": "n_tasks"}):
+            rate = {
+                "metric": "n_tasks",
+                "value": task_count,
+                "entry_date": datetime.now(),
+                "rate": 0,
+                "uId": id
+            }
+            db.Growth.insert_one(rate)
+            new_rate = 0
+        else:
+            db.Growth.update_one({"uid": id, "metric": "n_tasks"}, {"$set": {"value": task_count}})
+            new_rate = (task_count / last_update['value']) - 1
+            db.Growth.update_one({"uid": id, "metric": "n_tasks"}, {"$set": {"rate": new_rate, "entry_date" : datetime.now()}})
         return jsonify(new_rate), 200 
     else:
         return jsonify(last_update['rate']), 200
     
-@sales.route("/ltvgrowth", methods = ['GET'])
-def get_ltv_growth():
+@sales.route("/ltvgrowth/<id>", methods = ['GET'])
+def get_ltv_growth(id):
     # Get the last updated object
     last_update = db.Growth.find_one({"metric": "ltv"})
+    
+    name = db.Accounts.find_one({"_id": id})['full_name']
+    if db.Accounts.find_one({"_id": id})['role'] == "manager":
+        sales = db.Sales.find({ "manager_assigned": name })
+        n_clients = db.Clients.count_documents({"manager_assigned": name})
+    else:
+        sales = db.Sales.find({ "sold_by": name })
+        # Get the set of the clients assigned to a staff member to calculate thier
+        # number of clients
+        curr_user_tasks = db.Tasks.find({ "staff_member_assigned" : name })
+        n_clients = len({task["client_assigned"] for task in curr_user_tasks})
 
     # Calculate the current LTV
-    sales = db.Sales.find({})
     revenue_sum = 0
     n_purchases = 0
     for sale in sales:
         revenue_sum += sale['revenue']
         n_purchases += 1
-    n_clients = db.Clients.count_documents({})
     if n_purchases == 0:
         apv = 0
     else:
@@ -302,40 +343,78 @@ def get_ltv_growth():
     # If last entry was longer than 3 days ago, update the values and return the new rate
     # else just return the existing rate
     if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
-        db.Growth.update_one({"metric": "ltv"}, {"$set": {"value": ltv}})
-        new_rate = (ltv / last_update['value']) - 1
-        db.Growth.update_one({"metric": "ltv"}, {"$set": {"rate": new_rate}})
+        if not db.Growth.find_one({"uid": id, "metric": "ltv"}):
+            rate = {
+                "metric": "ltv",
+                "value": ltv,
+                "entry_date": datetime.now(),
+                "rate": 0,
+                "uId": id
+            }
+            db.Growth.insert_one(rate)
+            new_rate = 0
+        else:
+            db.Growth.update_one({"uid": id, "metric": "ltv"}, {"$set": {"value": ltv}})
+            new_rate = (ltv / last_update['value']) - 1
+            db.Growth.update_one({"uid": id, "metric": "ltv"}, {"$set": {"rate": new_rate, "entry_date" : datetime.now()}})
         return jsonify(new_rate), 200
     else:
         return jsonify(last_update['rate']), 200
 
-
-@sales.route("/clientgrowth", methods = ['GET'])
-def get_client_growth():
+@sales.route("/clientgrowth/<id>", methods = ['GET'])
+def get_client_growth(id):
     # Get the last updated object
     last_update = db.Growth.find_one({"metric": "n_clients"})
 
-    # Count the number of clients
-    client_count = db.Clients.count_documents({})
+    name = db.Accounts.find_one({"_id": id})['full_name']
+    if db.Accounts.find_one({"_id": id})['role'] == "manager":
+        curr_user_tasks = db.Tasks.find({ "manager_assigned" : name, "complete" : "Complete" })
+        client_count = len({task["client_assigned"] for task in curr_user_tasks})
+    else:
+        # Get the set of the clients assigned to a staff member to calculate thier
+        # number of clients
+        curr_user_tasks = db.Tasks.find({ "staff_member_assigned" : name, "complete" : "Complete" })
+        client_count = len({task["client_assigned"] for task in curr_user_tasks})
 
     # If last entry was longer than 3 days ago, update the values and return the new rate
     # else just return the existing rate
     if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
-        db.Growth.update_one({"metric": "n_clients"}, {"$set": {"value": client_count}})
-        new_rate = (client_count / last_update['value']) - 1
-        db.Growth.update_one({"metric": "n_clients"}, {"$set": {"rate": new_rate}})
+        if not db.Growth.find_one({"uid": id, "metric": "n_clients"}):
+            rate = {
+                "metric": "n_clients",
+                "value": client_count,
+                "entry_date": datetime.now(),
+                "rate": 0,
+                "uId": id
+            }
+            db.Growth.insert_one(rate)
+            new_rate = 0
+        else:
+            db.Growth.update_one({"uid": id, "metric": "n_clients"}, {"$set": {"value": client_count}})
+            new_rate = (client_count / last_update['value']) - 1
+            db.Growth.update_one({"uid": id, "metric": "n_clients"}, {"$set": {"rate": new_rate, "entry_date" : datetime.now()}})
         return jsonify(new_rate), 200
     else:
         return jsonify(last_update['rate']), 200
 
-@sales.route("/winrategrowth", methods = ['GET'])
-def get_winrate_growth():
+@sales.route("/winrategrowth/<id>", methods = ['GET'])
+def get_winrate_growth(id):
     # Get the last updated object
     last_update = db.Growth.find_one({"metric": "win_rate"})
 
+    name = db.Accounts.find_one({"_id": id})['full_name']
+    if db.Accounts.find_one({"_id": id})['role'] == "manager":
+        curr_user_tasks_sale = db.Tasks.find({ "manager_assigned" : name, "complete" : "Complete" })
+        curr_user_tasks_all = db.Tasks.find({ "manager_assigned" : name })
+        n_clients_with_sale = len({task["client_assigned"] for task in curr_user_tasks_sale})
+        n_clients = len({task["client_assigned"] for task in curr_user_tasks_all})
+    else:
+        curr_user_tasks_sale = db.Tasks.find({ "staff_member_assigned" : name, "complete" : "Complete" })
+        curr_user_tasks_all = db.Tasks.find({ "staff_member_assigned" : name })
+        n_clients_with_sale = len({task["client_assigned"] for task in curr_user_tasks_sale})
+        n_clients = len({task["client_assigned"] for task in curr_user_tasks_all})
+
     # Calculate current win rate
-    n_clients_with_sale = db.Clients.count_documents({'last_sale': {'$exists': True, '$ne': ''}})
-    n_clients = db.Clients.count_documents({})
     if n_clients == 0:
         win_rate = 0
     else:
@@ -344,17 +423,29 @@ def get_winrate_growth():
     # If last entry was longer than 3 days ago, update the values and return the new rate
     # else just return the existing rate
     if datetime.now() > (last_update['entry_date'] + timedelta(days=3)):
-        db.Growth.update_one({"metric": "win_rate"}, {"$set": {"value": win_rate}})
-        new_rate = (win_rate / last_update['value']) - 1
-        db.Growth.update_one({"metric": "win_rate"}, {"$set": {"rate": new_rate}})
+        if not db.Growth.find_one({"uid": id, "metric": "win_rate"}):
+            rate = {
+                "metric": "win_rate",
+                "value": win_rate,
+                "entry_date": datetime.now(),
+                "rate": 0,
+                "uId": id
+            }
+            db.Growth.insert_one(rate)
+            new_rate = 0
+        else:
+            db.Growth.update_one({"uid": id, "metric": "win_rate"}, {"$set": {"value": win_rate}})
+            new_rate = (win_rate / last_update['value']) - 1
+            db.Growth.update_one({"uid": id, "metric": "win_rate"}, {"$set": {"rate": new_rate, "entry_date" : datetime.now()}})
         return jsonify(new_rate), 200
     else:
         return jsonify(last_update['rate']), 200
     
-@sales.route("/piechart", methods=['GET'])
-def piechart_data():
+@sales.route("/piechart/<id>", methods=['GET'])
+def piechart_data(id):
+    name = get_manager_name(id)
     # Get all products and put into list
-    all_products = db.Products.find({})
+    all_products = db.Products.find({"manager_assigned": name})
     product_list = list(all_products)
 
     # If there are no products, return error
@@ -370,3 +461,12 @@ def piechart_data():
             "value": product['n_sold'],
         })
     return jsonify(data), 200
+
+# HELPER FUNCTIONS #
+def get_manager_name(id):
+    if (db.Accounts.find_one({"_id": id}))['role'] == "manager":
+        name = (db.Accounts.find_one({"_id": id}))['full_name']
+    else:
+        manager_id = (db.Accounts.find_one({"_id": id}))['manager']
+        name = db.Accounts.find_one({"_id": manager_id})['full_name']
+    return name

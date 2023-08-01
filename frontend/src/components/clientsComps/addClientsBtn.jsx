@@ -11,10 +11,11 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import { useSelector } from 'react-redux';
 
 export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError}) {
+  const _id = useSelector((state) => state.user);
   const [open, setOpen] = React.useState(false);
-
   const [client, setClient] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [lead_source, setLeadSource] = React.useState("");
@@ -42,7 +43,7 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
     };
     
     // POST request to backend to add new client
-    const response = await fetch(`${BACKEND_API}/clients/add`, {
+    const response = await fetch(`${BACKEND_API}/clients/add/${_id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'

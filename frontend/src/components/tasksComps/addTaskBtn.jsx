@@ -27,7 +27,6 @@ export default function AddBtn({ fetchData, userId, setTask}) {
     const [due_date, setDueDate] = React.useState("");
     const [staff_member_assigned, setStaffMemberAssigned] = React.useState("");
     const [complete, setStatus] = React.useState("Not Started");
-    
     const [products, setProducts] = React.useState([]);
     const [staff_members, setStaffMembers] = React.useState([]);
     const [clients, setClients] = React.useState([]);
@@ -57,7 +56,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
     const fetchStaffMembers = async () => {
         try {
             console.log("fetchStaffMembers: fetching staff members.... ")
-            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
+            const response = await fetch(`${BACKEND_API}/auth/${_id}`, {method: "GET"});
             const data = await response.json();
             setStaffMembers(data);
         } catch (error) {
@@ -67,7 +66,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
+            const response = await fetch(`${BACKEND_API}/products/${_id}`, {method: "GET"});
             const data = await response.json();;
             setProducts(data);
         } catch (error) {
@@ -76,7 +75,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
     };
     const fetchClients = async () => {
         try {
-            const response = await fetch(`${BACKEND_API}/clients`, {method: "GET"});
+            const response = await fetch(`${BACKEND_API}/clients/${_id}`, {method: "GET"});
             const data = await response.json();;
             setClients(data);
         } catch (error) {

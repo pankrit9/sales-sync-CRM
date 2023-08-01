@@ -6,12 +6,14 @@ import EditBtn from "../../components/productsComps/editProdBtn";
 import { BACKEND_API } from "../../api";
 import { SearchBar } from '../../components/SearchBar';
 import '../../components/Searchbar.css';
+import { useSelector } from 'react-redux';
 
 function Products() {
+    const _id = useSelector((state) => state.user);
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");    
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/products/${_id}`, {method: "GET"});
         const data = await response.json();
         setProducts(data);
         console.log("products data: ", data);
