@@ -11,8 +11,8 @@ def check_email_password(email, password):
     # Regular expression for validating an email
     regex = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$'
     
-    # Email length cannot be 0 or greater than 254
-    if len(email) == 0 or len(email) > 254:
+    # Email length cannot be 0 or greater than 50
+    if len(email) == 0 or len(email) > 50 or len(email) < 6 :
         return jsonify({'message': "Invalid email length"}), 422
     
     # Checks if invalid email format
