@@ -41,12 +41,14 @@
 }
 
 .chatbot-input {
+    z-index: 88888;
     border-top: 1px solid #ccc;
     padding: 1rem;
     display: flex;
 }
 
 .chatbot-input input {
+    z-index: 88888;
     flex-grow: 1;
     border: none;
     padding: 0.5rem;

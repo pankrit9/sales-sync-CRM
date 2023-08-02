@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
 import Navbar  from "../../components/navbars/Navbar";
+import Chatbot from '../../components/chatbot/Chatbot';
 import EnhancedTable from "../../components/clientsComps/clientsTable";
 import AddBtn from "../../components/clientsComps/addClientsBtn";
 import EditBtn from "../../components/clientsComps/editClientsBtn";
@@ -54,6 +55,7 @@ function Clients() {
     return (
         <>
             <Navbar/>
+            <Chatbot />
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Clients</h1>
             
             <div className="container-search">

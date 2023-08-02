@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
 import Navbar  from "../../components/navbars/Navbar";
+import Chatbot from '../../components/chatbot/Chatbot';
 import PieChart from "../../components/salesComps/pieChart";
 import BarChart from "../../components/salesComps/barChart";
 import StreamCloseChart from "../../components/salesComps/streamCloseChart";
@@ -154,6 +155,7 @@ function Sales() {
   return (
     <>
     <Navbar/>
+    <Chatbot />
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>Dashboard</h1>
     { role === "staff"
       ? <h1 className="header" style={{paddingLeft: '170px', marginTop: '50px', fontSize: '30px'}}>My Metrics</h1>

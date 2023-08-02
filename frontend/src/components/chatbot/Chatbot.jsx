@@ -51,7 +51,7 @@ function Chatbot() {
                 {isOpen ? <AiOutlineClose /> : <SmartToyTwoToneIcon fontSize='large' />}
             </button>
             {isOpen && (
-                <div className="chatbot-chat" style={{ backgroundColor: theme.palette.text.main }}>
+                <div className="chatbot-chat" style={{ backgroundColor: theme.palette.text.main, zIndex: 99999}}>
                     <div className="chatbot-messages" style={{ backgroundColor: theme.palette.text.main }}>
                         <div class="chatbox__header">
                             <div class="chatbox__image--header">
@@ -59,7 +59,7 @@ function Chatbot() {
                             </div>
                             <div class="chatbox__content--header">
                                 <h4 class="chatbox__heading--header">Chat support</h4>
-                                <p class="chatbox__description--header" style={{backgroundColor:"#ccc",padding:"0 0.5rem", margin:"1rem 0", borderRadius: "0.2rem", color:'black'}}>Hi. My name is Sam. How can I help you?</p>
+                                <p class="chatbox__description--header" style={{backgroundColor:theme.palette.neutral.main,padding:"0 0.5rem", margin:"1rem 0", borderRadius: "0.2rem", color:'black'}}>Hi. My name is Sam. How can I help you?</p>
                             </div>
                         </div>
                         {messages.map((message, index) => (
@@ -68,7 +68,7 @@ function Chatbot() {
                             </div>
                         ))}
                     </div>
-                    <div className="chatbot-input" style={{ backgroundColor: theme.palette.text.main }}>
+                    <div className="chatbot-input" style={{ backgroundColor: theme.palette.neutral.main, zIndex: "888888" }}>
                         <input type="text" value={input} onChange={handleInputChange} />
                         <button onClick={handleSend}><SendTwoToneIcon /></button>
                     </div>

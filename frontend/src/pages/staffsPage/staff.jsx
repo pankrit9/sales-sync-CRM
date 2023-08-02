@@ -5,6 +5,7 @@ import EnhancedTable from "../../components/staffComps/StaffTable";
 import AddBtn from "../../components/productsComps/addProdBtn";
 import EditBtn from "../../components/productsComps/editProdBtn";
 import SellBtn from "../../components/productsComps/sellProdBtn";
+import Chatbot from "../../components/chatbot/Chatbot";
 import { BACKEND_API } from "../../api";
 import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
 import "../../components/Searchbar.css"
@@ -36,6 +37,7 @@ const Staff = () => {
   return (
       <>
           <Navbar/>
+          <Chatbot />
           <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Staff Members</h1>
           
           <div className="container-search">
