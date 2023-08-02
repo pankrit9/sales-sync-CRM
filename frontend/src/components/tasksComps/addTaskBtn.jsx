@@ -149,6 +149,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
                     />
                     <FormControl fullWidth style={{ margin: '10px 0' }}>
                         <InputLabel id="client_assigned">Choose Client</InputLabel>
+                        <div style={{"marginTop": "10px" }}></div>
                         <Select
                             labelId="client_assigned"
                             id="client_assigned"
@@ -166,6 +167,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
                     </FormControl>
                     <FormControl fullWidth style={{ margin: '10px 0' }}>
                         <InputLabel id="complete">Priority</InputLabel>
+                        <div style={{"marginTop": "10px" }}></div>
                         <Select
                             labelId="priority"
                             id="priority"
@@ -199,6 +201,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
                                 style={{ margin: '10px 0' }}
                             >
                                 <InputLabel id="product">Product</InputLabel>
+                                <div style={{"marginTop": "10px" }}></div>
                                 <Select
                                     labelId="product"
                                     id="product"
@@ -231,6 +234,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
 
                     <FormControl fullWidth>
                         <InputLabel id="staff_member_assigned">Assign Staff</InputLabel>
+                        <div style={{"marginTop": "10px" }}></div>
                         <Select
                             labelId="staff_member_assigned"
                             id="staff_member_assigned"
