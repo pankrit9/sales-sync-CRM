@@ -204,22 +204,30 @@ def update_products(id, qty_sold, product_price):
 def update_accounts(id, qty_sold, sold_by, product_price):
     products = db.Products
 
-    # Get account of staff member, convert qty to int, get sold product and 
+    # Get account of staff member and manager, convert qty to int, get sold product and 
     # ensure price is in float format
-    staff = db.Accounts.find_one({"full_name":sold_by})
+    staff = db.Accounts.find_one({"full_name": sold_by})
+    manager_id = staff['manager']
+    manager = db.Accounts.find_one({"_id": manager_id})
     quantity_sold = int(qty_sold)
-    sold_product = products.find_one({"_id":id})
+    sold_product = products.find_one({"_id": id})
     price = float(product_price)
 
-    # Update account with sale information
+    # Update staff account with sale information
     db.Accounts.update_one(
         {"full_name": sold_by},
-        { "$set": {"revenue": str(float(staff['revenue']) + price * quantity_sold)}}
+        { "$set": {"revenue": (float(staff['revenue']) + price * quantity_sold)}}
     )
     tasks_n = (db.Accounts.find_one({"full_name" : sold_by}))['tasks_n']
     db.Accounts.update_one(
-            {"full_name" : sold_by},
-            {"$set": {"tasks_n": int(tasks_n) - 1}}
+        {"full_name" : sold_by},
+        {"$set": {"tasks_n": int(tasks_n) - 1}}
+    )
+
+    # Update manager account with sale information
+    db.Accounts.update_one(
+        {"_id": manager_id},
+        { "$set": {"revenue": (float(manager['revenue']) + price * quantity_sold)}}
     )
 
 def update_sales(product_id, qty_sold, sold_by, manager_assigned, client, product_price):

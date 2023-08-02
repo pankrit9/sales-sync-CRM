@@ -29,7 +29,7 @@ def get_above_ranking(id):
         higher_user = next(higher_user_cursor)
     except StopIteration:
         return jsonify({}), 200
-
+    print(higher_user)
     return jsonify(higher_user), 200
 
 @rankings.route("/lower/<id>", methods = ['GET'])
@@ -54,6 +54,7 @@ def get_below_ranking(id):
         lower_user = next(lower_user_cursor)
     except StopIteration:
         return jsonify({}), 200
+    print(lower_user)
     return jsonify(lower_user), 200
     
 @rankings.route("/current/<id>", methods = ['GET'])
