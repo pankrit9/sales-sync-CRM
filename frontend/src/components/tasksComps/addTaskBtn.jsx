@@ -123,7 +123,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
             <Button 
                 variant="contained" 
                 color="primary"
-                startIcon={<AddIcon />}
+                startIcon={<AddIcon/>}
                 onClick={handleClickOpen}
             >
                 Add task

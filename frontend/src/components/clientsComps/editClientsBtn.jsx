@@ -7,13 +7,20 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../../api";
+import * as AiIcons from "react-icons/ai"
+import EditIcon from '@mui/icons-material/Edit';
+import { FaUserEdit } from "react-icons/fa";
+import { LiaUserEditSolid } from "react-icons/lia";
 
 export default function EditBtn({fetchData}) {
   // The following useStates are used to manage the local state of this component.
   const [open, setOpen] = React.useState(false);
-  const [name, setName] = React.useState("");
-  const [stock, setStock] = React.useState("");
-  const [price, setPrice] = React.useState("");
+  const [clientn, setClient] = React.useState("");
+  const [client_position, setPosition] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [mobile_number, setNumber] = React.useState("");
+  const [address, setAddress] = React.useState("");
+
   const [_id, setId] = React.useState("");
 
   // Handles the open and close for the dialog for editing
@@ -26,20 +33,32 @@ export default function EditBtn({fetchData}) {
 
   // Handles editing client
   const handleEdit = async () => {
-    const product = {
+    const client = {
       _id,
-      name,
-      stock,
-      price
     };
-    
+    if (clientn !== "") {
+      client.client = clientn;
+    }
+
+    if (client_position !== "") {
+      client.client_position = client_position;
+    }
+    if (email !== "") {
+      client.email = email;
+    }
+    if (mobile_number !== "") {
+      client.mobile_number = mobile_number;
+    }
+    if (address !== "") {
+      client.address = address;
+    }
     // Send POST request to backend with product object in body
     const response = await fetch(`${BACKEND_API}/clients/edit/${_id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(client),
     });
   
     if (response.ok) {
@@ -57,7 +76,7 @@ export default function EditBtn({fetchData}) {
   // and the dialog itself with the form fields for editing a client
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen}>
+      <Button variant="contained" onClick={handleClickOpen} endIcon={<LiaUserEditSolid/>}>
         Edit Client
       </Button>
       <Dialog open={open} onClose={handleClose}>
@@ -70,7 +89,7 @@ export default function EditBtn({fetchData}) {
             autoFocus
             margin="dense"
             id="_id"
-            label="Product ID"
+            label="Client ID"
             type="text"
             fullWidth
             variant="standard"
@@ -80,35 +99,57 @@ export default function EditBtn({fetchData}) {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="clientn"
             label="Name"
             type="text"
             fullWidth
             variant="standard"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={clientn}
+            onChange={(e) => setClient(e.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="stock"
-            label="Stock"
+            id="client_position"
+            label="Client position"
             type="text"
             fullWidth
             variant="standard"
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
+            value={client_position}
+            onChange={(e) => setPosition(e.target.value)}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="price"
-            label="Price"
+            id="email"
+            label="Email"
             type="text"
             fullWidth
             variant="standard"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="mobile_number"
+            label="Mobile Number"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={mobile_number}
+            onChange={(e) => setNumber(e.target.value)}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="address"
+            label="Client Address"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
         </DialogContent>
         <DialogActions>

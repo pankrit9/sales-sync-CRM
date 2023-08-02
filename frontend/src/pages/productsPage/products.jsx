@@ -5,7 +5,7 @@ import AddBtn from "../../components/productsComps/addProdBtn";
 import EditBtn from "../../components/productsComps/editProdBtn";
 import { BACKEND_API } from "../../api";
 import { SearchBar } from '../../components/SearchBar';
-import '../../components/Searchbar.css';
+import '../../components/productsComps/products.css';
 import { useSelector } from 'react-redux';
 
 function Products() {
@@ -41,7 +41,7 @@ function Products() {
                     <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                 </div>
                 <div className='edit-btn-product'>
-                    <EditBtn fetchData={fetchData}/>
+                    <EditBtn fetchData={fetchData} setProducts={setProducts}/>
                 </div>
                 <div className='add-btn-product' >
                     <AddBtn fetchData={fetchData} setProducts={setProducts}/>

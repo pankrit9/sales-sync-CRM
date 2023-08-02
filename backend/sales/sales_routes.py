@@ -244,7 +244,7 @@ def get_proj_rev(id):
                 month = task['due_date'].month
                 year = task['due_date'].year
                 if month == i and year == curr_date.year:
-                    price = (db.Products.find_one({'name': task['product']}))['price']
+                    price = task["product_price"]
                     rev_closed += float(task['product_quantity']) * float(price)
             monthly_sales[staff] = rev_closed
         data.append(monthly_sales)
@@ -270,7 +270,7 @@ def get_proj_rev_sum(id):
     rev_closed = 0
     for task in tasks:
         if task['due_date'] >= curr_date and task['complete'] != "Completed":
-            price = (db.Products.find_one({'name': task['product']}))['price']
+            price = task["product_price"]
             rev_closed += float(task['product_quantity']) * float(price)
     return jsonify(rev_closed)
 

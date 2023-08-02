@@ -14,6 +14,8 @@ import History from '../../components/clientsComps/historyDialog';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { AiOutlineMail, AiTwotonePhone} from "react-icons/ai";
+
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -121,7 +123,7 @@ function Clients() {
                 <div>You do not have any clients yet</div>
                 ) : (
                 dataFiltered.map((dataFiltered) => (
-                    <Card sx={{ width: "15rem" }}>
+                    <Card sx={{ width: "16rem" }}>
                     <CardContent marginLeft="5rem">
                         <Tooltip title={dataFiltered.client} >
                         <Avatar alt="" {...stringAvatar(dataFiltered.client)} sx={{ bgcolor: getRandomColor(), width:"3.2rem", height:"3.2rem"}}>
@@ -131,10 +133,10 @@ function Clients() {
                         {dataFiltered.client} | {dataFiltered._id}
                         </Typography>
                         <Typography variant="h5" component="div" color="text.secondary">
-                        {dataFiltered.email}
+                        <AiOutlineMail/>  {dataFiltered.email}
                         </Typography>
                         <Typography variant="h5" component="div" color="text.secondary">
-                        {dataFiltered.mobile_number}
+                        <AiTwotonePhone/> {dataFiltered.mobile_number}
                         </Typography> 
                     </CardContent>
                     <CardActions>

@@ -8,6 +8,11 @@ import { useSelector } from 'react-redux';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import * as FaIcons6 from "react-icons/fa6";
+import * as FaIcons from "react-icons/fa";
+import { LuMail } from "react-icons/lu";
+import { AiOutlineMail } from "react-icons/ai";
+
 import { Card, CardContent, CardMedia,Avatar,  Tooltip, Typography, Grid, CardActions, Button} from '@mui/material';
 import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
 
@@ -26,7 +31,7 @@ function Staff () {
         if (!query) {
             return staff;
         } else {
-            return staff.filter((d) => d['first_name'].toLowerCase().includes(query.toLowerCase()));
+            return staff.filter((d) => d['full_name'].toLowerCase().includes(query.toLowerCase()));
         }
     };
     const colors = [deepOrange[500], deepOrange[300], deepPurple[500], deepPurple[300], green[500], green[300], red[500], red[300], blue[500], blue[300]];
@@ -63,28 +68,28 @@ function Staff () {
                     <div>You do not have any staff members yet</div>
                     ) : (
                     dataFiltered.map((dataFiltered) => (
-                        <Card sx={{ width: "15rem" }}>
+                        <Card sx={{ width: "20rem" }}>
                         <CardContent marginLeft="5rem">
 
                             <Tooltip title={dataFiltered.full_name} >
-                                <Avatar alt="" {...stringAvatar(dataFiltered.full_name)} sx={{ bgcolor: getRandomColor(), width:"3.2rem", height:"3.2rem"}}>
+                                <Avatar alt="" {...stringAvatar(dataFiltered.full_name)} sx={{ bgcolor: getRandomColor(), width:"3.5rem", height:"3.5rem"}}>
                           
                                 </Avatar>
                             </Tooltip>
                             <Typography sx={{ fontSize: 21 }}  gutterBottom>
                             {dataFiltered.full_name} | {dataFiltered._id}
                             </Typography>
-                            <Typography variant="h5" component="div" color="text.secondary">
-                                {dataFiltered.email}
+                            <Typography variant="h5" component="div" color="text.secondary" >
+                                <AiOutlineMail /> {dataFiltered.email}
                             </Typography>
-                            <Typography variant="h5" component="div" color="text.secondary">
-                                {dataFiltered.role}
+                            <Typography variant="h5" component="div" color="text.primary">
+                                <FaIcons6.FaUserTie/> Role: {dataFiltered.role}
                             </Typography> 
-                            <Typography variant="h5" component="div" color="text.secondary">
-                                Tasks assigned: {dataFiltered.tasks_n}
+                            <Typography variant="h5" component="div" color="text.primary">
+                                <FaIcons.FaTasks/> Tasks assigned: {dataFiltered.tasks_n}
                             </Typography> 
-                            <Typography variant="h5" component="div" color="text.secondary">
-                                Revenue produced: {dataFiltered.revenue}
+                            <Typography variant="h5" component="div" color="text.primary">
+                                <FaIcons6.FaMoneyBill1Wave/> Revenue produced: ${dataFiltered.revenue}
                             </Typography> 
                         </CardContent>
                         <CardActions>

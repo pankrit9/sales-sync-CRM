@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { useSelector } from 'react-redux';
+import AddIcon from "@mui/icons-material/Add";
 
 export default function AddBtn({fetchData, setProducts}) {
   // The following useStates are used to manage the local state of this component.
@@ -64,7 +65,7 @@ export default function AddBtn({fetchData, setProducts}) {
   return (
     <div>
       {/* Button to open dialog box */}
-      <Button variant="contained" onClick={handleClickOpen}>
+      <Button variant="contained" onClick={handleClickOpen} endIcon={<AddIcon/>}>
         Add Product
       </Button>
 

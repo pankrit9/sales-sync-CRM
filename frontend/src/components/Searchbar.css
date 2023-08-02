@@ -12,41 +12,9 @@
     width: 100%;
     position: fixed;
 }
-.tools-2 {
-    right: 342px;
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    padding-right: 10px;
-
-}
-.edit-btn-product {
-    right: 120px;
-    display: flex;
-    float: right;
-    justify-content: center;
-    position:fixed;
-}
 .search-icon {
     display: flex;
     justify-content: center;
     position: fixed;
 
-}
-.add-btn-product {
-    right: 245px;
-    display: flex;
-    float: right;
-    justify-content: center;
-    position: fixed;
-    padding-right: 10px;
-
-
-}
-.sell-btn-product {
-    right: 120px;
-    padding-right: 10px;
-    display: flex;
-    justify-content: center;
-    position: fixed;
 }
