@@ -56,14 +56,18 @@ def delete_client():
 
 @clients.route("/edit/<id>", methods=['POST'])
 def client_edit(id):
+    
     # Get request data, and updates fields according to request
     edit = request.get_json()
-    result = db.Clients.update_one({"_id": id}, {"$set": edit})
-
+    #Conver string id to int
+    requested_id = int(id)
+    edit["_id"] = requested_id
+    result = db.Clients.update_one({"_id": requested_id}, {"$set": edit})
+    print(edit)
     if result.modified_count > 0:
         return jsonify({"message": "Successful"}), 200
     else:
-        return jsonify({"message": "Error editing product"}), 400 
+        return jsonify({"message": "Error editing Client"}), 400 
 
 @clients.route("/<id>", methods=['GET'])
 def see_clients(id):

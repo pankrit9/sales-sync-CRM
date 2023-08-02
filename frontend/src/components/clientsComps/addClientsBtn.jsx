@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { useSelector } from 'react-redux';
+import * as AiIcons from "react-icons/ai"
 
 export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError}) {
   const _id = useSelector((state) => state.user);
@@ -68,8 +69,8 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
   return (
     <div>
       {/* Button to open dialog box */}
-      <Button variant="contained" onClick={handleClickOpen}>
-        Add Client
+      <Button variant="contained" onClick={handleClickOpen} endIcon={<AiIcons.AiOutlineUserAdd/>}>
+        Add Client 
       </Button>
 
       {/* Dialog box with form for adding client */}

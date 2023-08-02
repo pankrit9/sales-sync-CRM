@@ -92,7 +92,10 @@ def product_edit(id):
 
     # Parse json object for data to update
     edit = request.get_json()
-    stock = int(edit['stock'])
+    if bool(result['is_electronic']) == True:
+        stock = int(edit.get('stock', result['stock']))
+    else:
+        stock = 0
 
     # If product is electronic (i.e. has no stock), cannot update its stock field
     if bool(result['is_electronic']) == True and stock > 0:

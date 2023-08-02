@@ -60,8 +60,8 @@ export default function History({id, name, joined_date}) {
   // It contains a button to open the dialog, and the dialog itself with a timeline for the client's interaction history
   return (
     <div>
-      <Button size="medium" onClick={handleClickOpen}>
-        <FaIcons6.FaAddressBook/><div className='span2'>See History</div >
+      <Button size="medium" onClick={handleClickOpen} startIcon={<FaIcons6.FaAddressBook/>}>
+        See History
         </Button>
       <Dialog open={open} onClose={handleClose} >
         <DialogTitle>

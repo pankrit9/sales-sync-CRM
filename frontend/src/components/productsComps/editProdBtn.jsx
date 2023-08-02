@@ -13,8 +13,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { BACKEND_API } from "../../api";
 import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
+import EditIcon from '@mui/icons-material/Edit';
 
-export default function EditBtn({fetchData}) {
+export default function EditBtn({fetchData, setProducts}) {
   // The following useStates are used to manage the local state of this component.
   const [open, setOpen] = React.useState(false);
   const [name, setName] = React.useState("");
@@ -67,6 +68,7 @@ export default function EditBtn({fetchData}) {
       // Call fetchData after a successful product creation
       fetchData();
       setOpen(false);
+      setProducts([])
     } else {
       const errorData = await response.json();
       console.error("Error updating product: ", errorData);
@@ -77,7 +79,7 @@ export default function EditBtn({fetchData}) {
   // The return statement renders the component
   return (
     <div>
-      <Button variant="contained" onClick={handleClickOpen}>
+      <Button variant="contained" onClick={handleClickOpen} endIcon={<EditIcon/>}>
         Edit Product
       </Button>
       <Dialog open={open} onClose={handleClose}>

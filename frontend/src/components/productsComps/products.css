@@ -1,4 +1,4 @@
-.search-bar {
+.search-bar-pro {
     width: auto;
     display: flex;
     justify-content: center;
@@ -8,50 +8,38 @@
 }
 .container-search {
     left: 80px;
-    right: 120px;
     display: flex;
-    width: 86%;
-    height: 2.5rem;
+    width: 100%;
     position: fixed;
-    margin-left:'140px';
-    margin-right: '120px';
 }
-.tools {
-    right: 335px;
+.tools-2 {
+    right: 380px;
     display: flex;
     justify-content: center;
     position: fixed;
-    padding-right: 20px;
+    padding-right: 10px;
+
 }
-.edit-btn-clients {
+.edit-btn-product {
     right: 120px;
     display: flex;
     float: right;
     justify-content: center;
     position:fixed;
-
 }
 .search-icon {
     display: flex;
     justify-content: center;
     position: fixed;
-    right: 2rem;
 
 }
-.add-btn-clients {
-    right: 245px;
+.add-btn-product {
+    right: 265px;
     display: flex;
     float: right;
     justify-content: center;
     position: fixed;
     padding-right: 10px;
 
-}
-
-.download-btn {
-    right: 0px;
-    display: flex;
-    justify-content: center;
-    position:fixed;
 
 }
