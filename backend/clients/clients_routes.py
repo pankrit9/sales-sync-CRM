@@ -79,7 +79,7 @@ def see_clients(id):
 
     # Return error if no clients, else return list
     if not client_list:
-        return jsonify([]), 404
+        return jsonify([]), 200
     return jsonify(client_list), 200
 
 @clients.route("/history/<id>", methods=['GET'])

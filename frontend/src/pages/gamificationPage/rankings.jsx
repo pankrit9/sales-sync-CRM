@@ -165,7 +165,7 @@ function Rankings() {
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>My Ranking</h1>
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '40px'}}>{name}{' | '}{role}{' | Sales to next Rank: $'}
       {getRemSales(currentUserData.revenue) ? getRemSales(currentUserData.revenue).toLocaleString(): 'Loading...'}</h1>
-    <Box m="10px" style={{ marginLeft: '260px'}}>
+    <Box m="10px" style={{ marginLeft: '240px',marginTop: '30px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
       </Box>
@@ -173,7 +173,7 @@ function Rankings() {
       {/* GRID & CHARTS */}
       <Box
         display="grid"
-        gridTemplateColumns="repeat(12, 1fr)"
+        gridTemplateColumns="repeat(10, 1fr)"
         gridAutoRows="140px"
         gap="30px"
       >
@@ -184,7 +184,10 @@ function Rankings() {
           alignItems="center"
           justifyContent="center"
         >
-          {higherUserData && higherUserData.full_name ? 
+        {higherUserData && higherUserData.full_name ? 
+        <Box border={3} borderColor="divider" borderRadius={2} p={2}>
+        <Box pr={5} pb={2}>
+          
           <BadgeBoxSmall
               title={"Rank: " + getRank(higherUserData.revenue)}
               subtitle={"Next Rank: " + getNextRank(higherUserData.revenue)}
@@ -192,12 +195,15 @@ function Rankings() {
               increase={"Sales: $" + higherUserData.revenue.toLocaleString()}
               icon={getSmallBadge(higherUserData.revenue)}
             />            
-          : 'You are number 1!'
+          
+        </Box>
+        </Box>
+        : 'You are number 1!'
         }
         </Box>
         </Box>
       </Box>
-      <Box m="10px" style={{ marginLeft: '140px'}}>
+      <Box m="10px" style={{ marginLeft: '140px', marginTop: '30px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
       </Box>
@@ -217,6 +223,8 @@ function Rankings() {
           justifyContent="center"
         >
           {currentUserData && currentUserData.full_name ? 
+          <Box border={5} borderColor="#5E17EB" borderRadius={2} p={2}>
+          <Box pr={15} pb={4}>
           <BadgeBox
             title={"Rank: " + getRank(currentUserData.revenue)}
             user="You"
@@ -224,12 +232,15 @@ function Rankings() {
             increase={"Sales: $" + currentUserData.revenue.toLocaleString()}
             icon={getBigBadge(currentUserData.revenue)}
           />
+          
+          </Box>
+          </Box>
           : 'We cannot find you'
           }
         </Box>
         </Box>
       </Box>
-      <Box m="10px" style={{ marginLeft: '260px', marginTop: '30px' }}>
+      <Box m="10px" style={{ marginLeft: '240px', marginTop: '30px' }}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
       </Box>
@@ -237,7 +248,7 @@ function Rankings() {
       {/* GRID & CHARTS */}
       <Box
         display="grid"
-        gridTemplateColumns="repeat(12, 1fr)"
+        gridTemplateColumns="repeat(10, 1fr)"
         gridAutoRows="140px"
         gap="30px"
       >
@@ -249,6 +260,9 @@ function Rankings() {
           justifyContent="center"
         >
           {lowerUserData && lowerUserData.full_name ?
+        <Box border={3} borderColor="divider" borderRadius={2} p={2}>
+        <Box pr={5} pb={2}>
+          
           <BadgeBoxSmall
             title={"Rank: " + getRank(lowerUserData.revenue)}
             user={lowerUserData.full_name}
@@ -256,8 +270,11 @@ function Rankings() {
             increase={"Sales: $" + lowerUserData.revenue.toLocaleString()}
             icon={getSmallBadge(lowerUserData.revenue)}
           />
-          : 'There is no one below you'
-          }
+          
+        </Box>
+        </Box>
+        : 'There is no one below you'
+      }
         </Box>
         </Box>
       </Box>
