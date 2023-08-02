@@ -3,6 +3,9 @@ import { useTheme } from '@mui/material';
 
 const BarChart = ({data}) => {
     const theme = useTheme();
+    if (!data || data.length === 0) {
+        return <div>You have not secured any clients yet</div>;
+    }
     return (
         <ResponsiveBar
             data={data}

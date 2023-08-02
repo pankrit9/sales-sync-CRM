@@ -80,7 +80,7 @@ def see_products(id):
 
     # If no products, throw error, else return list of products
     if not product_list:
-        return jsonify({"message": "You don't have any products"}), 404
+        return jsonify([]), 200
     return jsonify(product_list), 200
 
 @products.route("/edit/<id>", methods=['POST'])

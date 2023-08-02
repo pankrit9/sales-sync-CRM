@@ -4,7 +4,7 @@ import React from 'react';
 const BadgeBoxSmall = ({ title, subtitle, user, icon, increase }) => {
 
   return (
-    <Box width="100%" m="0 100px">
+    <Box width="100%" m="0 20px">
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box display="flex" alignItems="center" gap="15px">
           {React.cloneElement(icon, { fontSize: "large" })}

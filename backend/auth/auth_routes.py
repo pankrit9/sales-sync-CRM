@@ -125,8 +125,7 @@ def get_team(id):
         staff_list = list(staff)
 
     if not staff_list:
-        return jsonify({"message": "There is no staff registered"}), 404
-
+        return jsonify([]), 200
     return jsonify(staff_list)
 
 # HELPER FUNCTIONS #

@@ -456,13 +456,14 @@ def get_winrate_growth(id):
 @sales.route("/piechart/<id>", methods=['GET'])
 def piechart_data(id):
     name = get_manager_name(id)
+    print(name)
     # Get all products and put into list
     all_products = db.Products.find({"manager_assigned": name})
     product_list = list(all_products)
 
     # If there are no products, return error
-    if not product_list:
-        return jsonify({"message": "You don't have any products"}), 404
+    if product_list == []:
+        return jsonify([]), 200
     
     # Append product data to array and return
     data = []

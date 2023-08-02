@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
 const StatBox = ({ title, subtitle, icon, increase }) => {
-
   return (
     <Box width="100%" m="0 80px">
       <Box display="flex" justifyContent="space-between">

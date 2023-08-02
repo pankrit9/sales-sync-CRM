@@ -59,7 +59,10 @@ function Staff () {
             </div>*/}
             <div style={{ marginLeft:'160px', marginRight: '100px', marginTop: '80px'}}>
                 <Grid container justify="space-around" gap={3} >
-                    {dataFiltered.map((dataFiltered) => (
+                    {!dataFiltered || dataFiltered.length === 0 ? (
+                    <div>You do not have any staff members yet</div>
+                    ) : (
+                    dataFiltered.map((dataFiltered) => (
                         <Card sx={{ width: "15rem" }}>
                         <CardContent marginLeft="5rem">
 
@@ -89,6 +92,7 @@ function Staff () {
                             {/*<History id={dataFiltered._id} name={dataFiltered.client} joined_date={dataFiltered.creation_date}/>*/}
                         </CardActions>
                         </Card>
+                    )
                     ))}
                 </Grid>
             </div>

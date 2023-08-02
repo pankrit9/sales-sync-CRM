@@ -116,34 +116,36 @@ function Clients() {
             </div>
 
             <div style={{ marginLeft:'160px', marginRight: '100px', marginTop: '80px'}}>
-                <Grid container justify="space-around" gap={3} >
-                    {dataFiltered.map((dataFiltered) => (
-                        <Card sx={{ width: "15rem" }}>
-                        <CardContent marginLeft="5rem">
-
-                            <Tooltip title={dataFiltered.client} >
-                                <Avatar alt="" {...stringAvatar(dataFiltered.client)} sx={{ bgcolor: getRandomColor(), width:"3.2rem", height:"3.2rem"}}>
-                          
-                                </Avatar>
-                            </Tooltip>
-                            <Typography sx={{ fontSize: 21 }}  gutterBottom>
-                            {dataFiltered.client} | {dataFiltered._id}
-                            </Typography>
-                            <Typography variant="h5" component="div" color="text.secondary">
-                                {dataFiltered.email}
-                            </Typography>
-                            <Typography variant="h5" component="div" color="text.secondary">
-                                {dataFiltered.mobile_number}
-                            </Typography> 
-                        </CardContent>
-                        <CardActions>
-                            
-                            <History id={dataFiltered._id} name={dataFiltered.client} joined_date={dataFiltered.creation_date}/>
-                        </CardActions>
-                        </Card>
-                    ))}
-                </Grid>
+            <Grid container justify="space-around" gap={3} >
+                {!dataFiltered || dataFiltered.length === 0 ? (
+                <div>You do not have any clients yet</div>
+                ) : (
+                dataFiltered.map((dataFiltered) => (
+                    <Card sx={{ width: "15rem" }}>
+                    <CardContent marginLeft="5rem">
+                        <Tooltip title={dataFiltered.client} >
+                        <Avatar alt="" {...stringAvatar(dataFiltered.client)} sx={{ bgcolor: getRandomColor(), width:"3.2rem", height:"3.2rem"}}>
+                        </Avatar>
+                        </Tooltip>
+                        <Typography sx={{ fontSize: 21 }}  gutterBottom>
+                        {dataFiltered.client} | {dataFiltered._id}
+                        </Typography>
+                        <Typography variant="h5" component="div" color="text.secondary">
+                        {dataFiltered.email}
+                        </Typography>
+                        <Typography variant="h5" component="div" color="text.secondary">
+                        {dataFiltered.mobile_number}
+                        </Typography> 
+                    </CardContent>
+                    <CardActions>
+                        <History id={dataFiltered._id} name={dataFiltered.client} joined_date={dataFiltered.creation_date}/>
+                    </CardActions>
+                    </Card>
+                ))
+                )}
+            </Grid>
             </div>
+
 
         </>
     );

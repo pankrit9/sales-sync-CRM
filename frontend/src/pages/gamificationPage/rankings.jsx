@@ -17,16 +17,40 @@ function Rankings() {
   const role = useSelector(state => state.role);
   const _id = useSelector((state) => state.user);
   const name = useSelector((state) => state.name);
+  const [higherUserData, setHigherUserData] = useState([]);
+  const [lowerUserData, setLowerUserData] = useState([]);
+  const [currentUserData, setCurrentUserData] = useState([]);
+
+  const fetchHigherUserData = async () => {
+    const response = await fetch(`${BACKEND_API}/rankings/higher/${_id}`, {method: "GET"});
+    const data = await response.json();
+    setHigherUserData(data);
+  }
+
+  const fetchLowerUserData = async () => {
+    const response = await fetch(`${BACKEND_API}/rankings/lower/${_id}`, {method: "GET"});
+    const data = await response.json();
+    setLowerUserData(data);
+  }
+
+  const fetchCurrentUserData = async () => {
+    const response = await fetch(`${BACKEND_API}/rankings/current/${_id}`, {method: "GET"});
+    const data = await response.json();
+    setCurrentUserData(data);
+  }
 
   useEffect(() => {
+    fetchHigherUserData();
+    fetchLowerUserData();
+    fetchCurrentUserData();
   }, []);
 
   return (
     <>
     <Navbar/>
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>My Ranking</h1>
-    <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '40px'}}>{name}{' | '}{role}{' | '}{'$552,000'}</h1>
-    <Box m="10px" style={{ marginLeft: '160px'}}>
+    <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '40px'}}>{name}{' | '}{role}{' | $'}{currentUserData.revenue}</h1>
+    <Box m="10px" style={{ marginLeft: '260px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
       </Box>
@@ -45,17 +69,20 @@ function Rankings() {
           alignItems="center"
           justifyContent="center"
         >
+          {higherUserData && higherUserData.full_name ? 
           <BadgeBoxSmall
-            title="Rank: Bronze Seller"
-            subtitle="Next Rank: Silver Seller"
-            user="Jordan Teal"
-            increase="Til next rank: $500,000"
-            icon={
-              <EmojiEventsTwoTone
-                sx={{ fontSize: "70px" }}
-              />
-            }
-          />
+              title="Rank: Bronze Seller"
+              subtitle="Next Rank: Silver Seller"
+              user={higherUserData.full_name}
+              increase="Til next rank: $500,000"
+              icon={
+                <EmojiEventsTwoTone
+                  sx={{ fontSize: "70px" }}
+                />
+              }
+            />
+          : 'You are number 1!'
+        }
         </Box>
         </Box>
       </Box>
@@ -82,7 +109,7 @@ function Rankings() {
             title="Rank: Bronze Seller"
             user="You"
             subtitle="Next Rank: Silver Seller"
-            increase="Til next rank: $500,000"
+            increase={currentUserData.revenue}
             icon={
               <TokenTwoTone
                 sx={{ fontSize: "120px" }}
@@ -92,7 +119,7 @@ function Rankings() {
         </Box>
         </Box>
       </Box>
-      <Box m="10px" style={{ marginLeft: '160px', marginTop: '25px' }}>
+      <Box m="10px" style={{ marginLeft: '260px', marginTop: '30px' }}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
       </Box>
@@ -111,9 +138,10 @@ function Rankings() {
           alignItems="center"
           justifyContent="center"
         >
+          {lowerUserData && lowerUserData.full_name ?
           <BadgeBoxSmall
             title="Rank: Bronze Seller"
-            user="Haley Smith"
+            user={lowerUserData.full_name}
             subtitle="Next Rank: Silver Seller"
             increase="Til next rank: $500,000"
             icon={
@@ -122,6 +150,8 @@ function Rankings() {
               />
             }
           />
+          : 'There is no one below you'
+          }
         </Box>
         </Box>
       </Box>

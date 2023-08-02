@@ -3,6 +3,11 @@ import { useTheme } from '@mui/material';
 
 const PieChart = ({data}) => {
     const theme = useTheme();
+    
+    if (!data || data.length === 0) {
+        return <div style={{paddingTop: '60px', paddingLeft: '160px'}}>You have not sold any products yet</div>;
+    }
+    
     return (
         <ResponsivePieCanvas
             data={data}

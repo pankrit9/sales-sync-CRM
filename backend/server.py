@@ -9,6 +9,7 @@ from products.products_routes import products
 from sales.records_routes import records
 from clients.clients_routes import clients
 from sales.sales_routes import sales
+from gamification.gamification_routes import rankings
 
 app = Flask(__name__)
 CORS(app)
@@ -25,6 +26,7 @@ app.register_blueprint(records, url_prefix="/records")
 app.register_blueprint(tasks, url_prefix="/tasks")
 app.register_blueprint(sales, url_prefix="/sales")
 app.register_blueprint(clients, url_prefix="/clients")
+app.register_blueprint(rankings, url_prefix="/rankings")
 
 # Wrapper function that is called before accessing any route 
 # that requires authentication.
