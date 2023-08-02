@@ -80,12 +80,12 @@ const headCells = [
     //     disablePadding: true,
     //     label: "Task",
     // },
-    {
-        id: "manager_assigned",
-        numeric: false,
-        disablePadding: false,
-        label: "Manager"
-    },
+    //{
+    //    id: "manager_assigned",
+    //    numeric: false,
+    //    disablePadding: false,
+    //    label: "Manager"
+    //},
     {
         id: "task_description",
         numeric: false,
@@ -104,12 +104,12 @@ const headCells = [
         disablePadding: false,
         label: "Product",
     },
-    // {
-    //     id: "product_quantity",
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: "Product Quantity",
-    // },
+     {
+        id: "product_quantity",
+        numeric: false,
+        disablePadding: false,
+        label: "Quantity",
+    },
     {
         id: "priority",
         numeric: false,
@@ -191,7 +191,7 @@ function EnhancedTableToolbar(props) {
     const { numSelected, selectedIds, fetchData } = props;   
 }
 
-export default function EnhancedTable({ rows, fetchData }) {
+export default function EnhancedTable({ rows, fetchData, setTask}) {
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("task_id");
     const [selected, setSelected] = React.useState([]);
@@ -221,7 +221,8 @@ export default function EnhancedTable({ rows, fetchData }) {
             console.log("calling ffetchstaffmembers edit")
             fetchStaffMembers();
         }
-    }, []);
+    }, [staff_members.length]);
+
     const fetchStaffMembers = async () => {
         try {
             console.log("fetchStaffMembers edit: fetching staff members.... ")
@@ -334,13 +335,12 @@ export default function EnhancedTable({ rows, fetchData }) {
                                                 }}
                                             /> */}
                                         {/* </TableCell> */}
-                                        <TableCell align="center">{row.manager_assigned}</TableCell>
                                         <TableCell align="centre">{row.task_description}</TableCell>
                                         <TableCell align="centre">{row.client_assigned}</TableCell>
                                         <TableCell align="centre">{row.product}</TableCell>
-                                        {/* <TableCell align="centre">{row.product_quantity}</TableCell> */}
+                                        <TableCell align="centre">{row.product_quantity}</TableCell>
                                         <TableCell align="centre">{row.priority}</TableCell>
-                                        <TableCell align="centre">{row.due_date}</TableCell>
+                                        <TableCell align="centre">{new Date(row.due_date).toDateString()}</TableCell>
                                         <TableCell align="centre">
                                             <Tooltip title={row.staff_member_assigned}>
                                                 <Avatar sx={{ bgcolor: getRandomColor() }}>
@@ -356,7 +356,7 @@ export default function EnhancedTable({ rows, fetchData }) {
                                                 </Grid>
                                                 <Grid item xs={6}>
                                                     {
-                                                        role === 'manager' && <DeleteTaskBtn task_id={row._id} />
+                                                        role === 'manager' && <DeleteTaskBtn task_id={row._id} setTask={setTask}/>
                                                     }
                                                 </Grid>
                                             </Grid>

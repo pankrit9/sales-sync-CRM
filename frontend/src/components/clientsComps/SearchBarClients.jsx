@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import TextField from "@mui/material/TextField";
 import "./SearchbarClients.css"
 
-export const SearchbarClients = ({setSearchQuery}) => (
+export const SearchbarClients = ({setSearchQuery,setRecords}) => (
     <form>
       <TextField id="search-bar" className="search-bar"
         onInput={(e) => {

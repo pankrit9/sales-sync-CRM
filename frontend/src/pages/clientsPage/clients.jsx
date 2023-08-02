@@ -8,13 +8,17 @@ import { BACKEND_API } from "../../api";
 import { SearchbarClients } from '../../components/clientsComps/SearchBarClients';
 import '../../components/Searchbar.css';
 import { useSelector } from 'react-redux';
+import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
+import * as FaIcons6 from "react-icons/fa6";
+import { Card, CardContent, stringAvatar, CardMedia,Avatar,  Tooltip, Typography, Grid, CardActions, Button} from '@mui/material';
+import History from '../../components/clientsComps/historyDialog';
 
 function Clients() {
     
     const [clients, setClients] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const state = useSelector(state => state);
-    
+    const [id, setId] = useState(0);
 
     const fetchData = useCallback(async () => {
         const response = await fetch(`${BACKEND_API}/clients/`, {method: "GET"});
@@ -26,13 +30,25 @@ function Clients() {
         if (!query) {
           return clients;
         } else {
-          return clients.filter((d) => d['name'].toLowerCase().includes(query.toLowerCase()));
+          return clients.filter((d) => d['client'].toLowerCase().includes(query.toLowerCase()));
         }
     };
+    const colors = [deepOrange[500], deepOrange[300], deepPurple[500], deepPurple[300], green[500], green[300], red[500], red[300], blue[500], blue[300]];
 
+    const getRandomColor = () => {
+        const randomIndex = Math.floor(Math.random() * colors.length);
+        return colors[randomIndex];
+    };
+
+    function stringAvatar(name) {
+        return {
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        };
+    }
+    
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
 
     const dataFiltered = filterData(searchQuery, clients);
     return (
@@ -51,9 +67,39 @@ function Clients() {
                     <AddBtn fetchData={fetchData}/>
                 </div>
             </div>
-                <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
-                {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData}/> : <p>The Client list is empty</p>}
+
+            <div style={{ marginLeft:'160px', marginRight: '100px', marginTop: '80px'}}>
+                <Grid container justify="space-around" gap={3} >
+                    {dataFiltered.map((dataFiltered) => (
+                        <Card sx={{ width: "15rem" }}>
+                        <CardContent marginLeft="5rem">
+
+                            <Tooltip title={dataFiltered.client} >
+                                <Avatar alt="" {...stringAvatar(dataFiltered.client)} sx={{ bgcolor: getRandomColor(), width:"3.2rem", height:"3.2rem"}}>
+                          
+                                </Avatar>
+                            </Tooltip>
+                            <Typography sx={{ fontSize: 21 }}  gutterBottom>
+                            {dataFiltered.client} | {dataFiltered._id}
+                            </Typography>
+                            <Typography variant="h5" component="div" color="text.secondary">
+                                {dataFiltered.email}
+                            </Typography>
+                            <Typography variant="h5" component="div" color="text.secondary">
+                                {dataFiltered.mobile_number}
+                            </Typography> 
+                        </CardContent>
+                        <CardActions>
+                            
+                            <History id={dataFiltered._id} name={dataFiltered.client} 
+                            email={dataFiltered.email} c_date={dataFiltered.completed_date} 
+                            joined_date={dataFiltered.creation_date}/>
+                        </CardActions>
+                        </Card>
+                    ))}
+                </Grid>
             </div>
+
         </>
     );
 }

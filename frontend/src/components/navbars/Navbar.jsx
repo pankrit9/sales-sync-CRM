@@ -70,7 +70,7 @@ function Navbar({}) {
                                 }}>
                                     <Link to={item.path}>
                                         {item.icon}
-                                        {sidebar? <span>{item.title}</span> :''}
+                                        {sidebar? <div className='span2'>{item.title}</div> :''}
                                     </Link>
                                 </li>
                             )

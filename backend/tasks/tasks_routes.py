@@ -27,11 +27,11 @@ def get_tasks(id):
 
     try:
         if curr_user["role"] == "manager":
-            task_query = {"manager_assigned": curr_user["first_name"]}
+            task_query = {"manager_assigned": curr_user["full_name"]}
             # task_query = {"manager_assigned": "test"}
 
         elif curr_user["role"] == "staff":
-            task_query = {"staff_member_assigned": curr_user["first_name"]}
+            task_query = {"staff_member_assigned": curr_user["full_name"]}
         else:
             return jsonify({"message": "Invalid role"}), 400
         
@@ -81,20 +81,19 @@ def manager_create_task(uId):
         return jsonify({"message" : "You don't have enough stock available."}), 404
     
     date_string = request.json.get('due_date')
-    date_object = datetime.strptime(date_string, "%Y-%m-%d")
-    
+        
     # note, need to have '_id' in order to avoid mongodb creating an
     # object id
     new_task = {
         "_id": str(taskId),
         "entry_date": datetime.now(),
-        "manager_assigned": curr_user["first_name"],
+        "manager_assigned": curr_user["full_name"],
         "task_description": request.json.get('task_description'),
         "client_assigned": request.json.get('client_assigned'),
         "product": request.json.get('product'),
         "product_quantity": request.json.get('product_quantity'),
         "priority": request.json.get('priority'),
-        "due_date": date_object,
+        "due_date": datetime.strptime(date_string, "%Y-%m-%d"),
         "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": request.json.get('complete'),
     }
@@ -107,9 +106,9 @@ def manager_create_task(uId):
         db.Products.update_one(
             {"name": request.json.get('product')},
             {"$set": {"stock" : int(stock) - int(quantity_staged)}})
-        tasks_n = (db.Accounts.find_one({"first_name" : request.json.get('staff_member_assigned')}))['tasks_n']
+        tasks_n = (db.Accounts.find_one({"full_name" : request.json.get('staff_member_assigned')}))['tasks_n']
         db.Accounts.update_one(
-            {"first_name" : request.json.get('staff_member_assigned')},
+            {"full_name" : request.json.get('staff_member_assigned')},
             {"$set": {"tasks_n": int(tasks_n) + 1}}
         )
         return jsonify({"message": "Successful"})
@@ -132,9 +131,9 @@ def manager_task_delete(taskId):
 
     if result.deleted_count > 0:
         if deduct:
-            tasks_n = (db.Accounts.find_one({"first_name": staff_name}))['tasks_n']
+            tasks_n = (db.Accounts.find_one({"full_name": staff_name}))['tasks_n']
             db.Accounts.update_one(
-                {"first_name" : staff_name},
+                {"full_name" : staff_name},
                 {"$set": {"tasks_n": int(tasks_n) - 1}}
             )
         return jsonify({"message": "Successful"})
@@ -145,9 +144,22 @@ def manager_task_delete(taskId):
 # if manager tries to edit task, allow to edit everything except task id
 @tasks.route("/edit/<uId>/<taskId>", methods=['POST'])
 def manager_task_edit(uId, taskId):
-    
+    taskId = str(taskId)
+
     # parse json object for data to update i.e. due date
-    edit = request.get_json()
+    data = request.get_json()
+
+    edit = {
+        "task_description": request.json.get('task_description'),
+        "client_assigned": request.json.get('client_assigned'),
+        "product": request.json.get('product'),
+        "product_quantity": request.json.get('product_quantity'),
+        "priority": request.json.get('priority'),
+        "due_date": datetime.strptime(data['due_date'], '%a, %d %b %Y %H:%M:%S %Z'),
+        "staff_member_assigned": request.json.get('staff_member_assigned'),
+        "complete": request.json.get('complete'),
+    }
+
     print("edit: ", edit)
 
     # updates fields according to provided JSON
@@ -161,17 +173,17 @@ def manager_task_edit(uId, taskId):
         product_id = (db.Products.find_one({"name": product_name}))['_id']
         qty_sold = (db.Tasks.find_one({"_id": taskId}))['product_quantity']
         sold_by = (db.Tasks.find_one({"_id": taskId}))['staff_member_assigned']
+        manager_assigned = (db.Tasks.find_one({"_id": taskId}))['manager_assigned']
         client = (db.Tasks.find_one({"_id": taskId}))['client_assigned']
         update_products(product_id, qty_sold)
         update_accounts(product_id, qty_sold, sold_by)
-        update_sales(product_id, qty_sold, sold_by)
-        update_clients(client)
+        update_sales(product_id, qty_sold, sold_by, manager_assigned, client)
+        update_clients(client, product_name, qty_sold, sold_by)
 
     if result.modified_count > 0:
         return jsonify({"message": "Successful"})
     else:
         return jsonify({"message": "Unsuccessful"}), 400
-
 
 def update_products(id, qty_sold):
     products = db.Products
@@ -182,10 +194,10 @@ def update_products(id, qty_sold):
     if not sold_product:
         return jsonify({"message": "Product with given id not found"}), 404
     
-    price = int(sold_product['price'])
+    price = float(sold_product['price'])
     n_sold = int(sold_product['n_sold'])
     is_electronic = bool(sold_product['is_electronic'])
-    prev_revenue = int(sold_product['revenue'])
+    prev_revenue = float(sold_product['revenue'])
     #status = request.json['payment_status']
     #method = request.json['payment_method']
 
@@ -212,24 +224,24 @@ def update_products(id, qty_sold):
 def update_accounts(id, qty_sold, sold_by):
     products = db.Products
 
-    staff = db.Accounts.find_one({"first_name":sold_by})
+    staff = db.Accounts.find_one({"full_name":sold_by})
     quantity_sold = int(qty_sold)
     sold_product = products.find_one({"_id":id})
-    price = int(sold_product['price'])
+    price = float(sold_product['price'])
 
     db.Accounts.update_one(
-        {"first_name": sold_by},
-        { "$set": {"revenue": str(int(staff['revenue']) + price * quantity_sold)}}
+        {"full_name": sold_by},
+        { "$set": {"revenue": str(float(staff['revenue']) + price * quantity_sold)}}
     )
 
-    tasks_n = (db.Accounts.find_one({"first_name" : sold_by}))['tasks_n']
+    tasks_n = (db.Accounts.find_one({"full_name" : sold_by}))['tasks_n']
     db.Accounts.update_one(
-            {"first_name" : sold_by},
+            {"full_name" : sold_by},
             {"$set": {"tasks_n": int(tasks_n) - 1}}
     )
 
-def update_sales(product_id, qty_sold, sold_by):
-    product_price = int((db.Products.find_one({"_id":product_id}))['price'])
+def update_sales(product_id, qty_sold, sold_by, manager_assigned, client):
+    product_price = float((db.Products.find_one({"_id":product_id}))['price'])
     
     # Fetch all ids and convert them to integers
     all_sale_ids = [int(sale['_id']) for sale in db.Sales.find({}, {"_id": 1})]
@@ -247,14 +259,21 @@ def update_sales(product_id, qty_sold, sold_by):
         "quantity_sold": int(qty_sold),
         "product_price": product_price,
         "sold_by": sold_by,
+        "manager_assigned": manager_assigned, 
         "date_of_sale": datetime.now(),
-        "client_id": "To be Implemented",
-        "revenue": int(qty_sold) * product_price,
+        "client_id": client,
+        "revenue": float(qty_sold) * product_price,
         "staff": "To be Implemented",
         "payment_method":"To be Implemented",
         "payment_status": "To be Implemented",
         "deadline": "To be Implemented",
     })
 
-def update_clients(client):
-    db.Clients.update_one({"client" : client}, {"$set": {'last_sale': datetime.now()}})
+def update_clients(client, product_name, qty_sold, sold_by):
+    new_interaction =  {"product_name": product_name,
+                        "completed_date": datetime.now(),
+                        "qty": qty_sold,
+                        "staff": sold_by}
+
+    db.Clients.update_one({"client" : client},
+                           {"$push": {'tasks_records': new_interaction}})

@@ -8,6 +8,8 @@ from flask import Blueprint, jsonify, request
 # search for the route /login
 clients = Blueprint('clients', __name__)
 
+
+
 # We have POST, PUT, DELETE and GET 
 @clients.route("/add", methods = ['POST'])
 def add_client():
@@ -28,8 +30,9 @@ def add_client():
         "client": request.json['client'],
         "lifetime_value" : 0,
         "pending_value" : 0,
-        "tasks": "",
+        "tasks_records": [],
         "staff" : "",
+        #"nationality": request.json['country'],
         "email" : request.json['email'],
         "lead_source" : request.json['lead_source'],
         "client_position":  request.json['client_position'],
@@ -46,15 +49,17 @@ def add_client():
 # We have POST, PUT, DELETE and GET 
 @clients.route("/delete", methods = ['DELETE'])
 def delete_client():
-    clients = db.Clients
+    
+    all_clients = db.Clients.find({})
 
-    delete_client = {
-        "name" : request.json['name']
-    }
+    # convert Cursor type to list
+    client_list = list(all_clients)
 
-    clients.delete_one(delete_client)
+    if not client_list:
+        return jsonify({"message": "You don't have any clients"})
 
-    return jsonify({"message": "success client deleted"})
+    return jsonify(client_list)
+
 
 @clients.route("/edit/<id>", methods=['POST'])
 def client_edit(id):
@@ -84,3 +89,14 @@ def see_clients():
         return jsonify({"message": "You don't have any clients"})
 
     return jsonify(client_list)
+
+@clients.route("/history/<id>", methods=['GET'])
+def see_client_history(id):
+    found_client = db.Clients.find_one({"_id":int(id)})
+    # convert Cursor type to list
+    records_list = found_client["tasks_records"]
+
+    if not records_list:
+        return jsonify([])
+
+    return jsonify(records_list)

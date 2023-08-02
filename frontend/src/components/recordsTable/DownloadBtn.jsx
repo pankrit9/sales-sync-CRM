@@ -44,12 +44,11 @@ export default function DownloadBtn({ fetchData, userId }) {
         };
 
         console.log("task: add request.... ");
-        const response = await fetch(`${BACKEND_API}/download`, {
-            method: "POST",
+        const response = await fetch(`${BACKEND_API}/records/download`, {
+            method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(task),
         });
 
         if (response.ok) {
@@ -71,12 +70,12 @@ export default function DownloadBtn({ fetchData, userId }) {
                 variant="contained" 
                 color="primary"
                 startIcon={<BsIcons.BsCloudDownload />}
-                onClick={handleClickOpen}
+                onClick={handeDwn}
                 
             >
                 <Typography>Download Report</Typography>
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog   >
                 <DialogTitle>Download PDF version</DialogTitle>
                 <DialogContent>
                     <TextField
@@ -93,7 +92,7 @@ export default function DownloadBtn({ fetchData, userId }) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handeDwn}>Add</Button>
+                    <Button >Download</Button>
                 </DialogActions>
             </Dialog>
         </div>

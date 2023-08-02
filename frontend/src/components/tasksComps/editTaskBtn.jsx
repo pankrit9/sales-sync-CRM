@@ -95,7 +95,7 @@ export default function EditBtn({ fetchData, task_id, initialData, staff_members
 
     return (
         <div>
-            <IconButton onClick={handleClickOpenEditBtn} >
+            <IconButton onClick={handleClickOpenEditBtn} disabled={initialData.complete === "Completed"} >
                 <EditIcon />
             </IconButton>
             <Dialog open={open} onClose={handleClose}>

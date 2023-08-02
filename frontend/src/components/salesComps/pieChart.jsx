@@ -1,7 +1,7 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/pie
 import { ResponsivePieCanvas } from '@nivo/pie'
-//import { mockDataPieChart as data } from '../../mockData/mockDataSet'
+import { useTheme } from '@mui/material';
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
@@ -9,6 +9,7 @@ import { ResponsivePieCanvas } from '@nivo/pie'
 // website examples showcase many properties,
 // you'll often use just a few of them.
 const PieChart = ({data}) => {
+    const theme = useTheme();
     return (
         <ResponsivePieCanvas
             data={data}
@@ -17,42 +18,14 @@ const PieChart = ({data}) => {
             padAngle={0.7}
             cornerRadius={3}
             activeOuterRadiusOffset={8}
-            colors={{ scheme: 'paired' }}
-            borderColor={{
-                from: 'color',
-                modifiers: [
-                    [
-                        'darker',
-                        0.6
-                    ]
-                ]
-            }}
+            colors={{ scheme: theme.palette.mode === 'dark' ? 'dark2' : 'paired' }}
+            borderColor={theme.palette.text.primary}
             arcLinkLabelsSkipAngle={10}
-            arcLinkLabelsTextColor="#333333"
+            arcLinkLabelsTextColor={theme.palette.text.primary}
             arcLinkLabelsThickness={2}
             arcLinkLabelsColor={{ from: 'color' }}
             arcLabelsSkipAngle={10}
-            arcLabelsTextColor="#333333"
-            defs={[
-                {
-                    id: 'dots',
-                    type: 'patternDots',
-                    background: 'inherit',
-                    color: 'rgba(255, 255, 255, 0.3)',
-                    size: 4,
-                    padding: 1,
-                    stagger: true
-                },
-                {
-                    id: 'lines',
-                    type: 'patternLines',
-                    background: 'inherit',
-                    color: 'rgba(255, 255, 255, 0.3)',
-                    rotation: -45,
-                    lineWidth: 6,
-                    spacing: 10
-                }
-            ]}
+            arcLabelsTextColor={theme.palette.text.primary}
         />
     )    
 }

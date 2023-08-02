@@ -34,7 +34,7 @@ function Products() {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [products.length]);
 
     const dataFiltered = filterData(searchQuery, products);
     return (
@@ -50,7 +50,7 @@ function Products() {
                     <EditBtn fetchData={fetchData}/>
                 </div>
                 <div className='add-btn-product' >
-                    <AddBtn fetchData={fetchData} />
+                    <AddBtn fetchData={fetchData} setProducts={setProducts}/>
                 </div>
             </div>
             <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>

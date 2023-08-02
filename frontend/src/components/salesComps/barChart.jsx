@@ -1,8 +1,10 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/bar
 import { ResponsiveBar } from '@nivo/bar'
+import { useTheme } from '@mui/material';
 
 const BarChart = ({data}) => {
+    const theme = useTheme();
     return (
         <ResponsiveBar
             data={data}
@@ -18,13 +20,13 @@ const BarChart = ({data}) => {
             padding={0.3}
             valueScale={{ type: 'linear' }}
             indexScale={{ type: 'band', round: true }}
-            colors={{ scheme: 'nivo' }}
+            colors={{ scheme: theme.palette.mode === 'dark' ? 'dark2' : 'paired' }}
             defs={[
                 {
                     id: 'dots',
                     type: 'patternDots',
                     background: 'inherit',
-                    color: '#38bcb2',
+                    color: theme.palette.text.primary,
                     size: 4,
                     padding: 1,
                     stagger: true
@@ -33,21 +35,13 @@ const BarChart = ({data}) => {
                     id: 'lines',
                     type: 'patternLines',
                     background: 'inherit',
-                    color: '#eed312',
+                    color: theme.palette.text.primary,
                     rotation: -45,
                     lineWidth: 6,
                     spacing: 10
                 }
             ]}
-            borderColor={{
-                from: 'color',
-                modifiers: [
-                    [
-                        'darker',
-                        1.6
-                    ]
-                ]
-            }}
+            borderColor={theme.palette.text.primary}
             axisTop={null}
             axisRight={null}
             axisBottom={null}
@@ -57,19 +51,11 @@ const BarChart = ({data}) => {
                 tickRotation: 0,
                 legend: '',
                 legendPosition: 'middle',
-                legendOffset: -40
+                legendOffset: -40,
             }}
             labelSkipWidth={12}
             labelSkipHeight={12}
-            labelTextColor={{
-                from: 'color',
-                modifiers: [
-                    [
-                        'darker',
-                        1.6
-                    ]
-                ]
-            }}
+            labelTextColor={theme.palette.text.primary}
             legends={[
                 {
                     dataFrom: 'keys',

@@ -17,7 +17,7 @@ import Grid from "@mui/material/Grid";
 import { useSelector } from 'react-redux';
 
 
-export default function AddBtn({ fetchData, userId }) {
+export default function AddBtn({ fetchData, userId, setTask}) {
     const [open, setOpen] = React.useState(false);
     const [task_description, setTaskDescription] = React.useState("");
     const [client_assigned, setClient] = React.useState("");
@@ -50,19 +50,9 @@ export default function AddBtn({ fetchData, userId }) {
         fetchStaffMembers();
     }, []);
 
-    // useEffect(() => {
-    //     fetchClients();
-    // }, []);
-
-    // const fetchClients = async () => {
-    //     try {
-    //         const response = await fetch(`${BACKEND_API}/clients`, {method: "GET"});
-    //         const data = await response.json();
-    //         setClients(data);
-    //     } catch (error) {
-    //         console.error("Error fetching clients: ", error);
-    //     }
-    // };
+    useEffect(() => {
+        fetchClients();
+    }, []);
 
     const fetchStaffMembers = async () => {
         try {
@@ -82,6 +72,15 @@ export default function AddBtn({ fetchData, userId }) {
             setProducts(data);
         } catch (error) {
             console.error("Error fetching products: ", error);
+        }
+    };
+    const fetchClients = async () => {
+        try {
+            const response = await fetch(`${BACKEND_API}/clients`, {method: "GET"});
+            const data = await response.json();;
+            setClients(data);
+        } catch (error) {
+            console.error("Error fetching clients: ", error);
         }
     };
 
@@ -111,6 +110,7 @@ export default function AddBtn({ fetchData, userId }) {
             // Call fetchData after a successful task creation
             fetchData();
             setOpen(false);
+            setTask([]);
         } else {
             console.log("task: did not add the task");
             const errorData = await response.json();
@@ -148,18 +148,7 @@ export default function AddBtn({ fetchData, userId }) {
                         value={task_description}
                         onChange={(e) => setTaskDescription(e.target.value)}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="client_assigned"
-                        label="Attach Client"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        value={client_assigned}
-                        onChange={(e) => setClient(e.target.value)}
-                    />
-                    {/* <FormControl fullWidth style={{ margin: '10px 0' }}>
+                    <FormControl fullWidth style={{ margin: '10px 0' }}>
                         <InputLabel id="client_assigned">Choose Client</InputLabel>
                         <Select
                             labelId="client_assigned"
@@ -170,12 +159,12 @@ export default function AddBtn({ fetchData, userId }) {
                             autoWidth
                         >
                             {clients.map((client) => (
-                                <MenuItem key={client._id} value={client.name}>
-                                    {client.name}
+                                <MenuItem key={client._id} value={client.client}>
+                                    {client.client}
                                 </MenuItem>
                             ))}
                         </Select>
-                    </FormControl> */}
+                    </FormControl>
                     <FormControl fullWidth style={{ margin: '10px 0' }}>
                         <InputLabel id="complete">Priority</InputLabel>
                         <Select
@@ -251,7 +240,7 @@ export default function AddBtn({ fetchData, userId }) {
                             autoWidth
                         >
                             {staff_members.map((staffMember) => (
-                                <MenuItem key={staffMember._id} value={staffMember.first_name}>
+                                <MenuItem key={staffMember._id} value={staffMember.full_name}>
                                     {staffMember.first_name} {staffMember.last_name}
                                 </MenuItem>
                             ))}

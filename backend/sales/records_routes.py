@@ -30,7 +30,6 @@ def see_records():
 
 @records.route("/download", methods=['GET'])
 def records_download():
-
     # Create a new PDF file
     pdf = PyPDF2.PdfFileWriter()
 
@@ -48,10 +47,11 @@ def records_download():
     elements = []
 
     # Add a table with sales data
-    table_data = [["Customer", "Product", "Date", "Amount"]]
-
-    for sale in sales_data:
-        row = [sale['customer'], sale['product'], sale['date'], sale['amount']]
+    table_data = [["Product Id", "Client", "Quantity Sold", "Date", "Sold By", "Revenue"]]
+    print(records_list)
+    for sale in records_list:
+        row = [sale['product_id'], sale['client_id'] , sale['date_of_sale'],sale['sold_by'] ,sale['quantity_sold'],"$" +str(sale['revenue'])]
+        
         table_data.append(row)
 
     table = Table(table_data)
@@ -69,5 +69,4 @@ def records_download():
     # Build the PDF document
     doc.build(elements)
 
-
-    return jsonify({"message": "Unsuccessful"}), 400 
+    return jsonify({"message": "successful"}), 200 
