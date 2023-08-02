@@ -25,12 +25,11 @@ import EditIcon from '@mui/icons-material/Edit';
 // if staff is editting
     // can only edit the following fields:
         // task status
-export default function EditBtn({ fetchData, task_id, initialData, staff_members }) {
+export default function EditBtn({ fetchData, task_id, initialData }) {
     const [formData, setFormData] = useState(initialData);
     const [open, setOpen] = React.useState(false);
 
-    // const [staff_members, setStaffMembers] = React.useState([]);
-
+    const [staff_members, setStaffMembers] = React.useState([]);
     const _id = useSelector((state) => state.user);
     const role = useSelector((state) => state.role);
 
@@ -55,23 +54,19 @@ export default function EditBtn({ fetchData, task_id, initialData, staff_members
     };
 
 
-    // useEffect(() => {
-    //     if (role === "manager") {
-    //         console.log("calling ffetchstaffmembers edit")
-    //         fetchStaffMembers();
-    //     }
-    // }, []);
+    useEffect(() => {
+            fetchStaffMembers();
+    }, []);
 
-    // const fetchStaffMembers = async () => {
-    //     try {
-    //         console.log("fetchStaffMembers edit: fetching staff members.... ")
-    //         const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
-    //         const data = await response.json();
-    //         setStaffMembers(data);
-    //     } catch (error) {
-    //         console.error("Error fetching staff members: ", error);
-    //     }
-    // };
+    const fetchStaffMembers = async () => {
+        try {
+            const response = await fetch(`${BACKEND_API}/auth/${_id}`, {method: "GET"});
+            const data = await response.json();
+            setStaffMembers(data);
+        } catch (error) {
+            console.error("Error fetching staff members: ", error);
+        }
+    };
 
     const handleEdit = async () => {
         console.log("editTask: edit requested... ", formData);
@@ -125,6 +120,7 @@ export default function EditBtn({ fetchData, task_id, initialData, staff_members
                             />
                             <FormControl fullWidth style={{ margin: '10px 0' }}>
                                 <InputLabel id="complete">Priority</InputLabel>
+                                <div style={{"marginTop": "10px" }}></div>
                                 <Select
                                     labelId="priority"
                                     id="priority"
@@ -139,6 +135,7 @@ export default function EditBtn({ fetchData, task_id, initialData, staff_members
                             </FormControl>
                             <FormControl fullWidth style={{ margin: '10px 0' }}>
                                 <InputLabel id="staff_member_assigned">Assign Staff</InputLabel>
+                                <div style={{"marginTop": "10px" }}></div>
                                 <Select
                                     labelId="staff_member_assigned"
                                     id="staff_member_assigned"

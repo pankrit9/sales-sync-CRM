@@ -110,17 +110,17 @@ function getRemSales(revenue) {
 }
 
 function getNextRank(revenue) {
-  if (revenue < 100000) {
+  if (revenue < 500000) {
     return "Bronze"
-  } else if (revenue < 500000) {
-    return "Silver"
   } else if (revenue < 800000) {
-    return "Gold"
+    return "Silver"
   } else if (revenue < 1000000) {
-    return "Platinum"
+    return "Gold"
   } else if (revenue < 5000000) {
+    return "Platinum"
+  } else if (revenue < 8000000) {
     return "Emerald"
-  } else if (revenue <= 8000000) {
+  } else if (revenue <= 10000000) {
     return "Diamond"
   } else {
     return "-"
