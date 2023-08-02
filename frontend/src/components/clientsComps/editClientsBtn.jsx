@@ -38,6 +38,7 @@ export default function EditBtn({fetchData}) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(product),
+      credentials: "include",
     });
   
     if (response.ok) {

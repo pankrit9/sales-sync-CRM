@@ -21,7 +21,7 @@ function Clients() {
     const [id, setId] = useState(0);
 
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/clients/`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/clients/`, {method: "GET", credentials: "include"});
         const data = await response.json();
         setClients(data);
     }, []);

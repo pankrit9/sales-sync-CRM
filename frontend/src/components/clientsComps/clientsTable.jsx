@@ -172,7 +172,10 @@ EnhancedTableHead.propTypes = {
 async function deleteSelected(selectedIds, fetchData) {
   // create a new array for the promises
   const deletePromises = selectedIds.map(id =>
-    fetch(`${BACKEND_API}/clients/delete/${id}`, {method: 'DELETE'})
+    fetch(`${BACKEND_API}/clients/delete/${id}`, {
+      method: 'DELETE',
+      credentials: "include"
+    })
   );
   try {
     // use Promise.all to wait for all delete requests to finish

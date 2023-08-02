@@ -38,96 +38,96 @@ function Sales() {
   const [winRateGrowthData, setWinRateGrowthData] = useState([]);
 
   const fetchTaskData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/tasks/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/tasks/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setTaskData(data);
   }
 
   const fetchClientData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/clients/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/clients/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setClientData(data);
   }
 
   const fetchProductData = async () => {
-    const response = await fetch(`${BACKEND_API}/products/piechart`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/products/piechart`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setProductData(data);
   }
 
   const fetchLTVData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/ltv/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/ltv/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setLTVData(data);
   }
 
   const fetchWinRateData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/winrate/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/winrate/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setWinRateData(data);
   }
 
   const fetchLeadSourceData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/leadsource`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/leadsource`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setLeadSourceData(data);
   }
 
   const fetchClosedKeysData = async () => {
-      const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET"});
+      const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET", credentials: "include"});
       const data = await response.json();
       setClosedKeysData(data);
   }
 
   const fetchRevClosedData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/closedrev`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/closedrev`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevClosedData(data);
   } 
   const fetchRevClosedSumData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/closedrevsum`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/closedrevsum`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevClosedSumData(data);
   } 
 
   const fetchRevProjectedData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/projrev`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/projrev`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevProjectedData(data);
   } 
 
   const fetchProjectedKeysData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/projkeys`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/projkeys`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setProjectedKeysData(data);
   } 
 
   const fetchRevProjectedSumData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/projrevsum`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/projrevsum`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevProjectedSumData(data);
   } 
 
   const fetchTaskGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/taskgrowth`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/taskgrowth`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setTaskGrowthData(data);
   } 
 
   const fetchltvGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setltvGrowthData(data);
   } 
 
   const fetchClientGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/clientgrowth`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/clientgrowth`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setClientGrowthData(data);
   } 
 
   const fetchWinRateGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/winrategrowth`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/winrategrowth`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setWinRateGrowthData(data);
   } 

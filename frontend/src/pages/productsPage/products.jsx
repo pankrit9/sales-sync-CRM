@@ -18,7 +18,7 @@ function Products() {
     
 
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/products`, {method: "GET", credentials: "include"});
         const data = await response.json();
         setProducts(data);
         console.log("products data: ", data);

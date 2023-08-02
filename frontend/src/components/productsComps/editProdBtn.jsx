@@ -23,7 +23,9 @@ export default function EditBtn({fetchData}) {
 
   useEffect(() => {
     const getProductIds = async () => {
-      const response = await fetch(`${BACKEND_API}/products`); 
+      const response = await fetch(`${BACKEND_API}/products`, {
+        credentials: "include",
+      }); 
       const products = await response.json();
       setProductIds(products.map(product => product._id));
     };

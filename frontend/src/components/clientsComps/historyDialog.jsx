@@ -60,6 +60,7 @@ export default function History({id, name, _email, c_date, joined_date}) {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: "include",
     });
   
     if (response.ok) {

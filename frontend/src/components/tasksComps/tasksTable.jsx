@@ -226,7 +226,7 @@ export default function EnhancedTable({ rows, fetchData, setTask}) {
     const fetchStaffMembers = async () => {
         try {
             console.log("fetchStaffMembers edit: fetching staff members.... ")
-            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
+            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET", credentials: "include"});
             const data = await response.json();
             setStaffMembers(data);
         } catch (error) {

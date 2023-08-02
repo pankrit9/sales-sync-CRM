@@ -47,6 +47,7 @@ export default function AddBtn({fetchData}) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(new_client),
+      credentials: "include",
     });
   
     if (response.ok) {

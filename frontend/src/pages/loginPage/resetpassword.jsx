@@ -63,7 +63,7 @@ const Resetpassword = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
-                credentials: "omit",
+                credentials: "include",
             }
         );
         const loggedIn = await loggedInResponse.json();
@@ -85,7 +85,7 @@ const Resetpassword = () => {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
-                credentials: "omit",
+                credentials: "include",
             }
         );
         const loggedIn = await loggedInResponse.json();

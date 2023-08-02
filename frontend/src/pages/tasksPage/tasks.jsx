@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
 import Navbar  from "../../components/navbars/Navbar";
+import Chatbot from "../../components/chatbot/Chatbot";
 import { SearchBar } from '../../components/SearchBar';
 import AddTaskBtn from "../../components/tasksComps/addTaskBtn";
 import EnhancedTable from "../../components/tasksComps/tasksTable";
@@ -54,6 +55,7 @@ const Tasks = () => {
     return (
         <>
             <Navbar />
+            <Chatbot />
             <h1 className="header" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', paddingLeft: '140px', marginTop: '50px', fontSize: '60px', alignItems: 'center' }}>
                 <span>Tasks</span>
                 <div className="add-btn-task" style={{ justifySelf: 'end', paddingRight: '140px' }}>

@@ -49,6 +49,7 @@ export default function DownloadBtn({ fetchData, userId }) {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include",
         });
 
         if (response.ok) {

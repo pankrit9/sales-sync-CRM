@@ -81,6 +81,7 @@ export default function EditBtn({ fetchData, task_id, initialData, staff_members
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(formData),
+            credentials: "include",
         });
 
         if (response.ok) {

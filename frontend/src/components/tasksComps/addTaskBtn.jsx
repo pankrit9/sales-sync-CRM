@@ -57,7 +57,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
     const fetchStaffMembers = async () => {
         try {
             console.log("fetchStaffMembers: fetching staff members.... ")
-            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET"});
+            const response = await fetch(`${BACKEND_API}/auth`, {method: "GET", credentials: "include"});
             const data = await response.json();
             setStaffMembers(data);
         } catch (error) {
@@ -67,7 +67,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(`${BACKEND_API}/products`, {method: "GET"});
+            const response = await fetch(`${BACKEND_API}/products`, {method: "GET", credentials: "include"});
             const data = await response.json();;
             setProducts(data);
         } catch (error) {
@@ -76,7 +76,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
     };
     const fetchClients = async () => {
         try {
-            const response = await fetch(`${BACKEND_API}/clients`, {method: "GET"});
+            const response = await fetch(`${BACKEND_API}/clients`, {method: "GET", credentials: "include"});
             const data = await response.json();;
             setClients(data);
         } catch (error) {
@@ -103,6 +103,7 @@ export default function AddBtn({ fetchData, userId, setTask}) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(task),
+            credentials: "include",
         });
 
         if (response.ok) {

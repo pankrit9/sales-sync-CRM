@@ -4,3 +4,4 @@
 /sales/__pycache__/
 /tasks/__pycache__/
 /backend/__pycache__/
+.env
