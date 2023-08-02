@@ -22,7 +22,7 @@ const Records = () => {
 
   // fetch tasks on the basis of current role and id of user
   const fetchData = useCallback(async () => {
-      const response = await fetch(`${BACKEND_API}/records`, {method: "GET"});
+      const response = await fetch(`${BACKEND_API}/records/${_id}`, {method: "GET"});
       const data = await response.json();
       setRecords(data);
   }, []);

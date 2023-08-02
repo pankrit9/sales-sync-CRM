@@ -15,10 +15,19 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 # search for the route /login
 records = Blueprint('records', __name__)
 
-@records.route("/", methods=['GET'])
-def see_records():
+@records.route("/<id>", methods=['GET'])
+def see_records(id):
     # Get all sales from the Sales collection and turn into list
-    all_records = db.Sales.find({})
+    curr_user = db.Accounts.find_one({"_id": id})
+    if curr_user["role"] == "manager":
+        name = curr_user['full_name']
+    elif curr_user["role"] == "staff":
+        manager_id = curr_user['manager']
+        name = db.Accounts.find_one({ "_id": manager_id})['full_name']
+    else:
+        return jsonify({"message": "Invalid role"}), 400 
+    
+    all_records = db.Sales.find({"manager_assigned": name})
     records_list = list(all_records)
 
     # Return error if no sales, else return list of records
