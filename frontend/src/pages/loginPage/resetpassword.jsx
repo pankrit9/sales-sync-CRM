@@ -50,19 +50,34 @@ const Resetpassword = () => {
      * @param onSubmitProps 
     */
     const forgotPassword = async (values, onSubmitProps) => {
-        const loggedInResponse = await fetch(
-            // send the form data to the below api call
-            `${BACKEND_API}/auth/recover-password`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-                credentials: "omit",
+
+        try {
+            const forgotInResponse = await fetch(
+                // send the form data to the below api call
+                `${BACKEND_API}/auth/recover-password`,
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(values),
+                    credentials: "omit",
+                }
+            );
+
+            if (!forgotInResponse.ok) {
+                const errorData = await forgotInResponse.json();
+                console.error("Unable to log in: ", errorData);
+                alert("Unable to log in: " + errorData.message);
+                throw new Error("Registration failed" + errorData.message);
+            };
+
+            const forgot = await forgotInResponse.json();
+            onSubmitProps.resetForm();  // reset the form
+            if (forgot) {
+                setPageType("change password"); // navigate to the home page as the user is logged in
             }
-        );
-        const loggedIn = await loggedInResponse.json();
-        onSubmitProps.resetForm();  // reset the form
-        setPageType("change password");
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     /**
@@ -81,11 +96,12 @@ const Resetpassword = () => {
             }
         );
         onSubmitProps.resetForm();  // reset the form
-        navigate("/")
+        navigate("/login")
     }
 
     /** logic behind when the user submits the form */
     const handleFormSubmit = async (values, onSubmitProps) => {
+        console.log("here we clicked", isChangePassword);
         if (isForgotPassword) await forgotPassword(values, onSubmitProps);
         if (isChangePassword) await changePassword(values, onSubmitProps);
     };
@@ -175,48 +191,43 @@ const Resetpassword = () => {
                             </>
                         )}
                     </Box>
-                            <Box>
-                                <Button
-                                    onClick={() => {
-                                        // if on login page, switch to forgot page, else switch to login page
-                                        setPageType(isForgotPassword ? "change password" : "forgot password"  );
-                                        resetForm();
-                                    }}
-                                    fullWidth
-                                    type="submit"
-                                    sx={{
-                                        gridColumn:"span ",
-                                        margin: "2rem 0",
-                                        padding: "1rem",
-                                        backgroundColor: palette.primary.main,
-                                        color: palette.background.alt,
-                                        "&:hover": { color: palette.primary.main},
-                                    }}
-                                >
-                                    { "SUBMIT"}
-                                </Button>
-                                
-                            </Box>
-                            <Typography
-                                onClick={() => {
-                                    // if on login page, switch to forgot page, else switch to login page
-                                    setPageType(isForgotPassword ? "forgot password" : "login");
-                                    navigate(isChangePassword ? "/login" :"/resetpassword" );
+                    <Box>
+                        <Button
+                            fullWidth
+                            type="submit"
+                            sx={{
+                                gridColumn:"span ",
+                                margin: "2rem 0",
+                                padding: "1rem",
+                                backgroundColor: palette.primary.main,
+                                color: palette.background.alt,
+                                "&:hover": { color: palette.primary.main},
+                            }}
+                        >
+                            { "SUBMIT"}
+                        </Button>
+                        
+                    </Box>
+                    <Typography
+                        onClick={() => {
+                            // if on login page, switch to forgot page, else switch to login page
+                            setPageType(isForgotPassword ? "forgot password" : "login");
+                            navigate("/login" );
 
-                                    resetForm();
-                                }}
-                                sx={{
-                                    textDecoration: "underline",
-                                    color: palette.primary.main,
-                                    "&:hover": { 
-                                        cursor: "pointer",
-                                        color: palette.primary.light,
-                                    }
-                                }}
-                            >
-                                {isForgotPassword &&
-                                    "I've remembered my password, click here to login!"}
-                            </Typography>
+                            resetForm();
+                        }}
+                        sx={{
+                            textDecoration: "underline",
+                            color: palette.primary.main,
+                            "&:hover": { 
+                                cursor: "pointer",
+                                color: palette.primary.light,
+                            }
+                        }}
+                    >
+                        {isForgotPassword &&
+                            "I've remembered my password, click here to login!"}
+                    </Typography>
                 </form>
             )}
         </Formik>
