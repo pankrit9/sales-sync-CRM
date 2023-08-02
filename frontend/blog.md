@@ -1,3 +1,6 @@
+# setting up the backend 
+`pip install -r requirements.txt`
+
 # setup guide for frontend
 package manager: yarn
 

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import jwt
 from config import db, bcrypt
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request, session, make_response
 from auth.registerLoginHelpers import check_email_password, recovery_email
 
 # All the api requests that start with auth will be guided here
@@ -12,14 +12,17 @@ auth = Blueprint('auth', __name__)
 
 @auth.route("/login", methods=['POST'])
 def login():
+    print("login route hit... ")
     token = ""
     # find user with the given email
     matching_user = db.Accounts.find_one({"email": request.json['email']})
     
     if matching_user is None:
+        print("User not found... ")
         return jsonify({"message": "User not found"}), 404
     
-    if bcrypt.check_password_hash(matching_user['password'], request.json['password']):        
+    if bcrypt.check_password_hash(matching_user['password'], request.json['password']):
+        print("Login successful... ")
         # Created a token so users can be authenticated
         token = jwt.encode({
             'user_id': str(matching_user['_id']),
@@ -31,11 +34,20 @@ def login():
         }, 'Avengers')  # Secret key is 'Avengers'
         session["logged_in"] = True
 
+        print(request.headers)
+
         # return token for the session
         return jsonify({"message": "Login successful", "token": token})
     else:
         return jsonify({"message": "Incorrect details.", "token": token})
         
+@auth.route("/login", methods=['OPTIONS'])
+def login_options():
+    response = make_response()
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'content-type'
+    return response
 
 
 @auth.route("/register", methods=['POST'])
