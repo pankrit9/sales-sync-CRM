@@ -24,7 +24,7 @@ elements = []
 table_data = [["Product Id", "Quantity Sold", "Date", "Sold By", "Client Id", "Revenue"]]
 print(records_list)
 for sale in records_list:
-    row = [sale['product_id'], sale['quantity_sold'], sale['date_of_sale'],sale['sold_by'] , sale['client_id'], sale['revenue']]
+    row = [sale['product_id'], sale['date_of_sale'], sale['quantity_sold'],sale['sold_by'] , sale['client_id'], sale['revenue']]
     
     table_data.append(row)
 

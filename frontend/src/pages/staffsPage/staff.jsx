@@ -5,33 +5,47 @@ import { BACKEND_API } from "../../api";
 import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
 import "../../components/Searchbar.css"
 import { useSelector } from 'react-redux';
+import Stack from '@mui/material/Stack';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { Card, CardContent, CardMedia,Avatar,  Tooltip, Typography, Grid, CardActions, Button} from '@mui/material';
+import { deepOrange, deepPurple, green, red, blue } from '@mui/material/colors';
 
+function Staff () {
+    const [staff, setStaff] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const _id = useSelector((state) => state.user);
 
-const Staff = () => {
-  const [staff, setStaff] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const _id = useSelector((state) => state.user);
+    const fetchData = useCallback(async () => {
+        const response = await fetch(`${BACKEND_API}/auth/${_id}`, {method: "GET"});
+        const data = await response.json();
+        setStaff(data);
+    }, []);
 
-  const fetchData = useCallback(async () => {
-      const response = await fetch(`${BACKEND_API}/auth/${_id}`, {method: "GET"});
-      const data = await response.json();
-      setStaff(data);
-  }, []);
+    const filterData = (query, staff) => {
+        if (!query) {
+            return staff;
+        } else {
+            return staff.filter((d) => d['first_name'].toLowerCase().includes(query.toLowerCase()));
+        }
+    };
+    const colors = [deepOrange[500], deepOrange[300], deepPurple[500], deepPurple[300], green[500], green[300], red[500], red[300], blue[500], blue[300]];
+    const getRandomColor = () => {
+        const randomIndex = Math.floor(Math.random() * colors.length);
+        return colors[randomIndex];
+    };
 
-  const filterData = (query, staff) => {
-      if (!query) {
-        return staff;
-      } else {
-        return staff.filter((d) => d['first_name'].toLowerCase().includes(query.toLowerCase()));
-      }
-  };
+        function stringAvatar(name) {
+            return {
+            children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+            };
+        }
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-  useEffect(() => {
-      fetchData();
-  }, []);
-
-  const dataFiltered = filterData(searchQuery, staff);
-  return (
+    const dataFiltered = filterData(searchQuery, staff);
+    return (
       <>
           <Navbar/>
           <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Your team</h1>
@@ -40,9 +54,44 @@ const Staff = () => {
                   <SearchBarStaff searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
               </div>
           </div>
-          <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
+          {/*<div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
               {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData}/> : <p>These is no staff members in your company</p>}
-          </div>
+            </div>*/}
+            <div style={{ marginLeft:'160px', marginRight: '100px', marginTop: '80px'}}>
+                <Grid container justify="space-around" gap={3} >
+                    {dataFiltered.map((dataFiltered) => (
+                        <Card sx={{ width: "15rem" }}>
+                        <CardContent marginLeft="5rem">
+
+                            <Tooltip title={dataFiltered.full_name} >
+                                <Avatar alt="" {...stringAvatar(dataFiltered.full_name)} sx={{ bgcolor: getRandomColor(), width:"3.2rem", height:"3.2rem"}}>
+                          
+                                </Avatar>
+                            </Tooltip>
+                            <Typography sx={{ fontSize: 21 }}  gutterBottom>
+                            {dataFiltered.full_name} | {dataFiltered._id}
+                            </Typography>
+                            <Typography variant="h5" component="div" color="text.secondary">
+                                {dataFiltered.email}
+                            </Typography>
+                            <Typography variant="h5" component="div" color="text.secondary">
+                                {dataFiltered.role}
+                            </Typography> 
+                            <Typography variant="h5" component="div" color="text.secondary">
+                                Tasks assigned: {dataFiltered.tasks_n}
+                            </Typography> 
+                            <Typography variant="h5" component="div" color="text.secondary">
+                                Revenue produced: {dataFiltered.revenue}
+                            </Typography> 
+                        </CardContent>
+                        <CardActions>
+                            
+                            {/*<History id={dataFiltered._id} name={dataFiltered.client} joined_date={dataFiltered.creation_date}/>*/}
+                        </CardActions>
+                        </Card>
+                    ))}
+                </Grid>
+            </div>
       </>
   );
 }
