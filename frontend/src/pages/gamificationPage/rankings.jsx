@@ -120,7 +120,7 @@ function getNextRank(revenue) {
     return "Platinum"
   } else if (revenue < 5000000) {
     return "Emerald"
-  } else if (revenue < 8000000) {
+  } else if (revenue <= 8000000) {
     return "Diamond"
   } else {
     return "-"
@@ -163,8 +163,8 @@ function Rankings() {
     <>
     <Navbar/>
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>My Ranking</h1>
-    <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '40px'}}>{name}{' | '}{role}{' | $'}
-      {currentUserData.revenue ? currentUserData.revenue.toLocaleString(): 'Loading...'}</h1>
+    <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '40px'}}>{name}{' | '}{role}{' | Sales to next Rank: $'}
+      {getRemSales(currentUserData.revenue) ? getRemSales(currentUserData.revenue).toLocaleString(): 'Loading...'}</h1>
     <Box m="10px" style={{ marginLeft: '260px'}}>
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -221,7 +221,7 @@ function Rankings() {
             title={"Rank: " + getRank(currentUserData.revenue)}
             user="You"
             subtitle={"Next Rank: " + getNextRank(currentUserData.revenue)}
-            increase={"Til next Rank: $" + getRemSales(currentUserData.revenue).toLocaleString()}
+            increase={"Sales: $" + currentUserData.revenue.toLocaleString()}
             icon={getBigBadge(currentUserData.revenue)}
           />
           : 'We cannot find you'
