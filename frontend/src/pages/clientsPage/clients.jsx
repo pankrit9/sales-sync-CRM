@@ -17,6 +17,7 @@ import MuiAlert from '@mui/material/Alert';
 import { AiOutlineMail, AiTwotonePhone} from "react-icons/ai";
 
 
+
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
@@ -137,6 +138,9 @@ function Clients() {
                         </Typography>
                         <Typography variant="h5" component="div" color="text.secondary">
                         <AiTwotonePhone/> {dataFiltered.mobile_number}
+                        </Typography> 
+                        <Typography variant="h5" component="div" color="text.secondary">
+                        <FaIcons6.FaMapLocationDot/> {dataFiltered.address}
                         </Typography> 
                     </CardContent>
                     <CardActions>

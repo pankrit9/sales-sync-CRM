@@ -4,6 +4,8 @@ import EnhancedTable from "../../components/staffComps/StaffTable";
 import { BACKEND_API } from "../../api";
 import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
 import "../../components/Searchbar.css"
+import "../../components/staffComps/staff.css"
+
 import { useSelector } from 'react-redux';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
@@ -55,7 +57,7 @@ function Staff () {
           <Navbar/>
           <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Your team</h1>
           <div className="container-search">
-              <div className="tools">
+              <div className="tools-staff">
                   <SearchBarStaff searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
               </div>
           </div>

@@ -1,0 +1,26 @@
+.search-bar-staff {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+ 
+}
+.container-search {
+    left: 80px;
+    display: flex;
+    width: 100%;
+    position: fixed;
+}
+.search-icon {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+
+}
+.tools-staff {
+    right: 120px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    padding-right: 20px;
+}

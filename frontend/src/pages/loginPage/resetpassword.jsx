@@ -116,115 +116,107 @@ const Resetpassword = () => {
                             }
                         }}
                     >
-                {/*FORGOT PASSWORD */}
-                {isForgotPassword && (                                   
-                    <>
-                    <TextField
-                        label="Email" 
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.email}
-                        name="email"initialValuesForgotPassword
-                        error={Boolean(touched.email) && Boolean(errors.email)}
-                        helperText={touched.email && errors.email}
-                        sx={{
-                            gridColumn: "span 4"
-                        }} 
-                    />
-                    <Box>
-                        <Button
-                            fullWidth
-                            type="submit"
-                            sx={{
-                                margin: "2rem 0",
-                                padding: "1rem",
-                                backgroundColor: palette.primary.main,
-                                color: palette.background.alt,
-                                "&:hover": { color: palette.primary.main},
-                            }}
-                        >
-                            {"SUBMIT"}
-                        </Button>
-                        <Typography
-                            onClick={() => {
-                                // if on login page, switch to forgot page, else switch to login page
-                                setPageType(isForgotPassword ? "forgot password" : "login");
-                                resetForm();
-                            }}
-                            sx={{
-                                textDecoration: "underline",
-                                color: palette.primary.main,
-                                "&:hover": { 
-                                    cursor: "pointer",
-                                    color: palette.primary.light,
-                                }
-                            }}
-                        >
-                            {"I've remembered my password, click here to login!"}
-                        </Typography>
-                    </Box>
-                    </>
-                )}
+                        {/*FORGOT PASSWORD */}
+                        {isForgotPassword && (    
+                            <TextField
+                                label="Email" 
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                value={values.email}
+                                name="email"initialValuesForgotPassword
+                                error={Boolean(touched.email) && Boolean(errors.email)}
+                                helperText={touched.email && errors.email}
+                                sx={{
+                                    gridColumn: "span 4"
+                                }} 
+                            />
+                        )}
 
-                {/*CHECK EMAIL INBOX MESSAGE */}
-                {isChangePassword && (
-                    <>
-                    <TextField
-                        label="Email" 
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.email}
-                        name="email"initialValuesChangePassword
-                        error={Boolean(touched.email) && Boolean(errors.email)}
-                        helperText={touched.email && errors.email}
-                        sx={{
-                            gridColumn: "span 4"
-                        }} 
-                    />
-                    <TextField
-                        label="Recovery Code" 
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.code}
-                        name="code"initialValuesChangePassword
-                        error={Boolean(touched.code) && Boolean(errors.code)}
-                        helperText={touched.code && errors.code}
-                        sx={{
-                            gridColumn: "span 4"
-                        }} 
-                    />
-                    {/*ADD FUNCTIONALITY TO CONFIRM PASSWORDS ARE EQUAL */}
-                    <TextField
-                        label="New Password" 
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.new_password}
-                        name="new_password"initialValuesChangePassword
-                        error={Boolean(touched.new_password) && Boolean(errors.new_password)}
-                        helperText={touched.new_password && errors.new_password}
-                        sx={{
-                            gridColumn: "span 4"
-                        }} 
-                    />
-                    <Box>
-                        <Button
-                            fullWidth
-                            type="submit"
-                            sx={{
-                                gridColumn:"span 4",
-                                margin: "2rem 0",
-                                padding: "1rem",
-                                backgroundColor: palette.primary.main,
-                                color: palette.background.alt,
-                                "&:hover": { color: palette.primary.main},
-                            }}
-                        >
-                            { "SUBMIT"}
-                        </Button>
+                        {/*CHECK EMAIL INBOX MESSAGE */}
+                        {isChangePassword && (
+                            <>
+                                <TextField
+                                    label="Email" 
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.email}
+                                    name="email"initialValuesChangePassword
+                                    error={Boolean(touched.email) && Boolean(errors.email)}
+                                    helperText={touched.email && errors.email}
+                                    sx={{
+                                        gridColumn: "span 4"
+                                    }} 
+                                />
+                                <TextField
+                                    label="Recovery Code" 
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.code}
+                                    name="code"initialValuesChangePassword
+                                    error={Boolean(touched.code) && Boolean(errors.code)}
+                                    helperText={touched.code && errors.code}
+                                    sx={{
+                                        gridColumn: "span 4"
+                                    }} 
+                                />
+                                {/*ADD FUNCTIONALITY TO CONFIRM PASSWORDS ARE EQUAL */}
+                                <TextField
+                                    label="New Password" 
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.new_password}
+                                    name="new_password"initialValuesChangePassword
+                                    error={Boolean(touched.new_password) && Boolean(errors.new_password)}
+                                    helperText={touched.new_password && errors.new_password}
+                                    sx={{
+                                        gridColumn: "span 4"
+                                    }} 
+                                />
+                            </>
+                        )}
                     </Box>
-                    </>
-                )}
-                </Box>
+                            <Box>
+                                <Button
+                                    onClick={() => {
+                                        // if on login page, switch to forgot page, else switch to login page
+                                        setPageType(isForgotPassword ? "change password" : "forgot password"  );
+                                        resetForm();
+                                    }}
+                                    fullWidth
+                                    type="submit"
+                                    sx={{
+                                        gridColumn:"span ",
+                                        margin: "2rem 0",
+                                        padding: "1rem",
+                                        backgroundColor: palette.primary.main,
+                                        color: palette.background.alt,
+                                        "&:hover": { color: palette.primary.main},
+                                    }}
+                                >
+                                    { "SUBMIT"}
+                                </Button>
+                                
+                            </Box>
+                            <Typography
+                                onClick={() => {
+                                    // if on login page, switch to forgot page, else switch to login page
+                                    setPageType(isForgotPassword ? "forgot password" : "login");
+                                    navigate(isChangePassword ? "/login" :"/resetpassword" );
+
+                                    resetForm();
+                                }}
+                                sx={{
+                                    textDecoration: "underline",
+                                    color: palette.primary.main,
+                                    "&:hover": { 
+                                        cursor: "pointer",
+                                        color: palette.primary.light,
+                                    }
+                                }}
+                            >
+                                {isForgotPassword &&
+                                    "I've remembered my password, click here to login!"}
+                            </Typography>
                 </form>
             )}
         </Formik>

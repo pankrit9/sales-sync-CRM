@@ -43,17 +43,6 @@ def add_client(id):
     db.Clients.insert_one(new_client)
     return jsonify({"message": "success"}), 200
 
-@clients.route("/delete", methods = ['DELETE'])
-def delete_client():
-    # Get all clients in collection
-    all_clients = db.Clients.find({})
-    client_list = list(all_clients)
-
-    # Return error if no clients, else return list
-    if not client_list:
-        return jsonify({"message": "You don't have any clients"}), 404
-    return jsonify(client_list), 200
-
 @clients.route("/edit/<id>", methods=['POST'])
 def client_edit(id):
     

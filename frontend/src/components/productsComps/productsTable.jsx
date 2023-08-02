@@ -354,7 +354,7 @@ export default function EnhancedTable({rows, fetchData}) {
                       {row._id}
                     </TableCell>
                     <TableCell align="left">{row.name}</TableCell>
-                    <TableCell align="right">{row.stock}</TableCell>
+                    <TableCell align="right">{row.is_electronic  ? "Unlimited" :row.stock}</TableCell>
                     <TableCell align="right">{row.price}</TableCell>
                     <TableCell align="right">
                       <Checkbox

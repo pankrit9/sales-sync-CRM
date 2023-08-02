@@ -67,7 +67,8 @@ def register():
         "company": request.form['company'],
         "code": request.form["code"],
         "revenue": 0,
-        "tasks_n": 0
+        "tasks_n": 0,
+        "task_completed": 0
     }
 
     # Check whether the email is taken
@@ -75,8 +76,10 @@ def register():
         return jsonify({"error": "The given email is already taken."}), 409
 
     # Check that email is in ...@... format and password is strong
-    check_email_password(request.form['email'],request.form['password'])
-
+    check_response = check_email_password(request.form['email'],request.form['password'])
+    if check_response[1] != 200:
+        return check_response[0], check_response[1]
+    
     # Check if company exists
     response = check_company(full_name, request.form['role'], request.form['company'], request.form["code"])
     if response == "New company created" or response == "Added to the company":

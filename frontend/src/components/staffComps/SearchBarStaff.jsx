@@ -6,7 +6,7 @@ import "../Searchbar.css"
 
 export const SearchBarStaff = ({setSearchQuery}) => (
     <form>
-      <TextField id="search-bar" className="search-bar"
+      <TextField id="search-bar-staff" className="search-bar"
         onInput={(e) => {
           setSearchQuery(e.target.value);
         }}

@@ -22,6 +22,8 @@ def check_email_password(email, password):
     # Check the lenght
     if len(password) < 8:
         return jsonify({'message': "Password cannot be less than 8 characters"}), 422  
+    
+    return jsonify({'message': "No problem"}), 200
 
 def recovery_email(receiver_email, bcrypt):
     company_email = 'salesyncrm@gmail.com'
