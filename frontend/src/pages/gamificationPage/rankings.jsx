@@ -13,30 +13,10 @@ import { StarsTwoTone } from '@mui/icons-material';
 import { EmojiEventsTwoTone } from '@mui/icons-material';
 import { AutoAwesomeMosaicTwoTone } from '@mui/icons-material';
 
-function getSmallBadge(revenue) {
-  if (revenue >= 10000000) {
-    return <AutoAwesomeMosaicTwoTone sx={{ fontSize: "70px" }}/>;
-  }
-  if (revenue >= 8000000) {
-    return <StarsTwoTone sx={{ fontSize: "70px" }}/>;
-  }
-  if (revenue >= 5000000) {
-    return <MilitaryTechTwoTone sx={{ fontSize: "70px" }}/>;
-  }
-  if (revenue >= 1000000) {
-    return <WorkspacesTwoTone sx={{ fontSize: "70px" }}/>;
-  }
-  if (revenue >= 800000) {
-    return <LocalPoliceTwoTone sx={{ fontSize: "70px" }}/>;
-  }
-  if (revenue >= 500000) {
-    return <TokenTwoTone sx={{ fontSize: "70px" }}/>;
-  }
-  if (revenue < 500000) {
-    return <EmojiEventsTwoTone sx={{ fontSize: "70px" }}/>;
-  }
-  return <EmojiEventsTwoTone sx={{ fontSize: "70px" }}/>;
-}
+
+import Chatbot from "../../components/chatbot/Chatbot";
+ 
+
 
 function getBigBadge(revenue) {
   if (revenue >= 10000000) {
@@ -87,7 +67,30 @@ function getRank(revenue) {
   }
   return "Iron"
 }
-
+function getSmallBadge(revenue) {
+  if (revenue >= 10000000) {
+    return <AutoAwesomeMosaicTwoTone sx={{ fontSize: "70px" }}/>;
+  }
+  if (revenue >= 8000000) {
+    return <StarsTwoTone sx={{ fontSize: "70px" }}/>;
+  }
+  if (revenue >= 5000000) {
+    return <MilitaryTechTwoTone sx={{ fontSize: "70px" }}/>;
+  }
+  if (revenue >= 1000000) {
+    return <WorkspacesTwoTone sx={{ fontSize: "70px" }}/>;
+  }
+  if (revenue >= 800000) {
+    return <LocalPoliceTwoTone sx={{ fontSize: "70px" }}/>;
+  }
+  if (revenue >= 500000) {
+    return <TokenTwoTone sx={{ fontSize: "70px" }}/>;
+  }
+  if (revenue < 500000) {
+    return <EmojiEventsTwoTone sx={{ fontSize: "70px" }}/>;
+  }
+  return <EmojiEventsTwoTone sx={{ fontSize: "70px" }}/>;
+}
 function getRemSales(revenue) {
   if (revenue < 500000) {
     return (500000 - revenue)

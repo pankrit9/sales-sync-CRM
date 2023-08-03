@@ -1,0 +1,7 @@
+/backend/clients/__pycache__/
+/products/__pycache__/
+/auth/__pycache__/
+/sales/__pycache__/
+/tasks/__pycache__/
+/backend/__pycache__/
+.env

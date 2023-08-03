@@ -1,1 +1,7 @@
 /venv
+/backend/clients/__pycache__/
+/backend/products/__pycache__/
+/backend/auth/__pycache__/
+/backend/sales/__pycache__/
+/backend/tasks/__pycache__/
+/backend/__pycache__/

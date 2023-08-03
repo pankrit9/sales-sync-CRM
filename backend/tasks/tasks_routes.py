@@ -73,7 +73,7 @@ def manager_create_task(uId):
         "product_quantity": request.json.get('product_quantity'),
         "product_price": product_price,
         "priority": request.json.get('priority'),
-        "due_date": datetime.strptime(date_string, "%Y-%m-%d"),
+        "due_date": datetime.strptime(date_string, "%Y-%M-%d"),
         "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": request.json.get('complete'),
     }

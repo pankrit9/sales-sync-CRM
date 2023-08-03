@@ -42,6 +42,7 @@ export default function History({id, name, joined_date}) {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: "include",
     });
     if (response.ok) {
       setOpen(false);

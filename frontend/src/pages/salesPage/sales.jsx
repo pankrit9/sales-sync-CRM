@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar  from "../../components/navbars/Navbar";
+import Chatbot from '../../components/chatbot/Chatbot';
 import PieChart from "../../components/salesComps/pieChart";
 import BarChart from "../../components/salesComps/barChart";
 import StreamCloseChart from "../../components/salesComps/streamCloseChart";
@@ -34,96 +35,96 @@ function Sales() {
   const [winRateGrowthData, setWinRateGrowthData] = useState([]);
 
   const fetchTaskData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/tasks/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/tasks/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setTaskData(data);
   }
 
   const fetchClientData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/clients/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/clients/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setClientData(data);
   }
 
   const fetchProductData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/piechart/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/piechart/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setProductData(data);
   }
 
   const fetchLTVData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/ltv/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/ltv/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setLTVData(data);
   }
 
   const fetchWinRateData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/winrate/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/winrate/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setWinRateData(data);
   }
 
   const fetchLeadSourceData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/leadsource/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/leadsource/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setLeadSourceData(data);
   }
 
   const fetchClosedKeysData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/closedkeys/${_id}`, {method: "GET"});
-    const data = await response.json();
-    setClosedKeysData(data);
+      const response = await fetch(`${BACKEND_API}/sales/closedkeys/${_id}`, {method: "GET", credentials: "include"});
+      const data = await response.json();
+      setClosedKeysData(data);
   }
 
   const fetchRevClosedData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/closedrev/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/closedrev/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevClosedData(data);
   } 
   const fetchRevClosedSumData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/closedrevsum/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/closedrevsum/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevClosedSumData(data);
   } 
 
   const fetchRevProjectedData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/projrev/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/projrev/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevProjectedData(data);
   } 
 
   const fetchProjectedKeysData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/projkeys/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/projkeys/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setProjectedKeysData(data);
   } 
 
   const fetchRevProjectedSumData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/projrevsum/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/projrevsum/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevProjectedSumData(data);
   } 
 
   const fetchTaskGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/taskgrowth/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/taskgrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setTaskGrowthData(data);
   } 
 
   const fetchltvGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setltvGrowthData(data);
   } 
 
   const fetchClientGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/clientgrowth/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/clientgrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setClientGrowthData(data);
   } 
 
   const fetchWinRateGrowthData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/winrategrowth/${_id}`, {method: "GET"});
+    const response = await fetch(`${BACKEND_API}/sales/winrategrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setWinRateGrowthData(data);
   } 
@@ -150,6 +151,7 @@ function Sales() {
   return (
     <>
     <Navbar/>
+    <Chatbot />
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>Dashboard</h1>
     { role === "staff"
       ? <h1 className="header" style={{paddingLeft: '170px', marginTop: '50px', fontSize: '30px'}}>My Metrics</h1>

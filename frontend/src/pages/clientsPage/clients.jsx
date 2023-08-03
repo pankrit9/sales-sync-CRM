@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {Link} from 'react-router-dom'
 import Navbar  from "../../components/navbars/Navbar";
+import Chatbot from '../../components/chatbot/Chatbot';
 import AddBtn from "../../components/clientsComps/addClientsBtn";
 import EditBtn from "../../components/clientsComps/editClientsBtn";
 import { BACKEND_API } from "../../api";
@@ -44,7 +45,7 @@ function Clients() {
     };
   
     const fetchData = useCallback(async () => {
-        const response = await fetch(`${BACKEND_API}/clients/${_id}`, {method: "GET"});
+        const response = await fetch(`${BACKEND_API}/clients/${_id}`, {method: "GET", credentials: "include"});
         const data = await response.json();
         setClients(data);
     }, []);
@@ -104,6 +105,7 @@ function Clients() {
                     
             </Stack>
 
+            <Chatbot />
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Clients</h1>
             
             <div className="container-search">

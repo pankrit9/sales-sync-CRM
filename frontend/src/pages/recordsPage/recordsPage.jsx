@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback} from "react";
 import Navbar  from "../../components/navbars/Navbar";
+import Chatbot from "../../components/chatbot/Chatbot";
 import RecordsTable from '../../components/recordsTable/records';
 import { BACKEND_API } from "../../api";
 import "../../components/Searchbar.css"
@@ -44,14 +45,15 @@ const Records = () => {
   return (
       <>
           <Navbar />
+          <Chatbot />
           <h1 className="header" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', paddingLeft: '140px', marginTop: '50px', fontSize: '60px', alignItems: 'center' }}>
               <span>Sales History</span>
           </h1>
-            <div className="download-btn" style={{ justifySelf: 'end', paddingRight: '120px' }}>
+            {/*<div className="download-btn" style={{ justifySelf: 'end', paddingRight: '120px' }}>
                   { // only manager can add tasks
                     (role === 'manager'|| role === 'accountant') && <DownloadBtn fetchData={fetchData} userId = {_id}/>
                     }
-              </div>
+                </div>*/}
           <div className="task_container" style={{display: 'grid'}} >
                <div className="tools" style={{ paddingRight: '0px' }}>
                   <SearchBarRecords searchQuery={searchQuery} setSearchQuery={setSearchQuery} setRecords={setRecords}/>
