@@ -133,7 +133,7 @@ def manager_task_edit(uId, taskId):
         "product": request.json.get('product'),
         "product_quantity": request.json.get('product_quantity'),
         "priority": request.json.get('priority'),
-        "due_date": datetime.strptime(data['due_date'], '%a, %d %b %Y %H:%M:%S %Z'),
+        "due_date": datetime.strptime(data['due_date'], "%Y-%m-%d"),
         "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": request.json.get('complete'),
     }

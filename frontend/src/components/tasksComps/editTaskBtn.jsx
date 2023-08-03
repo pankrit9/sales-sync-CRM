@@ -25,7 +25,7 @@ import EditIcon from '@mui/icons-material/Edit';
 // if staff is editting
     // can only edit the following fields:
         // task status
-export default function EditBtn({ fetchData, task_id, initialData }) {
+export default function EditBtn({ fetchData, task_id, initialData, setTask }) {
     const [formData, setFormData] = useState(initialData);
     const [open, setOpen] = React.useState(false);
 
@@ -55,7 +55,7 @@ export default function EditBtn({ fetchData, task_id, initialData }) {
 
 
     useEffect(() => {
-            fetchStaffMembers();
+        fetchStaffMembers();
     }, []);
 
     const fetchStaffMembers = async () => {
@@ -81,6 +81,7 @@ export default function EditBtn({ fetchData, task_id, initialData }) {
         if (response.ok) {
             // fetchData();
             setOpen(false);
+            setTask([])
         } else {
             const errorData = await response.json();
             console.error("Error editing task: ", errorData);
