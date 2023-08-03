@@ -1,24 +1,15 @@
 import jwt
-<<<<<<< HEAD
-from flask import Flask, request, jsonify
-from functools import wraps
-from config import bcrypt
-from flask_cors import CORS
-=======
 from flask import Flask, render_template, request, flash, jsonify, session
 from flask_cors import CORS
 from functools import wraps
 from config import db, bcrypt
->>>>>>> frontend-pankrit
 from auth.auth_routes import auth
 from tasks.tasks_routes import tasks
 from products.products_routes import products
 from sales.records_routes import records
 from clients.clients_routes import clients
 from sales.sales_routes import sales
-<<<<<<< HEAD
 from gamification.gamification_routes import rankings
-=======
 import certifi
 from dotenv import load_dotenv
 import os   # access to env variables using os.getenv
@@ -26,7 +17,6 @@ from chatbot.chatbot_routes import chatbot, setupChatbot
 
 def create_app():
     os.environ["OPENAI_API_KEY"] = "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"
->>>>>>> frontend-pankrit
 
     load_dotenv()
 
@@ -37,36 +27,6 @@ def create_app():
 
     CORS(app, origins="http://localhost:3000", supports_credentials=True)  # Specify exact origin
 
-<<<<<<< HEAD
-# Blueprints
-app.register_blueprint(auth, url_prefix="/auth")
-app.register_blueprint(products, url_prefix="/products")
-app.register_blueprint(records, url_prefix="/records")
-app.register_blueprint(tasks, url_prefix="/tasks")
-app.register_blueprint(sales, url_prefix="/sales")
-app.register_blueprint(clients, url_prefix="/clients")
-app.register_blueprint(rankings, url_prefix="/rankings")
-
-# Wrapper function that is called before accessing any route 
-# that requires authentication.
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = request.args.get('token')
-        if not token:
-            return jsonify({'message': 'Token not found'}), 404
-        try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
-        except:
-            return jsonify({'message': 'Token is invalid'}), 401
-        return f(data, *args, **kwargs)
-    return decorated
-
-@app.route("/", methods=['GET'])
-def home():
-    return
-
-=======
     # loading the .env file and getting the keys
     # HUGGING_FACE_API_KEY = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
@@ -84,6 +44,7 @@ def home():
     app.register_blueprint(sales, url_prefix="/sales")
     app.register_blueprint(clients, url_prefix="/clients")
     app.register_blueprint(chatbot, url_prefix="/chatbot")
+    app.register_blueprint(rankings, url_prefix="/rankings")
 
     # This might be usefull later on
     def token_required(f):
@@ -116,7 +77,6 @@ def home():
 # def home():
 #     return "Hello World!"
 
->>>>>>> frontend-pankrit
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
