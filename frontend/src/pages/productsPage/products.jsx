@@ -38,7 +38,7 @@ function Products() {
             <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Products</h1>
             <div className="container-search">
                 <div className="tools-2">
-                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+                    <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} setProducts={setProducts}/>
                 </div>
                 <div className='edit-btn-product'>
                     <EditBtn fetchData={fetchData} setProducts={setProducts}/>
@@ -48,7 +48,7 @@ function Products() {
                 </div>
             </div>
             <div style={{ marginLeft:'140px', marginRight: '120px', marginTop: '80px'}}>
-                {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData}/> : <p>The inventory is empty</p>}
+                {dataFiltered.length > 0 ? <EnhancedTable rows={dataFiltered} fetchData={fetchData} setProducts={setProducts}/> : <p>The inventory is empty</p>}
             </div>
         </>
     );

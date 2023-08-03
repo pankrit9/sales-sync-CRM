@@ -98,7 +98,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, setProducts } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -153,7 +153,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-async function deleteSelected(selectedIds, fetchData) {
+async function deleteSelected(selectedIds, fetchData, setProducts) {
   // create a new array for the promises
   const deletePromises = selectedIds.map(id =>
     fetch(`${BACKEND_API}/products/delete/${id}`, {method: 'DELETE'})
@@ -163,6 +163,7 @@ async function deleteSelected(selectedIds, fetchData) {
     await Promise.all(deletePromises);
     // only after all delete requests are done, fetch data
     fetchData();
+    setProducts([]);
   } catch (err) {
     console.error(err);
   }
@@ -305,7 +306,7 @@ export default function EnhancedTable({rows, fetchData}) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, borderRadius:"20px 20px 0px 0px"}}>
-        <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
+        <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}

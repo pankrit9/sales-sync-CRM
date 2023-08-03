@@ -61,7 +61,7 @@ def add_products(id):
 def delete_product(id):
     # Get product based on id and delete from collection
     result = db.Products.delete_one({"_id":id})
-    if result.modified_count > 0:
+    if result.deleted_count > 0:
         return jsonify({"message": "Successful"}), 200
     else:
         return jsonify({"message": "Error deleting product"}), 400
