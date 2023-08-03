@@ -39,8 +39,6 @@ def login():
     else:
         return jsonify({"message": "Incorrect details."}), 404
         
-<<<<<<< HEAD
-=======
 @auth.route("/login", methods=['OPTIONS'])
 def login_options():
     response = make_response()
@@ -50,7 +48,6 @@ def login_options():
     return response
 
 
->>>>>>> frontend-pankrit
 @auth.route("/register", methods=['POST'])
 def register():
     # Encrypt the password
