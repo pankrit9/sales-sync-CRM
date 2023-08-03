@@ -105,6 +105,7 @@ function getSmallBadge(revenue) {
     return <EmojiEventsTwoTone sx={{ fontSize: "70px" }}/>;
   }
   return <EmojiEventsTwoTone sx={{ fontSize: "70px" }}/>;
+}
 function getRemSales(revenue) {
   if (revenue < 500000) {
     return (500000 - revenue)
