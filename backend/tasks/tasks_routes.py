@@ -144,6 +144,9 @@ def manager_task_edit(uId, taskId):
     # Add completion date if task has been set to completed
     if edit['complete'] == "Completed":
         db.Tasks.update_one({"_id": taskId}, {"$set": {'completion_date': datetime.now()}})
+        user = db.Accounts.find_one({"_id": uId})
+        completed_taskn = user.get("task_completed", 0)
+        db.Accounts.update_one({"_id": uId}, {"$set": {"task_completed":completed_taskn+1}})
     
     # If task has been completed, update all other collections to reflect the successful sale
     if edit['complete'] == "Completed" and (db.Tasks.find_one({"_id": taskId}))['product']: 
