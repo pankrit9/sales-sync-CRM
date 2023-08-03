@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Navbar  from "../../components/navbars/Navbar";
 import EnhancedTable from "../../components/staffComps/StaffTable";
+import AddBtn from "../../components/productsComps/addProdBtn";
+import EditBtn from "../../components/productsComps/editProdBtn";
+import SellBtn from "../../components/productsComps/sellProdBtn";
+import Chatbot from "../../components/chatbot/Chatbot";
 import { BACKEND_API } from "../../api";
 import { SearchBarStaff } from '../../components/staffComps/SearchBarStaff';
 import "../../components/Searchbar.css"

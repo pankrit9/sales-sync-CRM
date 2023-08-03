@@ -13,8 +13,28 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import DeleteIcon from '@mui/icons-material/Delete';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { BACKEND_API } from "../../api";
+import { useState, useEffect } from 'react';
+
+function createData(_id, client_name, email, lifetime_value, pending_value, next_task_due_date, current_assignee) {
+  return {
+    _id,
+    client_name,
+    email,
+    lifetime_value,
+    pending_value,
+    next_task_due_date,
+    current_assignee
+  };
+}
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -32,6 +52,10 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
+// Since 2020 all major browsers ensure sort stability with Array.prototype.sort().
+// stableSort() brings sort stability to non-modern browsers (notably IE11). If you
+// only support modern browsers you can replace stableSort(exampleArray, exampleComparator)
+// with exampleArray.slice().sort(exampleComparator)
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -52,28 +76,40 @@ const headCells = [
     label: 'ID',
   },
   {
-    id: 'first_name',
+    id: 'client',
     numeric: false,
     disablePadding: false,
-    label: 'Staff Name',
+    label: 'Client Name',
   },
   {
-    id: 'Position',
-    numeric: false,
-    disablePadding: false,
-    label: 'Position',
-  },
-  {
-    id: 'Sales',
+    id: 'email',
     numeric: true,
     disablePadding: false,
-    label: 'Sales',
+    label: 'Email',
   },
   {
-    id: 'Outstanding Tasks',
+    id: 'lead_source',
     numeric: true,
     disablePadding: false,
-    label: 'Outstanding Tasks',
+    label: 'Lead Source',
+  },
+  {
+    id: 'client_position',
+    numeric: true,
+    disablePadding: false,
+    label: 'Client Position',
+  },
+  {
+    id: 'mobile_number',
+    numeric: true,
+    disablePadding: false,
+    label: 'Mobile Number',
+  },
+  {
+    id: 'address',
+    numeric: true,
+    disablePadding: false,
+    label: 'Address',
   },
 ];
 
@@ -86,17 +122,24 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow >
-
-        
+      <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox
+            color="primary"
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={rowCount > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{
+              'aria-label': 'select all clients',
+            }}
+          />
+        </TableCell>
         {headCells.map((headCell) => (
-          <TableCell 
+          <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
-            padding={'normal'}
-            paddingLeft= "1rem"
+            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -126,10 +169,13 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-async function deleteSelectedTasks(selectedIds, fetchData) {
+async function deleteSelected(selectedIds, fetchData) {
   // create a new array for the promises
   const deletePromises = selectedIds.map(id =>
-    fetch(`${BACKEND_API}/products/delete/${id}`, {method: 'DELETE', credentials: "include"})
+    fetch(`${BACKEND_API}/clients/delete/${id}`, {
+      method: 'DELETE',
+      credentials: "include"
+    })
   );
   try {
     // use Promise.all to wait for all delete requests to finish
@@ -140,8 +186,13 @@ async function deleteSelectedTasks(selectedIds, fetchData) {
     console.error(err);
   }
 }
+function EnhancedTableToolbar(props) {
+  const { numSelected, selectedIds, fetchData } = props;
 
-function EnhancedTableToolbarStaff(props) {
+  const handleDelete = async () => {
+    await deleteSelected(selectedIds, fetchData);
+    props.fetchData()
+  }
 
   return (
     <Toolbar
@@ -151,22 +202,50 @@ function EnhancedTableToolbarStaff(props) {
         color:"white",
         background : "#000000",
         borderRadius:   "20px 20px 0px 0px",
-        
+        ...(numSelected > 0 && {
+          bgcolor: (theme) =>
+            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+        }),
       }}
     >
-      <Typography
+      {numSelected > 0 ? (
+        <Typography
           sx={{ flex: '1 1 100%' }}
-          variant="h5"
+          color="inherit"
+          variant="subtitle1"
+          component="div"
+        >
+          {numSelected} selected
+        </Typography>
+      ) : (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          variant="h6"
           id="tableTitle"
           component="div"
         >
-          Staff
-      </Typography>
+          Clients
+        </Typography>
+      )}
+
+      {numSelected > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton onClick={handleDelete}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton>
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+      )}
     </Toolbar>
   );
 }
 
-EnhancedTableToolbarStaff.propTypes = {
+EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
@@ -175,6 +254,7 @@ export default function EnhancedTable({rows, fetchData}) {
   const [orderBy, setOrderBy] = React.useState('_id');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
+  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -208,6 +288,7 @@ export default function EnhancedTable({rows, fetchData}) {
         selected.slice(selectedIndex + 1),
       );
     }
+
     setSelected(newSelected);
   };
 
@@ -218,6 +299,10 @@ export default function EnhancedTable({rows, fetchData}) {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
   };
 
   const isSelected = (_id) => selected.indexOf(_id) !== -1;
@@ -237,13 +322,13 @@ export default function EnhancedTable({rows, fetchData}) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 , borderRadius:"20px 20px 0px 0px"}}>
-        <EnhancedTableToolbarStaff numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
+      <Paper sx={{ width: '100%', mb: 2, borderRadius:"20px 20px 0px 0px"}}>
+        <EnhancedTableToolbar numSelected={selected.length} selectedIds={selected} fetchData={fetchData}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={'medium'}
+            size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -252,12 +337,11 @@ export default function EnhancedTable({rows, fetchData}) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
-              style
-              borderRadius= "20px 20px 0px 0px"
             />
             <TableBody>
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row._id);
+                const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
@@ -270,24 +354,38 @@ export default function EnhancedTable({rows, fetchData}) {
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell sx ={{paddingLeft: "1rem"}}
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        color="primary"
+                        checked={isItemSelected}
+                        inputProps={{
+                          'aria-labelledby': labelId,
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell
                       component="th"
+                      id={labelId}
                       scope="row"
                       padding="none"
                     >
-                      { row._id}
+                      {row._id}
                     </TableCell>
-                    <TableCell align="left">{row.first_name +" "+row.last_name}</TableCell>
-                    <TableCell align="left">{row.role}</TableCell>
+                    <TableCell align="left">{row.client}</TableCell>
+                    <TableCell align="right">{row.email}</TableCell>
+                    <TableCell align="right">{row.lead_source}</TableCell>
+                    <TableCell align="right">{row.client_position}</TableCell>
+                    <TableCell align="right">{row.mobile_number}</TableCell>
+                    <TableCell align="right">{row.address}</TableCell>
+                    <TableCell align="right">{row.n_sold}</TableCell>
                     <TableCell align="right">{row.revenue}</TableCell>
-                    <TableCell align="right">{row.tasks_n}</TableCell>
                   </TableRow>
                 );
               })}
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (53) * emptyRows,
+                    height: (dense ? 33 : 53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

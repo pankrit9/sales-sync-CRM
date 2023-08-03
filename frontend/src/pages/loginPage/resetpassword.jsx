@@ -92,7 +92,7 @@ const Resetpassword = () => {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(values),
-                credentials: "omit",
+                credentials: "include",
             }
         );
         onSubmitProps.resetForm();  // reset the form

@@ -50,6 +50,7 @@ export default function AddBtn({fetchData, handleClickSnack, setOpenSnackError})
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(new_client),
+      credentials: "include",
     });
     
     // If successful, fetch updated data, else throw error

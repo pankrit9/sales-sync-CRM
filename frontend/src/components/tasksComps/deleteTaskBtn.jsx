@@ -37,7 +37,7 @@ export default function DeleteBtn({ task_id, setTask}) {
     };
 
     const handleDelete = async () => {
-        const response = await fetch(`${BACKEND_API}/tasks/delete/${task_id}`, {method: 'DELETE'});
+        const response = await fetch(`${BACKEND_API}/tasks/delete/${task_id}`, {method: 'DELETE', credentials: "include"});
 
         if (response.ok) {
             setOpen(false);
