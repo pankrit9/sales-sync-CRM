@@ -127,6 +127,7 @@ def manager_task_edit(uId, taskId):
     data = request.get_json()
 
     formatted_due_date = convert_date_format(data['due_date'])
+    datetime_due_date = datetime.strptime(formatted_due_date, "%a, %d %b %Y %H:%M:%S %Z")
 
     # create new task
     edit = {
@@ -135,7 +136,7 @@ def manager_task_edit(uId, taskId):
         "product": request.json.get('product'),
         "product_quantity": request.json.get('product_quantity'),
         "priority": request.json.get('priority'),
-        "due_date": formatted_due_date,
+        "due_date": datetime_due_date,
         "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": request.json.get('complete'),
     }
