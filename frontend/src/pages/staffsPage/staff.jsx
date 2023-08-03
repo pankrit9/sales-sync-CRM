@@ -59,6 +59,7 @@ function Staff () {
     return (
       <>
           <Navbar/>
+          <Chatbot/>
           <h1 className="header" style={{paddingLeft: '140px', marginTop: '50px', fontSize: '60px'}}>Your team</h1>
           <div className="container-search">
               <div className="tools-staff">

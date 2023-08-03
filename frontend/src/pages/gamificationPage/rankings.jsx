@@ -165,6 +165,7 @@ function Rankings() {
   return (
     <>
     <Navbar/>
+    <Chatbot/>
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '60px'}}>My Ranking</h1>
     <h1 className="header" style={{paddingLeft: '160px', marginTop: '50px', fontSize: '40px'}}>{name}{' | '}{role}{' | Sales to next Rank: $'}
       {getRemSales(currentUserData.revenue) ? getRemSales(currentUserData.revenue).toLocaleString(): 'Loading...'}</h1>
