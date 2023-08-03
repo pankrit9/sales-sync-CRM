@@ -28,11 +28,11 @@ chatbot = Blueprint('chatbot', __name__)
 
 def getDataFromDocuments(docs):
     loaders = [UnstructuredPDFLoader(os.path.join(docs, fn)) for fn in os.listdir(docs)]
-    print("\nloaders\n", loaders)
+    # print("\nloaders\n", loaders)
     data = []
     for loader in loaders:
         data.extend(loader.load())
-    print(f'\nprinting data length ... {len(data)}')
+    # print(f'\nprinting data length ...')
     return data
 
 def splitDocuments(data):
@@ -40,16 +40,16 @@ def splitDocuments(data):
     return text_splitter.split_documents(data)
 
 def createOrLoadVectorstore(docs, embeddings):
-    VectorStore_openAI = "faiss_store_openai.pkl"
-    if os.path.exists(VectorStore_openAI):
-        with open(VectorStore_openAI, "rb") as f:
-            VectorStore_openAI = pickle.load(f)
+    vectorstore_filename = "faiss_store_openai.pkl"
+    if os.path.exists(vectorstore_filename):
+        with open(vectorstore_filename, "rb") as f:
+            VectorStore_openAI_obj = pickle.load(f)
     else:
-        VectorStore_openAI = FAISS.from_documents(docs, embeddings)
-        with open(VectorStore_openAI, "wb") as f:
-            pickle.dump(VectorStore_openAI, f)
-    print(f'\nprinting VectorStore_openAI ... {VectorStore_openAI}')
-    return VectorStore_openAI
+        VectorStore_openAI_obj = FAISS.from_documents(docs, embeddings)
+        with open(vectorstore_filename, "wb") as f:
+            pickle.dump(VectorStore_openAI_obj, f)
+    # print(f'\nprinting VectorStore_openAI ... {VectorStore_openAI}')
+    return VectorStore_openAI_obj
     
 
 def setupQAChain(retriever):
@@ -58,17 +58,23 @@ def setupQAChain(retriever):
 
 # setting up the chatbot
 def setupChatbot():
+    print("###########   SETTING UP CHATBOT   ###########\n")
     docs_folder = '../docs'
     # load and split the docs
     data = getDataFromDocuments(docs_folder)
+    print("########### COLLECTING INFORMATION ###########")
     docs = splitDocuments(data)
+    print("###########       SPLITTING        ###########")
     # create or load the vector store
     embeddings = OpenAIEmbeddings()
+    print("###########   CREATING EMBEDDINGS  ###########")
     vector_store = createOrLoadVectorstore(docs, embeddings)
+    print("########### CREATING VECTOR STORE  ###########")
     # setup the QA chain
     chain = setupQAChain(vector_store.as_retriever())
-
+    print("###########  SETTING UP QA CHAIN   ###########")
     current_app.chain = chain
+    print("########### CHATBOT SETUP COMPLETE ###########\n")
 
     # print(chain({'question': "Who are the developer``s in this project"}, return_only_outputs=True))
 
