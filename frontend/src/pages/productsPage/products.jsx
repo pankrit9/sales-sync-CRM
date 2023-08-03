@@ -14,11 +14,7 @@ function Products() {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");    
     const fetchData = useCallback(async () => {
-<<<<<<< HEAD
-        const response = await fetch(`${BACKEND_API}/products/${_id}`, {method: "GET"});
-=======
-        const response = await fetch(`${BACKEND_API}/products`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+        const response = await fetch(`${BACKEND_API}/products/${_id}`, {method: "GET", credentials: "include"});
         const data = await response.json();
         setProducts(data);
         console.log("products data: ", data);

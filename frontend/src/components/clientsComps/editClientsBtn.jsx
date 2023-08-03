@@ -58,12 +58,8 @@ export default function EditBtn({fetchData}) {
       headers: {
         'Content-Type': 'application/json'
       },
-<<<<<<< HEAD
-      body: JSON.stringify(client),
-=======
       body: JSON.stringify(product),
       credentials: "include",
->>>>>>> frontend-pankrit
     });
   
     if (response.ok) {
