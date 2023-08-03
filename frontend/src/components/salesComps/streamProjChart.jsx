@@ -2,7 +2,7 @@ import { ResponsiveStream } from '@nivo/stream'
 
 const StreamProjChart = ({data, projectedKeys}) => {
     if (!projectedKeys || projectedKeys.length === 0) {
-        return <div style={{paddingTop: '60px', paddingLeft: '270px'}}>You do not have any staff yet</div>;
+        return <div style={{paddingTop: '60px', paddingLeft: '270px'}}>You do not have any sales projected</div>;
     }
     return (
         <ResponsiveStream

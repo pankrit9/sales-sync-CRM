@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from config import db
 from flask import Blueprint, jsonify
+from dateutil.parser import parse
 
 sales = Blueprint('sales', __name__)
 
@@ -269,7 +270,15 @@ def get_proj_rev_sum(id):
     tasks = db.Tasks.find({"manager_assigned": name})
     rev_closed = 0
     for task in tasks:
-        if task['due_date'] >= curr_date and task['complete'] != "Completed":
+        if isinstance(task['due_date'], str):
+            due_date = parse(task['due_date'])  # Convert from string to datetime
+        else:
+            due_date = task['due_date']
+
+        # make due_date naive by replacing tzinfo with None
+        due_date = due_date.replace(tzinfo=None)
+
+        if due_date >= curr_date and task['complete'] != "Completed":
             price = task["product_price"]
             rev_closed += float(task['product_quantity']) * float(price)
     return jsonify(rev_closed)
