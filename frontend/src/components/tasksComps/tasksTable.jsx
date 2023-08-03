@@ -197,7 +197,7 @@ export default function EnhancedTable({ rows, fetchData, setTask}) {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     
     const [staff_members, setStaffMembers] = React.useState([]);
 
@@ -352,7 +352,7 @@ export default function EnhancedTable({ rows, fetchData, setTask}) {
                                         <TableCell align="centre">
                                             <Grid container spacing={2}>
                                                 <Grid item xs={6}>
-                                                    <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} staff_members={staff_members} />
+                                                    <EditTaskBtn fetchData={fetchData} task_id={row._id} initialData={row} staff_members={staff_members} setTask={setTask}/>
                                                 </Grid>
                                                 <Grid item xs={6}>
                                                     {
