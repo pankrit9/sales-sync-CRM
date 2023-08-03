@@ -229,7 +229,7 @@ def get_proj_rev(id):
     # From current date to end of the year, for each month
     # tally the sales projected for that month for each staff
     # member and append to array for return
-    i = curr_date.month + 1
+    i = curr_date.month
     while (i <= 12):
         monthly_sales = {}
         for staff in staff_list:

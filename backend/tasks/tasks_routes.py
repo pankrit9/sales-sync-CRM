@@ -126,6 +126,8 @@ def manager_task_edit(uId, taskId):
     # parse json object for data to update i.e. due date
     data = request.get_json()
 
+    formatted_due_date = convert_date_format(data['due_date'])
+
     # create new task
     edit = {
         "task_description": request.json.get('task_description'),
@@ -133,7 +135,7 @@ def manager_task_edit(uId, taskId):
         "product": request.json.get('product'),
         "product_quantity": request.json.get('product_quantity'),
         "priority": request.json.get('priority'),
-        "due_date": datetime.strptime(data['due_date'], "%Y-%m-%d"),
+        "due_date": formatted_due_date,
         "staff_member_assigned": request.json.get('staff_member_assigned'),
         "complete": request.json.get('complete'),
     }
@@ -263,6 +265,8 @@ def update_sales(product_id, qty_sold, sold_by, manager_assigned, client, produc
         "deadline": "To be Implemented",
     })
 
+# HELPER FUNCTIONS #
+
 def update_clients(client, product_name, qty_sold, sold_by):
     # Update client with sale information
     new_interaction =  {"product_name": product_name,
@@ -271,3 +275,16 @@ def update_clients(client, product_name, qty_sold, sold_by):
                         "staff": sold_by}
     db.Clients.update_one({"client" : client},
                            {"$push": {'tasks_records': new_interaction}})
+    
+def convert_date_format(date_str):
+    date_str = date_str.strip()
+    try:
+        datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S %Z")
+        return date_str
+    except ValueError:
+        try:
+            datetime.strptime(date_str, "%a, %d %b %Y %H:%M:%S")
+            return date_str + " GMT"
+        except ValueError:
+            dt = datetime.strptime(date_str, "%Y-%m-%d")
+            return dt.strftime("%a, %d %b %Y %H:%M:%S GMT")
