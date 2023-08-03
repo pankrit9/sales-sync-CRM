@@ -58,7 +58,7 @@ export default function EditBtn({fetchData}) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(product),
+      body: JSON.stringify(client),
       credentials: "include",
     });
   

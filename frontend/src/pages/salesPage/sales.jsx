@@ -47,11 +47,7 @@ function Sales() {
   }
 
   const fetchProductData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/piechart/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/products/piechart`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/piechart/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setProductData(data);
   }
@@ -69,112 +65,66 @@ function Sales() {
   }
 
   const fetchLeadSourceData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/leadsource/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/leadsource`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/leadsource/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setLeadSourceData(data);
   }
 
   const fetchClosedKeysData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/closedkeys/${_id}`, {method: "GET"});
-    const data = await response.json();
-    setClosedKeysData(data);
-  }
-
-  const fetchRevClosedData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/closedrev/${_id}`, {method: "GET"});
-=======
-      const response = await fetch(`${BACKEND_API}/sales/closedkeys`, {method: "GET", credentials: "include"});
+      const response = await fetch(`${BACKEND_API}/sales/closedkeys/${_id}`, {method: "GET", credentials: "include"});
       const data = await response.json();
       setClosedKeysData(data);
   }
 
   const fetchRevClosedData = async () => {
-    const response = await fetch(`${BACKEND_API}/sales/closedrev`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/closedrev/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevClosedData(data);
   } 
   const fetchRevClosedSumData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/closedrevsum/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/closedrevsum`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/closedrevsum/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevClosedSumData(data);
   } 
 
   const fetchRevProjectedData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/projrev/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/projrev`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/projrev/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevProjectedData(data);
   } 
 
   const fetchProjectedKeysData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/projkeys/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/projkeys`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/projkeys/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setProjectedKeysData(data);
   } 
 
   const fetchRevProjectedSumData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/projrevsum/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/projrevsum`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/projrevsum/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setRevProjectedSumData(data);
   } 
 
   const fetchTaskGrowthData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/taskgrowth/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/taskgrowth`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/taskgrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setTaskGrowthData(data);
   } 
 
   const fetchltvGrowthData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/ltvgrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setltvGrowthData(data);
   } 
 
   const fetchClientGrowthData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/clientgrowth/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/clientgrowth`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/clientgrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setClientGrowthData(data);
   } 
 
   const fetchWinRateGrowthData = async () => {
-<<<<<<< HEAD
-    const response = await fetch(`${BACKEND_API}/sales/winrategrowth/${_id}`, {method: "GET"});
-=======
-    const response = await fetch(`${BACKEND_API}/sales/winrategrowth`, {method: "GET", credentials: "include"});
->>>>>>> frontend-pankrit
+    const response = await fetch(`${BACKEND_API}/sales/winrategrowth/${_id}`, {method: "GET", credentials: "include"});
     const data = await response.json();
     setWinRateGrowthData(data);
   } 

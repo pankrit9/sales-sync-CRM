@@ -16,22 +16,7 @@ import { AutoAwesomeMosaicTwoTone } from '@mui/icons-material';
 
 import Chatbot from "../../components/chatbot/Chatbot";
  
-const Rankings = () => {
-  return (
-    <>
-        <div>
-            <Navbar/>
-            <Chatbot />
-        </div>
-        
-        <div >
-            <Link to="#" className='menu-bars'>
-                SPRINT 2
-            </Link>
-        </div>
-    </>
-  )
-}
+
 
 function getBigBadge(revenue) {
   if (revenue >= 10000000) {
