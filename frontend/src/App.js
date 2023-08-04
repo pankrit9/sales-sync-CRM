@@ -1,23 +1,23 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./homePage/pages/Home";
+import Home from "./pages/homePage/pages/Home";
 import LoginPage from "./pages/loginPage";
-import Products from "./pages/productsPage/products";
-import Sales from "./pages/salesPage/sales";
-import Records from "./pages/recordsPage/recordsPage";
-import Tasks from "./pages/tasksPage/tasks";
-import Clients from "./pages/clientsPage/clients";
+import Products from "./pages/products";
+import Sales from "./pages/sales";
+import Records from "./pages/recordsPage";
+import Tasks from "./pages/tasks";
+import Clients from "./pages/clients";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import Navbar  from "./components/navbars/Navbar";
-import Rankings from "./pages/gamificationPage/rankings";
-import Staff from "./pages/staffsPage/staff";
+import Rankings from "./pages/rankings";
+import Staff from "./pages/staff";
 import ResetPage from "./pages/loginPage/indexReset";
-import Blog from "./homePage/pages/Blog";
-import Services from "./homePage/pages/Services";
-import Pricing from "./homePage/pages/Pricing";
+import Blog from "./pages/homePage/pages/Blog";
+import Services from "./pages/homePage/pages/Services";
+import Pricing from "./pages/homePage/pages/Pricing";
 
 function App() {
   const mode = useSelector((state) => state.mode); // grabs the value created at initial state in ./state/index.js

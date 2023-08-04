@@ -3,17 +3,17 @@ from flask import Flask, render_template, request, flash, jsonify, session
 from flask_cors import CORS
 from functools import wraps
 from config import db, bcrypt
-from auth.auth_routes import auth
-from tasks.tasks_routes import tasks
-from products.products_routes import products
-from sales.records_routes import records
-from clients.clients_routes import clients
-from sales.sales_routes import sales
-from gamification.gamification_routes import rankings
+from routes.auth_routes import auth
+from routes.tasks_routes import tasks
+from routes.products_routes import products
+from routes.records_routes import records
+from routes.clients_routes import clients
+from routes.sales_routes import sales
+from routes.gamification_routes import rankings
 import certifi
 from dotenv import load_dotenv
 import os   # access to env variables using os.getenv
-from chatbot.chatbot_routes import chatbot, setupChatbot
+from routes.chatbot_routes import chatbot, setupChatbot
 
 def create_app():
     os.environ["OPENAI_API_KEY"] = "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"
