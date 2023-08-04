@@ -4,6 +4,18 @@
 # setup guide for frontend
 package manager: yarn
 
+# Docker setup
+## docker compose
+- right click the docker-compose.yml file and click on Compose Up
+
+## frontend individually
+- To build the Docker image, you'll need to navigate to your frontend directory and then run: `docker build -t fronted .`
+- To run the Docker image, you can use: `docker run -p 3000:3000 frontend`
+
+## to run backend individually
+- to build the Docker image, `docker build -t backend .`
+- to run the Docker image: `docker run -p 6969:6969 backend`
+
 #### mac setup
 - `brew install yarn`
 - check yarn version: `yarn --version`
