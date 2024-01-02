@@ -1,4 +1,5 @@
-FROM python:latest
+FROM python:3.10.6
+# FROM python:latest
 
 WORKDIR /app
 
