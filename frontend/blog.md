@@ -1,5 +1,5 @@
 # setup for aws ec2
-- connect to the instance using: ssh -i salesSync_crm_ec2_docker.pem ec2-user@54.178.82.245
+- connect to the instance using: `ssh -i salesSync_crm_ec2_docker.pem ec2-user@54.178.82.245`
 
 # setting up the backend 
 `pip install -r requirements.txt`
