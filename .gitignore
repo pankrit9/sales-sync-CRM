@@ -2,4 +2,4 @@
 /backend/routes/__pycache__/
 /backend/helpers/__pycache__/
 /backend/__pycache__/
-/salesSync_crm_ec2_docker.pem
+/crm_sales_sync.pem
