@@ -46,7 +46,8 @@ def create_app(host='0.0.0.0', port=6969):
     # setup chatbot
     with app.app_context():
         setupChatbot()
-    app.run(host=host, port=port, debug=True)
+    # app.run(host=host, port=port, debug=True)
+    app.run(ssl_context=('cert.pem', 'key.pem'))
     return app
 
 # @app.route("/", methods=['GET'])
