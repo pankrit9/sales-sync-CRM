@@ -25,7 +25,7 @@ def create_app(host='0.0.0.0', port=6969):
     app = Flask(__name__)
     app.config['CORS_HEADERS'] = 'Content-Type'
 
-    CORS(app, origins="http://localhost:3000", supports_credentials=True)  # Specify exact origin
+    CORS(app, origins="https://sales-sync-crm-frontend.vercel.app", supports_credentials=True)  # Specify exact origin
 
     app.config['SECRET_KEY'] = 'Avengers'
     SECRET_JWT = 'salesync'
@@ -51,7 +51,7 @@ def create_app(host='0.0.0.0', port=6969):
 
 # @app.route("/", methods=['GET'])
 # def home():
-#     return "Hello World!"
+#     return "Hello World! Welcome to the sales sync crm's backend!"
 
 if __name__ == '__main__':
     app = create_app('0.0.0.0',6969)
