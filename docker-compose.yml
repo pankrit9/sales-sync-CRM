@@ -1,3 +1,7 @@
+# earlier config - not used anymore - to connect backend and frontend
+### change the file name to docker-compose.yml and run docker-compose up and remove the other docker-compose.yml file
+
+#### also change the Dockerfile in the backend folder - line 20 (uncomment) and line 19 (comment out)
 version: '3'
 services:
   backend:

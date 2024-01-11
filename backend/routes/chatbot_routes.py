@@ -15,7 +15,7 @@ from langchain.text_splitter import CharacterTextSplitter
 # Creating QA chain
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chains import RetrievalQA
-from langchain import HuggingFaceHub
+# from langchain import HuggingFaceHub
 from dotenv import load_dotenv
 import os   # access to env variables using os.getenv
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -25,6 +25,9 @@ from langchain.chat_models import ChatOpenAI
 
 chatbot = Blueprint('chatbot', __name__)
 # HUGGING_FACE_API_KEY = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+# OpenAI
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
 
 def getDataFromDocuments(docs):
     loaders = [UnstructuredPDFLoader(os.path.join(docs, fn)) for fn in os.listdir(docs)]

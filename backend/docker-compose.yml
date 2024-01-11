@@ -1,0 +1,13 @@
+version: '3'
+services:
+  web:
+    build: ./
+    container_name: gunicorn_container
+    expose:
+      - "6969"
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web

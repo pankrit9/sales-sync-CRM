@@ -16,7 +16,8 @@ COPY . .
 
 EXPOSE 6969
 
-CMD ["python", "server.py"]
+CMD ["gunicorn", "--workers=4", "--bind=0.0.0.0:6969", "server:app"]
+# CMD ["python", "server.py"]
 
 # FROM python:3.10.6
 # # FROM python:latest
