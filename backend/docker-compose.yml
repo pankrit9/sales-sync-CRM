@@ -6,8 +6,11 @@ services:
     expose:
       - "6969"
   nginx:
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     build: ./nginx
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - web
